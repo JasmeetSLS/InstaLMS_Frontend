@@ -21,7 +21,7 @@ const AdminLayout = ({ children }) => {
                     >
                         <Menu className="w-5 h-5 text-gray-600" />
                     </button>
-                    <h1 className="ml-3 text-lg font-bold text-gray-800">BAT LMS Admin</h1>
+                    <h1 className="ml-3 text-lg font-bold text-gray-800">Admin Panel</h1>
                 </header>
                 
                 {/* Page Content */}
