@@ -1,9 +1,10 @@
 // src/components/Sidebar.jsx
 import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
-import { FolderPlus, PlusCircle, Image, X, Menu } from 'lucide-react';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { FolderPlus, PlusCircle, Image, X, Menu, LogOut } from 'lucide-react';
 
 const Sidebar = ({ isOpen, onClose }) => {
+    const navigate = useNavigate();
     const navItems = [
         { 
             path: '/create-category', 
@@ -17,6 +18,19 @@ const Sidebar = ({ isOpen, onClose }) => {
         },
     ];
 
+    const handleLogout = () => {
+        // Clear localStorage
+        localStorage.removeItem('adminToken');
+        localStorage.removeItem('adminEmail');
+        localStorage.removeItem('isAdminLoggedIn');
+        
+        // Close sidebar if open
+        onClose();
+        
+        // Redirect to login page
+        navigate('/admin/login');
+    };
+
     return (
         <>
             {/* Mobile Overlay */}
@@ -29,7 +43,7 @@ const Sidebar = ({ isOpen, onClose }) => {
 
             {/* Sidebar */}
             <aside className={`
-                fixed top-0 left-0 h-full bg-white shadow-xl z-50 transition-transform duration-300
+                fixed top-0 left-0 h-full bg-white shadow-xl z-50 transition-transform duration-300 flex flex-col
                 w-72 lg:translate-x-0 lg:static lg:w-80
                 ${isOpen ? 'translate-x-0' : '-translate-x-full'}
             `}>
@@ -37,7 +51,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                 <div className="p-5 border-b border-gray-200">
                     <div className="flex items-center justify-between">
                         <div>
-                            <h1 className="text-2xl font-bold bg-orange-500 bg-clip-text text-transparent">
+                            <h1 className="text-2xl font-bold bg-gradient-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent">
                                 INSTA STYLE LMS
                             </h1>
                             <p className="text-xs text-gray-500 mt-1">Admin Panel</p>
@@ -52,7 +66,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                 </div>
 
                 {/* Navigation */}
-                <nav className="p-4 space-y-2">
+                <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
                     {navItems.map((item) => (
                         <NavLink
                             key={item.path}
@@ -74,20 +88,16 @@ const Sidebar = ({ isOpen, onClose }) => {
                     ))}
                 </nav>
 
-                {/* Footer */}
-                {/* <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200">
-                    <div className="bg-gradient-to-r from-orange-50 to-indigo-50 rounded-lg p-3">
-                        <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 bg-gradient-to-r from-orange-500 to-indigo-600 rounded-full flex items-center justify-center">
-                                <Image className="w-5 h-5 text-white" />
-                            </div>
-                            <div>
-                                <p className="text-xs font-medium text-gray-600">BAT Training</p>
-                                <p className="text-xs text-gray-500">Content Management</p>
-                            </div>
-                        </div>
-                    </div>
-                </div> */}
+                {/* Footer with Logout Button */}
+                <div className="p-4 border-t border-gray-200">
+                    <button
+                        onClick={handleLogout}
+                        className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-600 hover:bg-red-50 transition-all duration-200 group"
+                    >
+                        <LogOut className="w-5 h-5 group-hover:rotate-180 transition-transform duration-300" />
+                        <span className="font-medium">Logout</span>
+                    </button>
+                </div>
             </aside>
         </>
     );
