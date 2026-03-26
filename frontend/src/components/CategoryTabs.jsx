@@ -1,35 +1,102 @@
 // src/components/CategoryTabs.jsx
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 
 const CategoryTabs = ({ categories, selectedCategory, onCategoryChange, loading }) => {
+  const scrollContainerRef = useRef(null);
+
+  // Function to get random gradient colors for each category
+  const getGradientColor = (index) => {
+    const gradients = [
+      'from-pink-500 via-red-500 to-yellow-500',
+      'from-purple-500 via-pink-500 to-red-500',
+      'from-blue-500 via-cyan-500 to-green-500',
+      'from-orange-500 via-yellow-500 to-red-500',
+      'from-green-500 via-teal-500 to-blue-500',
+      'from-indigo-500 via-purple-500 to-pink-500',
+      'from-red-500 via-orange-500 to-yellow-500',
+      'from-teal-500 via-green-500 to-blue-500',
+    ];
+    return gradients[index % gradients.length];
+  };
+
+  // Auto-scroll to selected category
+  useEffect(() => {
+    if (scrollContainerRef.current && selectedCategory) {
+      const selectedButton = scrollContainerRef.current.querySelector(`[data-category-id="${selectedCategory}"]`);
+      if (selectedButton) {
+        selectedButton.scrollIntoView({
+          behavior: 'smooth',
+          block: 'nearest',
+          inline: 'center'
+        });
+      }
+    }
+  }, [selectedCategory]);
+
   if (loading) {
     return (
       <div className="px-4 mt-4">
-        <div className="bg-white rounded-xl shadow-sm p-4 text-center">
-          <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600 mx-auto"></div>
+        <div className="flex justify-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="px-4 mt-4">
-      <div className="bg-white rounded-xl shadow-sm p-1 flex gap-1 overflow-x-auto">
-        {categories.map((category) => (
+    <div className="px-4 mt-4 relative">
+      {/* Scroll Container - Hide scrollbar but allow scrolling */}
+      <div 
+        ref={scrollContainerRef}
+        className="flex gap-4 overflow-x-auto scrollbar-hide pb-2 snap-x snap-mandatory"
+        style={{
+          scrollbarWidth: 'none', // Firefox
+          msOverflowStyle: 'none', // IE/Edge
+          WebkitOverflowScrolling: 'touch', // Smooth scrolling on iOS
+        }}
+      >
+        {categories.map((category, index) => (
           <button
             key={category.id}
+            data-category-id={category.id}
             onClick={() => onCategoryChange(category.id)}
-            className={`flex-shrink-0 px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
-              selectedCategory === category.id
-                ? 'bg-blue-600 text-white shadow-md'
-                : 'text-gray-600 hover:bg-gray-100'
-            }`}
+            className="flex flex-col items-center gap-1 flex-shrink-0 group snap-start"
           >
-            {category.name}
+            {/* Instagram-style Status Circle */}
+            <div className={`
+              relative p-0.5 rounded-full transition-all duration-200
+              ${selectedCategory === category.id 
+                ? 'bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500' 
+                : 'bg-gradient-to-r from-gray-300 to-gray-400'
+              }
+            `}>
+              <div className={`
+                w-16 h-16 rounded-full overflow-hidden bg-white p-0.5
+                ${selectedCategory === category.id ? 'bg-white' : ''}
+              `}>
+                <div className={`
+                  w-full h-full rounded-full flex items-center justify-center
+                  bg-gradient-to-br ${getGradientColor(index)} text-white font-bold text-xl
+                `}>
+                  {category.name.charAt(0).toUpperCase()}
+                </div>
+              </div>
+            </div>
+            
+            {/* Category Name */}
+            <span className={`
+              text-xs font-medium transition-all duration-200
+              ${selectedCategory === category.id 
+                ? 'text-blue-600 font-semibold' 
+                : 'text-gray-600'
+              }
+            `}>
+              {category.name}
+            </span>
           </button>
         ))}
       </div>
-    </div>
+   </div>
   );
 };
 
