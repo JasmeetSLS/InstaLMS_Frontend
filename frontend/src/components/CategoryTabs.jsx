@@ -1,10 +1,11 @@
 // src/components/CategoryTabs.jsx
 import React, { useRef, useEffect } from 'react';
+import { Image as ImageIcon } from 'lucide-react';
 
 const CategoryTabs = ({ categories, selectedCategory, onCategoryChange, loading }) => {
   const scrollContainerRef = useRef(null);
 
-  // Function to get random gradient colors for each category
+  // Function to get gradient colors for fallback
   const getGradientColor = (index) => {
     const gradients = [
       'from-pink-500 via-red-500 to-yellow-500',
@@ -45,14 +46,14 @@ const CategoryTabs = ({ categories, selectedCategory, onCategoryChange, loading 
 
   return (
     <div className="px-4 mt-4 relative">
-      {/* Scroll Container - Hide scrollbar but allow scrolling */}
+      {/* Scroll Container */}
       <div 
         ref={scrollContainerRef}
         className="flex gap-4 overflow-x-auto scrollbar-hide pb-2 snap-x snap-mandatory"
         style={{
-          scrollbarWidth: 'none', // Firefox
-          msOverflowStyle: 'none', // IE/Edge
-          WebkitOverflowScrolling: 'touch', // Smooth scrolling on iOS
+          scrollbarWidth: 'none',
+          msOverflowStyle: 'none',
+          WebkitOverflowScrolling: 'touch',
         }}
       >
         {categories.map((category, index) => (
@@ -74,12 +75,20 @@ const CategoryTabs = ({ categories, selectedCategory, onCategoryChange, loading 
                 w-16 h-16 rounded-full overflow-hidden bg-white p-0.5
                 ${selectedCategory === category.id ? 'bg-white' : ''}
               `}>
-                <div className={`
-                  w-full h-full rounded-full flex items-center justify-center
-                  bg-gradient-to-br ${getGradientColor(index)} text-white font-bold text-xl
-                `}>
-                  {category.name.charAt(0).toUpperCase()}
-                </div>
+                {category.icon_url ? (
+                  <img 
+                    src={`http://localhost:5000${category.icon_url}`}
+                    alt={category.name}
+                    className="w-full h-full rounded-full object-cover"
+                  />
+                ) : (
+                  <div className={`
+                    w-full h-full rounded-full flex items-center justify-center
+                    bg-gradient-to-br ${getGradientColor(index)} text-white font-bold text-xl
+                  `}>
+                    {category.name.charAt(0).toUpperCase()}
+                  </div>
+                )}
               </div>
             </div>
             
@@ -96,7 +105,7 @@ const CategoryTabs = ({ categories, selectedCategory, onCategoryChange, loading 
           </button>
         ))}
       </div>
-   </div>
+    </div>
   );
 };
 

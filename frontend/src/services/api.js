@@ -15,8 +15,21 @@ export const categoryAPI = {
     // Get all categories
     getAll: () => api.get('/categories'),
     
-    // Create new category
-    create: (name) => api.post('/categories', { name }),
+    // Get single category
+    getById: (id) => api.get(`/categories/${id}`),
+    
+    // Create new category with icon
+    create: (formData) => api.post('/categories', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+    }),
+    
+    // Update category with icon
+    update: (id, formData) => api.put(`/categories/${id}`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+    }),
+    
+    // Delete category
+    delete: (id) => api.delete(`/categories/${id}`),
 };
 
 // Post APIs

@@ -5,8 +5,8 @@ import { Eye, Image as ImageIcon, Video, FileImage, ChevronLeft, ChevronRight, H
 const CarComponents = ({ posts, loading, onViewPost }) => {
   const [currentMediaIndex, setCurrentMediaIndex] = useState({});
   const [likedPosts, setLikedPosts] = useState({});
-  const [savedPosts, setSavedPosts] = useState({});
   const [videoStates, setVideoStates] = useState({});
+  const [currentlyPlayingId, setCurrentlyPlayingId] = useState(null);
   const videoRefs = useRef({});
 
   const getMediaIcon = (type) => {
@@ -16,6 +16,14 @@ const CarComponents = ({ posts, loading, onViewPost }) => {
   };
 
   const nextMedia = (postId, totalMedia) => {
+    // Pause video before changing media
+    const video = videoRefs.current[postId];
+    if (video && !video.paused) {
+      video.pause();
+      setVideoStates(prev => ({ ...prev, [postId]: 'paused' }));
+      setCurrentlyPlayingId(null);
+    }
+    
     setCurrentMediaIndex(prev => ({
       ...prev,
       [postId]: ((prev[postId] || 0) + 1) % totalMedia
@@ -23,6 +31,14 @@ const CarComponents = ({ posts, loading, onViewPost }) => {
   };
 
   const prevMedia = (postId, totalMedia) => {
+    // Pause video before changing media
+    const video = videoRefs.current[postId];
+    if (video && !video.paused) {
+      video.pause();
+      setVideoStates(prev => ({ ...prev, [postId]: 'paused' }));
+      setCurrentlyPlayingId(null);
+    }
+    
     setCurrentMediaIndex(prev => ({
       ...prev,
       [postId]: ((prev[postId] || 0) - 1 + totalMedia) % totalMedia
@@ -37,49 +53,59 @@ const CarComponents = ({ posts, loading, onViewPost }) => {
     setLikedPosts(prev => ({ ...prev, [postId]: !prev[postId] }));
   };
 
-  const handleSave = (postId) => {
-    setSavedPosts(prev => ({ ...prev, [postId]: !prev[postId] }));
-  };
-
   const toggleVideoPlay = (postId) => {
     const video = videoRefs.current[postId];
-    if (video) {
-      if (video.paused) {
-        video.play();
-        setVideoStates(prev => ({ ...prev, [postId]: 'playing' }));
-      } else {
-        video.pause();
-        setVideoStates(prev => ({ ...prev, [postId]: 'paused' }));
+    if (!video) return;
+
+    // If another video is playing, pause it
+    if (currentlyPlayingId && currentlyPlayingId !== postId) {
+      const otherVideo = videoRefs.current[currentlyPlayingId];
+      if (otherVideo) {
+        otherVideo.pause();
+        setVideoStates(prev => ({ ...prev, [currentlyPlayingId]: 'paused' }));
       }
+    }
+
+    // Toggle current video
+    if (video.paused) {
+      video.play();
+      setVideoStates(prev => ({ ...prev, [postId]: 'playing' }));
+      setCurrentlyPlayingId(postId);
+    } else {
+      video.pause();
+      setVideoStates(prev => ({ ...prev, [postId]: 'paused' }));
+      setCurrentlyPlayingId(null);
     }
   };
 
   const handleVideoPlay = (postId) => {
     setVideoStates(prev => ({ ...prev, [postId]: 'playing' }));
+    setCurrentlyPlayingId(postId);
   };
 
   const handleVideoPause = (postId) => {
     setVideoStates(prev => ({ ...prev, [postId]: 'paused' }));
+    if (currentlyPlayingId === postId) {
+      setCurrentlyPlayingId(null);
+    }
   };
 
   const handleVideoEnded = (postId) => {
     setVideoStates(prev => ({ ...prev, [postId]: 'ended' }));
+    setCurrentlyPlayingId(null);
   };
 
-  // Auto-play videos when they come into view
+  // Reset video state when media index changes
   useEffect(() => {
-    const videoElements = Object.entries(videoRefs.current);
-    videoElements.forEach(([postId, video]) => {
+    // When media changes, reset video state for that post
+    Object.keys(currentMediaIndex).forEach(postId => {
+      const video = videoRefs.current[postId];
       if (video) {
-        video.play().catch(error => {
-          // Autoplay might be blocked by browser, handle silently
-          console.log('Autoplay prevented:', error);
-          setVideoStates(prev => ({ ...prev, [postId]: 'paused' }));
-        });
-        setVideoStates(prev => ({ ...prev, [postId]: 'playing' }));
+        video.pause();
+        setVideoStates(prev => ({ ...prev, [postId]: 'paused' }));
       }
     });
-  }, [posts]);
+  }, [currentMediaIndex]);
 
   if (loading) {
     return (
@@ -112,10 +138,10 @@ const CarComponents = ({ posts, loading, onViewPost }) => {
         const currentMedia = post.media && post.media.length > 0 ? post.media[currentIndex] : null;
         const hasMultipleMedia = post.media && post.media.length > 1;
         const isLiked = likedPosts[post.id] || false;
-        const videoState = videoStates[post.id] || 'initial';
+        const videoState = videoStates[post.id] || 'paused';
 
         return (
-          <article key={post.id} className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+          <article key={post.id} className="bg-white rounded-2xl  shadow-sm border border-gray-100 overflow-hidden">
 
             {/* Media Carousel */}
             {post.media && post.media.length > 0 && currentMedia && (
@@ -134,8 +160,6 @@ const CarComponents = ({ posts, loading, onViewPost }) => {
                         onPlay={() => handleVideoPlay(post.id)}
                         onPause={() => handleVideoPause(post.id)}
                         onEnded={() => handleVideoEnded(post.id)}
-                        autoPlay
-                        muted={false}
                       />
                       
                       {/* Center Play/Pause Button */}
@@ -189,10 +213,19 @@ const CarComponents = ({ posts, loading, onViewPost }) => {
                 {/* Media Indicators */}
                 {hasMultipleMedia && (
                   <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 flex gap-1.5 z-10">
-                    {post.media.map((_, idx) => (
+                    {post.media.map((media, idx) => (
                       <button
                         key={idx}
-                        onClick={() => setCurrentMediaIndex(prev => ({ ...prev, [post.id]: idx }))}
+                        onClick={() => {
+                          // Pause video before changing media
+                          const video = videoRefs.current[post.id];
+                          if (video && !video.paused) {
+                            video.pause();
+                            setVideoStates(prev => ({ ...prev, [post.id]: 'paused' }));
+                            setCurrentlyPlayingId(null);
+                          }
+                          setCurrentMediaIndex(prev => ({ ...prev, [post.id]: idx }));
+                        }}
                         className={`h-1 rounded-full transition-all ${
                           idx === currentIndex 
                             ? 'w-5 bg-white' 
@@ -213,15 +246,12 @@ const CarComponents = ({ posts, loading, onViewPost }) => {
                   className={`flex items-center gap-1.5 transition ${isLiked ? 'text-red-500' : 'text-gray-600 hover:text-red-500'}`}
                 >
                   <Heart className={`w-6 h-6 ${isLiked ? 'fill-current' : ''}`} />
-                 
                 </button>
                 <button className="flex items-center gap-1.5 text-gray-600 hover:text-blue-500 transition">
                   <MessageCircle className="w-6 h-6" />
-                  
                 </button>
                 <button className="flex items-center gap-1.5 text-gray-600 hover:text-green-500 transition">
                   <Share2 className="w-6 h-6" />
-                 
                 </button>
               </div>
             </div>
@@ -231,15 +261,6 @@ const CarComponents = ({ posts, loading, onViewPost }) => {
               <div className="px-5 pb-2">
                 <p className="text-gray-900 text-base font-medium leading-relaxed">
                   {post.title}
-                </p>
-              </div>
-            )}
-
-            {/* Description/Content */}
-            {post.content && (
-              <div className="px-5 pb-2">
-                <p className="text-gray-600 text-sm leading-relaxed">
-                  {post.content}
                 </p>
               </div>
             )}

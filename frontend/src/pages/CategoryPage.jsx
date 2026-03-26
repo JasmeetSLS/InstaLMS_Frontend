@@ -1,6 +1,6 @@
 // src/pages/CategoryPage.jsx
 import React, { useState, useEffect } from 'react';
-import { Plus, Trash2, Edit2, X, AlertCircle, Save, Folder } from 'lucide-react';
+import { Plus, Trash2, Edit2, X, AlertCircle, Save, Folder, Upload, Image as ImageIcon } from 'lucide-react';
 import { categoryAPI } from '../services/api';
 
 const CategoryPage = () => {
@@ -8,9 +8,13 @@ const CategoryPage = () => {
     const [loading, setLoading] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [categoryName, setCategoryName] = useState('');
+    const [categoryIcon, setCategoryIcon] = useState(null);
+    const [iconPreview, setIconPreview] = useState('');
     const [error, setError] = useState('');
     const [editingId, setEditingId] = useState(null);
     const [editName, setEditName] = useState('');
+    const [editIcon, setEditIcon] = useState(null);
+    const [editIconPreview, setEditIconPreview] = useState('');
 
     useEffect(() => {
         fetchCategories();
@@ -40,15 +44,53 @@ const CategoryPage = () => {
             return;
         }
 
+        const formData = new FormData();
+        formData.append('name', categoryName);
+        if (categoryIcon) {
+            formData.append('icon', categoryIcon);
+        }
+
         try {
-            await categoryAPI.create(categoryName);
+            await categoryAPI.create(formData);
             await fetchCategories();
             setCategoryName('');
+            setCategoryIcon(null);
+            setIconPreview('');
             setShowModal(false);
             setError('');
         } catch (error) {
             console.error('Error creating category:', error);
             setError(error.response?.data?.error || 'Error creating category');
+        }
+    };
+
+    const handleUpdateCategory = async (id) => {
+        if (!editName.trim()) {
+            alert('Category name cannot be empty');
+            return;
+        }
+        
+        if (editName.length < 2) {
+            alert('Category name must be at least 2 characters');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('name', editName);
+        if (editIcon) {
+            formData.append('icon', editIcon);
+        }
+
+        try {
+            await categoryAPI.update(id, formData);
+            await fetchCategories();
+            setEditingId(null);
+            setEditName('');
+            setEditIcon(null);
+            setEditIconPreview('');
+        } catch (error) {
+            console.error('Error updating category:', error);
+            alert(error.response?.data?.error || 'Error updating category');
         }
     };
 
@@ -67,45 +109,36 @@ const CategoryPage = () => {
     const handleEditCategory = (category) => {
         setEditingId(category.id);
         setEditName(category.name);
-    };
-
-    const handleUpdateCategory = async (id) => {
-        if (!editName.trim()) {
-            alert('Category name cannot be empty');
-            return;
-        }
-        
-        if (editName.length < 2) {
-            alert('Category name must be at least 2 characters');
-            return;
-        }
-
-        try {
-            await categoryAPI.update(id, editName);
-            await fetchCategories();
-            setEditingId(null);
-            setEditName('');
-        } catch (error) {
-            console.error('Error updating category:', error);
-            alert(error.response?.data?.error || 'Error updating category');
-        }
+        setEditIconPreview(category.icon_url ? `http://localhost:5000${category.icon_url}` : '');
+        setEditIcon(null);
     };
 
     const handleCancelEdit = () => {
         setEditingId(null);
         setEditName('');
+        setEditIcon(null);
+        setEditIconPreview('');
     };
 
-    const getCategoryColor = (index) => {
-        const colors = [
-            'bg-orange-100 text-orange-700',
-            'bg-green-100 text-green-700',
-            'bg-purple-100 text-purple-700',
-            'bg-orange-100 text-orange-700',
-            'bg-pink-100 text-pink-700',
-            'bg-indigo-100 text-indigo-700',
-        ];
-        return colors[index % colors.length];
+    const handleIconChange = (e, isEdit = false) => {
+        const file = e.target.files[0];
+        if (file) {
+            if (isEdit) {
+                setEditIcon(file);
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    setEditIconPreview(reader.result);
+                };
+                reader.readAsDataURL(file);
+            } else {
+                setCategoryIcon(file);
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    setIconPreview(reader.result);
+                };
+                reader.readAsDataURL(file);
+            }
+        }
     };
 
     return (
@@ -115,11 +148,12 @@ const CategoryPage = () => {
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
                     <div>
                         <h1 className="text-2xl font-bold text-gray-800">Categories</h1>
-                       
                     </div>
                     <button
                         onClick={() => {
                             setCategoryName('');
+                            setCategoryIcon(null);
+                            setIconPreview('');
                             setError('');
                             setShowModal(true);
                         }}
@@ -151,6 +185,9 @@ const CategoryPage = () => {
                                             S.No
                                         </th>
                                         <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                            Icon
+                                        </th>
+                                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                             Category Name
                                         </th>
                                         <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
@@ -165,26 +202,59 @@ const CategoryPage = () => {
                                     {categories.map((category, index) => (
                                         <tr key={category.id} className="hover:bg-gray-50 transition">
                                             <td className="px-6 py-4 whitespace-nowrap">
-                                                <div className="flex items-center gap-3">
-                                                    <span className="text-sm text-gray-500">{index + 1}</span>
-                                                </div>
+                                                <span className="text-sm text-gray-500">{index + 1}</span>
+                                            </td>
+                                            <td className="px-6 py-4 whitespace-nowrap">
+                                                {editingId === category.id ? (
+                                                    <div className="flex items-center gap-2">
+                                                        {editIconPreview ? (
+                                                            <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-100">
+                                                                <img src={editIconPreview} alt="Preview" className="w-full h-full object-cover" />
+                                                            </div>
+                                                        ) : (
+                                                            <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center">
+                                                                <ImageIcon className="w-5 h-5 text-gray-400" />
+                                                            </div>
+                                                        )}
+                                                        <label className="cursor-pointer">
+                                                            <input
+                                                                type="file"
+                                                                accept="image/*"
+                                                                onChange={(e) => handleIconChange(e, true)}
+                                                                className="hidden"
+                                                            />
+                                                            <div className="text-xs text-blue-600 hover:text-blue-700 cursor-pointer">
+                                                                Change
+                                                            </div>
+                                                        </label>
+                                                    </div>
+                                                ) : (
+                                                    <div className="w-10 h-10 rounded-full overflow-hidden bg-gradient-to-br from-orange-100 to-orange-200 flex items-center justify-center">
+                                                        {category.icon_url ? (
+                                                            <img 
+                                                                src={`http://localhost:5000${category.icon_url}`}
+                                                                alt={category.name}
+                                                                className="w-full h-full object-cover"
+                                                            />
+                                                        ) : (
+                                                            <span className="text-orange-600 font-bold text-lg">
+                                                                {category.name.charAt(0).toUpperCase()}
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                )}
                                             </td>
                                             <td className="px-6 py-4">
                                                 {editingId === category.id ? (
-                                                    <div className="flex items-center gap-2">
-                                                        <input
-                                                            type="text"
-                                                            value={editName}
-                                                            onChange={(e) => setEditName(e.target.value)}
-                                                            className="border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
-                                                            autoFocus
-                                                        />
-                                                    </div>
+                                                    <input
+                                                        type="text"
+                                                        value={editName}
+                                                        onChange={(e) => setEditName(e.target.value)}
+                                                        className="border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                                                        autoFocus
+                                                    />
                                                 ) : (
-                                                    <div>
-                                                        <div className="font-medium text-gray-900">{category.name}</div>
-                                                
-                                                    </div>
+                                                    <div className="font-medium text-gray-900">{category.name}</div>
                                                 )}
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap">
@@ -195,7 +265,6 @@ const CategoryPage = () => {
                                                         day: 'numeric'
                                                     })}
                                                 </div>
-                                               
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-center">
                                                 {editingId === category.id ? (
@@ -239,7 +308,6 @@ const CategoryPage = () => {
                                 </tbody>
                             </table>
                         </div>
-                       
                     </div>
                 )}
             </div>
@@ -255,6 +323,8 @@ const CategoryPage = () => {
                                     setShowModal(false);
                                     setError('');
                                     setCategoryName('');
+                                    setCategoryIcon(null);
+                                    setIconPreview('');
                                 }}
                                 className="p-1 hover:bg-gray-100 rounded-full"
                             >
@@ -268,6 +338,50 @@ const CategoryPage = () => {
                                     <span className="text-sm text-red-600">{error}</span>
                                 </div>
                             )}
+                            
+                            {/* Icon Upload */}
+                            <div className="mb-4">
+                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                    Category Icon (Optional)
+                                </label>
+                                <div className="flex items-center gap-4">
+                                    {iconPreview ? (
+                                        <div className="w-16 h-16 rounded-full overflow-hidden bg-gray-100">
+                                            <img src={iconPreview} alt="Preview" className="w-full h-full object-cover" />
+                                        </div>
+                                    ) : (
+                                        <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center">
+                                            <ImageIcon className="w-8 h-8 text-gray-400" />
+                                        </div>
+                                    )}
+                                    <label className="cursor-pointer">
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            onChange={(e) => handleIconChange(e, false)}
+                                            className="hidden"
+                                        />
+                                        <div className="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition cursor-pointer">
+                                            <Upload className="w-4 h-4" />
+                                            <span className="text-sm">Upload Icon</span>
+                                        </div>
+                                    </label>
+                                    {iconPreview && (
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                setCategoryIcon(null);
+                                                setIconPreview('');
+                                            }}
+                                            className="text-red-500 text-sm hover:text-red-600"
+                                        >
+                                            Remove
+                                        </button>
+                                    )}
+                                </div>
+                                <p className="text-xs text-gray-500 mt-2">Recommended: Square image, max 5MB</p>
+                            </div>
+                            
                             <input
                                 type="text"
                                 value={categoryName}
@@ -286,6 +400,8 @@ const CategoryPage = () => {
                                         setShowModal(false);
                                         setError('');
                                         setCategoryName('');
+                                        setCategoryIcon(null);
+                                        setIconPreview('');
                                     }}
                                     className="flex-1 py-2 rounded-lg border border-gray-300 text-gray-700 font-medium hover:bg-gray-50"
                                 >
