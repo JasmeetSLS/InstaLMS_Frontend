@@ -27,7 +27,7 @@ const Sidebar = ({ isOpen, onClose }) => {
         // Close sidebar if open
         onClose();
         
-        // Redirect to login page
+        // blueirect to login page
         navigate('/admin/login');
     };
 
@@ -51,7 +51,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                 <div className="p-5 border-b border-gray-200">
                     <div className="flex items-center justify-between">
                         <div>
-                            <h1 className="text-2xl font-bold bg-gradient-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent">
+                            <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-500 to-blue-600 bg-clip-text text-transparent">
                                 INSTA STYLE LMS
                             </h1>
                             <p className="text-xs text-gray-500 mt-1">Admin Panel</p>
@@ -75,7 +75,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                             className={({ isActive }) => `
                                 flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200
                                 ${isActive 
-                                    ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg' 
+                                    ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg' 
                                     : 'text-gray-700 hover:bg-gray-100'
                                 }
                             `}
@@ -92,7 +92,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                 <div className="p-4 border-t border-gray-200">
                     <button
                         onClick={handleLogout}
-                        className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-600 hover:bg-red-50 transition-all duration-200 group"
+                        className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-blue-600 hover:bg-blue-50 transition-all duration-200 group"
                     >
                         <LogOut className="w-5 h-5 group-hover:rotate-180 transition-transform duration-300" />
                         <span className="font-medium">Logout</span>

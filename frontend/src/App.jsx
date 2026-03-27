@@ -6,13 +6,14 @@ import PostCreatePage from './pages/PostCreatePage';
 import CategoryPage from './pages/CategoryPage';
 import AdminLayout from './components/AdminLayout';
 import AdminLogin from './pages/AdminLogin';
+import UserLogin from './pages/UserLogin';
 
 function App() {
   return (
     <Router>
       <Routes>
         {/* Home Page - No Admin Layout */}
-        <Route path="/" element={<HomePage />} />
+        <Route path="/home" element={<HomePage />} />
         
         {/* Admin Pages with Layout */}
         <Route 
@@ -34,6 +35,7 @@ function App() {
         />
 
         <Route path="/admin/login" element={<AdminLogin/>} />
+          <Route path="/" element={<UserLogin/>} />
         
         {/* Redirect any unknown routes to home */}
         <Route path="*" element={<Navigate to="/" replace />} />

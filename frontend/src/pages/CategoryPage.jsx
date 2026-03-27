@@ -157,7 +157,7 @@ const CategoryPage = () => {
                             setError('');
                             setShowModal(true);
                         }}
-                        className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg hover:shadow-lg transition"
+                        className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:shadow-lg transition"
                     >
                         <Plus className="w-4 h-4" />
                         Create Category
@@ -167,7 +167,7 @@ const CategoryPage = () => {
                 {/* Categories Table */}
                 {loading ? (
                     <div className="flex justify-center items-center h-64">
-                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600"></div>
+                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
                     </div>
                 ) : categories.length === 0 ? (
                     <div className="text-center py-12 bg-white rounded-xl shadow-sm">
@@ -229,7 +229,7 @@ const CategoryPage = () => {
                                                         </label>
                                                     </div>
                                                 ) : (
-                                                    <div className="w-10 h-10 rounded-full overflow-hidden bg-gradient-to-br from-orange-100 to-orange-200 flex items-center justify-center">
+                                                    <div className="w-10 h-10 rounded-full overflow-hidden bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center">
                                                         {category.icon_url ? (
                                                             <img 
                                                                 src={`http://localhost:5000${category.icon_url}`}
@@ -237,7 +237,7 @@ const CategoryPage = () => {
                                                                 className="w-full h-full object-cover"
                                                             />
                                                         ) : (
-                                                            <span className="text-orange-600 font-bold text-lg">
+                                                            <span className="text-blue-600 font-bold text-lg">
                                                                 {category.name.charAt(0).toUpperCase()}
                                                             </span>
                                                         )}
@@ -250,7 +250,7 @@ const CategoryPage = () => {
                                                         type="text"
                                                         value={editName}
                                                         onChange={(e) => setEditName(e.target.value)}
-                                                        className="border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                                                        className="border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                                         autoFocus
                                                     />
                                                 ) : (
@@ -288,7 +288,7 @@ const CategoryPage = () => {
                                                     <div className="flex items-center justify-center gap-2">
                                                         <button
                                                             onClick={() => handleEditCategory(category)}
-                                                            className="p-2 text-blue-600 hover:bg-orange-50 rounded-lg transition"
+                                                            className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition"
                                                             title="Edit Category"
                                                         >
                                                             <Edit2 className="w-4 h-4" />
@@ -390,7 +390,7 @@ const CategoryPage = () => {
                                     setError('');
                                 }}
                                 placeholder="Enter category name (e.g., BAT, Product)"
-                                className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                                className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                 autoFocus
                             />
                             <div className="flex gap-3 mt-5">
@@ -409,7 +409,7 @@ const CategoryPage = () => {
                                 </button>
                                 <button
                                     type="submit"
-                                    className="flex-1 py-2 rounded-lg bg-orange-500 text-white font-medium hover:bg-orange-600"
+                                    className="flex-1 py-2 rounded-lg bg-blue-500 text-white font-medium hover:bg-blue-600"
                                 >
                                     Create Category
                                 </button>
