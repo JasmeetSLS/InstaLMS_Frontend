@@ -89,7 +89,6 @@ const UserLogin = () => {
                                 <User className="w-8 h-8 text-pink-600" />
                             </div>
                             <h2 className="text-2xl font-bold text-white">Welcome Back!</h2>
-                            <p className="text-white mt-2">Sign in to continue learning</p>
                         </div>
 
                         <form onSubmit={handleSubmit} className="space-y-5">
@@ -114,7 +113,7 @@ const UserLogin = () => {
                                         type="email"
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
-                                        className="block w-full pl-10 pr-3 py-3 border text-white border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition  placeholder:text-white"
+                                        className="block w-full pl-10 pr-3 py-3 border text-white border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition  placeholder:text-gray-400"
                                         placeholder="your@email.com"
                                         required
                                     />
@@ -134,7 +133,7 @@ const UserLogin = () => {
                                         type={showPassword ? "text" : "password"}
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
-                                        className="block w-full pl-10 pr-10 py-3 border text-white placeholder:text-white border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition"
+                                        className="block w-full pl-10 pr-10 py-3 border text-white placeholder:text-gray-400 border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition"
                                         placeholder="••••••••"
                                         required
                                     />

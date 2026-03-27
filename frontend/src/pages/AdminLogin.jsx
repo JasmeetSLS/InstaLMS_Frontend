@@ -59,20 +59,25 @@ const AdminLogin = () => {
             </div>
 
             {/* Right Side - Login Form */}
-            <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-gray-200">
+            <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-black">
                 <div className="max-w-md w-full">
                     {/* Mobile Logo */}
                     <div className="lg:hidden text-center mb-8">
                         <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl shadow-lg mb-4">
                             <Shield className="w-8 h-8 text-white" />
                         </div>
-                        <h1 className="text-2xl font-bold text-gray-800">BAT LMS Admin</h1>
+                        <h1 className="text-2xl font-bold text-white">INSTA STYLE LMS ADMIN</h1>
                     </div>
 
                     {/* Login Card */}
-                    <div className="bg-white rounded-2xl shadow-xl p-8">
+                    <div className="text-white rounded-lg border border-transparent 
+                         shadow-[0_4px_6px_-1px_rgba(255,255,255,0.1),0_2px_4px_-1px_rgba(0,0,0,0.5)] 
+                         backdrop-blur-sm bg-black/10 relative
+                         before:absolute before:inset-0 before:rounded-lg 
+                         before:border-2 before:border-white/70 before:shadow-[0_0_15px_rgba(255,255,255,0.6)] 
+                         before:content-[''] before:pointer-events-none p-8">
                         <div className="text-center mb-8">
-                            <h2 className="text-2xl font-bold text-gray-800">Admin Login In</h2>
+                            <h2 className="text-2xl font-bold text-white">Admin Login In</h2>
                         </div>
 
                         <form onSubmit={handleSubmit} className="space-y-5">
@@ -86,19 +91,19 @@ const AdminLogin = () => {
 
                             {/* Email Field */}
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label className="block text-sm font-medium text-white mb-2">
                                     Email Address
                                 </label>
                                 <div className="relative">
                                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                        <Mail className="h-5 w-5 text-gray-400" />
+                                        <Mail className="h-5 w-5 text-white" />
                                     </div>
                                     <input
                                         type="email"
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
-                                        className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
-                                        placeholder="admin@bat.com"
+                                        className="block w-full pl-10 pr-3 py-3 border text-white border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition placeholder:text-gray-400"
+                                        placeholder="your@email.com"
                                         required
                                     />
                                 </div>
@@ -106,18 +111,18 @@ const AdminLogin = () => {
 
                             {/* Password Field */}
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label className="block text-sm font-medium text-white mb-2">
                                     Password
                                 </label>
                                 <div className="relative">
                                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                        <Lock className="h-5 w-5 text-gray-400" />
+                                        <Lock className="h-5 w-5 text-white" />
                                     </div>
                                     <input
                                         type={showPassword ? "text" : "password"}
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
-                                        className="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                                        className="block w-full pl-10 pr-10 py-3 text-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition placeholder:text-gray-400"
                                         placeholder="••••••••"
                                         required
                                     />
@@ -127,9 +132,9 @@ const AdminLogin = () => {
                                         className="absolute inset-y-0 right-0 pr-3 flex items-center"
                                     >
                                         {showPassword ? (
-                                            <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                                            <EyeOff className="h-5 w-5 text-white" />
                                         ) : (
-                                            <Eye className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                                            <Eye className="h-5 w-5 text-white" />
                                         )}
                                     </button>
                                 </div>
