@@ -61,9 +61,8 @@ const UserLogin = () => {
                     className="absolute inset-0 w-full h-full object-cover"
                 />
             </div>
-
             {/* Right Side - Login Form (Desktop) / Full Screen on Mobile with Background */}
-            <div className="w-full lg:w-1/2 flex items-center bg-gray-400 justify-center p-8 relative">
+            <div className="w-full lg:w-1/2 flex items-center bg-black justify-center p-8 relative">
                 {/* Mobile Background Image */}
                 <div className="lg:hidden absolute inset-0">
                     <div className="absolute inset-0  z-10"></div>
