@@ -318,18 +318,7 @@ const CategoryPage = () => {
                     <div className="bg-white rounded-xl max-w-md w-full">
                         <div className="flex items-center justify-between p-5 border-b border-gray-200">
                             <h3 className="text-lg font-bold text-gray-800">Create New Category</h3>
-                            <button
-                                onClick={() => {
-                                    setShowModal(false);
-                                    setError('');
-                                    setCategoryName('');
-                                    setCategoryIcon(null);
-                                    setIconPreview('');
-                                }}
-                                className="p-1 hover:bg-gray-100 rounded-full"
-                            >
-                                <X className="w-5 h-5" />
-                            </button>
+                            
                         </div>
                         <form onSubmit={handleCreateCategory} className="p-5">
                             {error && (
@@ -342,7 +331,7 @@ const CategoryPage = () => {
                             {/* Icon Upload */}
                             <div className="mb-4">
                                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                                    Category Icon (Optional)
+                                    Category Icon
                                 </label>
                                 <div className="flex items-center gap-4">
                                     {iconPreview ? (
@@ -389,8 +378,8 @@ const CategoryPage = () => {
                                     setCategoryName(e.target.value);
                                     setError('');
                                 }}
-                                placeholder="Enter category name (e.g., BAT, Product)"
-                                className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                placeholder="Enter category name "
+                                className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-1 focus:ring-black"
                                 autoFocus
                             />
                             <div className="flex gap-3 mt-5">

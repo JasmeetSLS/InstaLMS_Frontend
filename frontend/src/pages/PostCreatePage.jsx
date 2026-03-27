@@ -324,7 +324,7 @@ const PostPage = () => {
                                         name="category_id"
                                         value={formData.category_id}
                                         onChange={handleInputChange}
-                                        className="flex-1 border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                        className="flex-1 border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-1 focus:ring-black"
                                         required
                                     >
                                         {categories.map(cat => (
@@ -347,7 +347,7 @@ const PostPage = () => {
                                     value={formData.title}
                                     onChange={handleInputChange}
                                     placeholder="Enter post title"
-                                    className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                    className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-1 focus:ring-black"
                                     required
                                 />
                             </div>
@@ -363,7 +363,7 @@ const PostPage = () => {
                                     onChange={handleInputChange}
                                     rows="4"
                                     placeholder="Write your post content here..."
-                                    className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
+                                    className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-1 focus:ring-black resize-none"
                                 />
                             </div>
 
@@ -378,7 +378,7 @@ const PostPage = () => {
                                     value={formData.hashtags}
                                     onChange={handleInputChange}
                                     placeholder="#BAT #Training #Sales"
-                                    className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                    className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-1 focus:ring-black"
                                 />
                                 <p className="text-xs text-gray-500 mt-1">
                                     Separate hashtags with spaces
@@ -391,7 +391,7 @@ const PostPage = () => {
                                     Media Files * (Images, Videos, GIFs)
                                 </label>
                                 
-                                <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-500 transition cursor-pointer bg-gray-50">
+                                <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-black transition cursor-pointer bg-gray-50">
                                     <input
                                         type="file"
                                         accept="image/*,video/*,image/gif"
