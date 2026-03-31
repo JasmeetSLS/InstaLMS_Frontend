@@ -79,7 +79,6 @@ const AdminLogin = () => {
                          before:content-[''] before:pointer-events-none p-8">
                         <div className="text-center mb-8">
                             <h2 className="text-2xl font-bold text-white">Admin Login</h2>
-                            <p className="text-gray-300 mt-2">Enter your credentials to access dashboard</p>
                         </div>
 
                         <form onSubmit={handleSubmit} className="space-y-5">
