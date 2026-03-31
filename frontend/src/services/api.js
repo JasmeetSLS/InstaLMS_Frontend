@@ -1,63 +1,96 @@
-// src/services/api.js
-import axios from 'axios';
+// Constants
+export const FILE_BASE_URL = 'http://localhost:5000';
+export const API_BASE_URL = `${FILE_BASE_URL}/api`;
 
-const API_BASE_URL = 'http://localhost:5000/api';
-
-const api = axios.create({
-    baseURL: API_BASE_URL,
-    headers: {
-        'Content-Type': 'application/json',
-    },
-});
-
-// Category APIs
-export const categoryAPI = {
-    // Get all categories
-    getAll: () => api.get('/categories'),
-    
-    // Get single category
-    getById: (id) => api.get(`/categories/${id}`),
-    
-    // Create new category with icon
-    create: (formData) => api.post('/categories', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-    }),
-    
-    // Update category with icon
-    update: (id, formData) => api.put(`/categories/${id}`, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-    }),
-    
-    // Delete category
-    delete: (id) => api.delete(`/categories/${id}`),
+// Route configuration
+const ROUTE_CONFIG = {
+  admin: { base: '/admin', prefix: '/admin' }
 };
 
-// Post APIs
-export const postAPI = {
-    // Get all posts
-    getAll: () => api.get('/posts'),
-    
-    // Get posts by category
-    getByCategory: (categoryId) => api.get(`/posts/category/${categoryId}`),
-    
-    // Get single post
-    getById: (id) => api.get(`/posts/${id}`),
-    
-    // Create post with media
-    create: (formData) => api.post('/posts', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-    }),
-    
-    // Update post
-    update: (id, formData) => api.put(`/posts/${id}`, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-    }),
-    
-    // Delete post
-    delete: (id) => api.delete(`/posts/${id}`),
-    
-    // Delete specific media
-    deleteMedia: (postId, mediaId) => api.delete(`/posts/${postId}/media/${mediaId}`),
+// Common headers
+const getDefaultHeaders = (isFormData = false) => {
+  const headers = {};
+  if (!isFormData) {
+    headers['Content-Type'] = 'application/json';
+  }
+  
+  const token = localStorage.getItem('adminToken');
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+  
+  return headers;
+};
+
+// Response handlers
+const handleResponse = async (response, options = {}) => {
+  const contentType = response.headers.get('content-type');
+  
+  if (contentType && contentType.includes('application/json')) {
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data.error || 'Something went wrong');
+    }
+    return data;
+  } else {
+    const text = await response.text();
+    if (!response.ok) {
+      throw new Error(text || 'Something went wrong');
+    }
+    return text;
+  }
+};
+
+// URL builder
+const buildUrl = (endpoint) => {
+  for (const [key, config] of Object.entries(ROUTE_CONFIG)) {
+    if (endpoint.startsWith(config.prefix)) {
+      const baseUrl = `${API_BASE_URL}${config.base}`;
+      const cleanEndpoint = endpoint.replace(config.prefix, '');
+      return `${baseUrl}${cleanEndpoint}`;
+    }
+  }
+  return `${API_BASE_URL}${endpoint}`;
+};
+
+// Core request method
+const request = async (endpoint, method = 'GET', data = null, options = {}) => {
+  const url = buildUrl(endpoint);
+  const headers = getDefaultHeaders(options.isFormData);
+  
+  let body = data;
+  if (data && !options.isFormData) {
+    body = JSON.stringify(data);
+  }
+
+  const config = {
+    method,
+    headers,
+    body,
+    ...options
+  };
+
+  const response = await fetch(url, config);
+  return handleResponse(response, options);
+};
+
+// API method factory
+const createApiMethods = (basePath = '') => ({
+  get: (endpoint) => request(`${basePath}${endpoint}`, 'GET'),
+  post: (endpoint, data, options = {}) => request(`${basePath}${endpoint}`, 'POST', data, options),
+  put: (endpoint, data, options = {}) => request(`${basePath}${endpoint}`, 'PUT', data, options),
+  delete: (endpoint) => request(`${basePath}${endpoint}`, 'DELETE')
+});
+
+const admin = createApiMethods('/admin');
+
+// Main API object
+const api = {
+  // Core request method (exposed for custom requests)
+  request,
+
+  // Admin APIs
+  adminLogin: (username, password) => admin.post('/login', { username, password })
 };
 
 export default api;

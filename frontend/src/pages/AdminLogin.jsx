@@ -1,61 +1,62 @@
-// src/pages/AdminLogin.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Lock, Mail, Eye, EyeOff, Shield, AlertCircle, ArrowRight } from 'lucide-react';
+import { Lock, User, Eye, EyeOff, Shield, AlertCircle, ArrowRight } from 'lucide-react';
+import api from '../services/api';
 
 const AdminLogin = () => {
     const navigate = useNavigate();
-    const [email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
-    // Static admin credentials
-    const ADMIN_EMAIL = 'admin@admin.com';
-    const ADMIN_PASSWORD = 'Admin@123';
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         
-        if (!email || !password) {
-            setError('Please enter both email and password');
+        if (!username || !password) {
+            setError('Please enter both username and password');
             return;
         }
 
         setLoading(true);
         setError('');
 
-        // Static authentication
-        setTimeout(() => {
-            if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+        try {
+            // Call admin login API
+            const response = await api.adminLogin(username, password);
+            
+            if (response.success) {
                 // Store admin session
-                localStorage.setItem('adminToken', 'admin-token-123');
-                localStorage.setItem('adminEmail', email);
+                localStorage.setItem('adminToken', response.token);
+                localStorage.setItem('adminUsername', username);
+                localStorage.setItem('adminEmail', response.data?.email || username);
+                localStorage.setItem('adminRole', response.data?.role || 'admin');
                 localStorage.setItem('isAdminLoggedIn', 'true');
                 
                 // Redirect to admin dashboard
-                navigate('/create-category');
+                navigate('/');
             } else {
-                setError('Invalid email or password');
+                setError(response.error || 'Login failed');
             }
+        } catch (err) {
+            console.error('Admin login error:', err);
+            setError(err.message || 'Invalid username or password');
+        } finally {
             setLoading(false);
-        }, 800);
+        }
     };
 
     return (
         <div className="min-h-screen flex">
             {/* Left Side - Image Section */}
             <div className="hidden lg:flex lg:w-1/2 relative bg-gradient-to-br from-blue-900 to-indigo-900 overflow-hidden">
-                {/* Background Image */}
                 <div className="absolute inset-0 bg-black/40 z-10"></div>
                 <img 
                     src="https://www.orisoftcomputereducation.com/Photo/Data_security_01.jpg"
                     alt="Admin Office"
                     className="absolute inset-0 w-full h-full object-cover"
                 />
-                
-    
             </div>
 
             {/* Right Side - Login Form */}
@@ -77,33 +78,34 @@ const AdminLogin = () => {
                          before:border-2 before:border-white/70 before:shadow-[0_0_15px_rgba(255,255,255,0.6)] 
                          before:content-[''] before:pointer-events-none p-8">
                         <div className="text-center mb-8">
-                            <h2 className="text-2xl font-bold text-white">Admin Login In</h2>
+                            <h2 className="text-2xl font-bold text-white">Admin Login</h2>
+                            <p className="text-gray-300 mt-2">Enter your credentials to access dashboard</p>
                         </div>
 
                         <form onSubmit={handleSubmit} className="space-y-5">
                             {/* Error Message */}
                             {error && (
-                                <div className="bg-red-50 border border-red-200 rounded-lg p-3 flex items-center gap-2 animate-shake">
+                                <div className="bg-red-50 border border-red-200 rounded-lg p-3 flex items-center gap-2">
                                     <AlertCircle className="w-4 h-4 text-red-500 flex-shrink-0" />
                                     <span className="text-sm text-red-600">{error}</span>
                                 </div>
                             )}
 
-                            {/* Email Field */}
+                            {/* Username Field */}
                             <div>
                                 <label className="block text-sm font-medium text-white mb-2">
-                                    Email Address
+                                    Username
                                 </label>
                                 <div className="relative">
                                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                        <Mail className="h-5 w-5 text-white" />
+                                        <User className="h-5 w-5 text-white" />
                                     </div>
                                     <input
-                                        type="email"
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
-                                        className="block w-full pl-10 pr-3 py-3 border text-white border-gray-300 rounded-lg focus:ring-1 focus:ring-white transition placeholder:text-gray-400"
-                                        placeholder="your@email.com"
+                                        type="text"
+                                        value={username}
+                                        onChange={(e) => setUsername(e.target.value)}
+                                        className="block w-full pl-10 pr-3 py-3 border text-white border-gray-300 rounded-lg focus:ring-1 focus:ring-white transition placeholder:text-gray-400 bg-transparent"
+                                        placeholder="Enter username"
                                         required
                                     />
                                 </div>
@@ -122,7 +124,7 @@ const AdminLogin = () => {
                                         type={showPassword ? "text" : "password"}
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
-                                        className="block w-full pl-10 pr-10 py-3 text-white border border-gray-300 rounded-lg focus:ring-1 focus:ring-white  transition placeholder:text-gray-400"
+                                        className="block w-full pl-10 pr-10 py-3 text-white border border-gray-300 rounded-lg focus:ring-1 focus:ring-white transition placeholder:text-gray-400 bg-transparent"
                                         placeholder="••••••••"
                                         required
                                     />
@@ -159,7 +161,6 @@ const AdminLogin = () => {
                                 )}
                             </button>
                         </form>
-
                     </div>
                 </div>
             </div>
