@@ -66,7 +66,7 @@ const PostPage = () => {
             return;
         }
         
-        const oversizedFiles = files.filter(file => file.size > 50 * 1024 * 1024);
+        const oversizedFiles = files.filter(file => file.size > 1024 * 1024 * 1024);
         if (oversizedFiles.length > 0) {
             alert('Some files exceed 50MB limit');
             return;
