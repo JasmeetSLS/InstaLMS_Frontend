@@ -35,7 +35,7 @@ const AdminLogin = () => {
                 localStorage.setItem('isAdminLoggedIn', 'true');
                 
                 // Redirect to admin dashboard
-                navigate('/');
+                navigate('/admin/user');
             } else {
                 setError(response.error || 'Login failed');
             }
