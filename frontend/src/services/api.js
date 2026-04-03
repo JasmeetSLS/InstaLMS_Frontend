@@ -10,6 +10,61 @@ const api = axios.create({
     },
 });
 
+// Add token to requests if it exists
+api.interceptors.request.use(
+    (config) => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
+    }
+);
+
+// Auth APIs
+export const authAPI = {
+    // Login user
+    login: (credentials) => api.post('/login', credentials),
+    
+    // Get current user info
+    getCurrentUser: () => api.get('/me'),
+    
+    // Get user profile with image
+    getProfile: () => api.get('/me'),
+    
+    // Logout (clear local storage)
+    logout: () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        localStorage.removeItem('isUserLoggedIn');
+    }
+};
+
+// User APIs
+export const userAPI = {
+    // Get all users
+    getAll: () => api.get('/users'),
+    
+    // Get single user
+    getById: (id) => api.get(`/users/${id}`),
+    
+    // Create new user with profile image
+    create: (formData) => api.post('/users', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+    }),
+    
+    // Update user with profile image
+    update: (id, formData) => api.put(`/users/${id}`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+    }),
+    
+    // Delete user
+    delete: (id) => api.delete(`/users/${id}`),
+};
+
 // Category APIs
 export const categoryAPI = {
     // Get all categories

@@ -2,52 +2,60 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Mail, Lock, Eye, EyeOff, User, ArrowRight, AlertCircle, Sparkles } from 'lucide-react';
+import { authAPI } from '../services/api';
 
 const UserLogin = () => {
     const navigate = useNavigate();
-    const [email, setEmail] = useState('');
+    const [employeeid, setEmployeeId] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
-    // Static user credentials (you can add multiple users)
-    const users = [
-        { email: 'user@user.com', password: 'User@123', name: 'John Doe', role: 'User' },
-        { email: 'john@example.com', password: 'john123', name: 'John', role: 'User' },
-        { email: 'demo@bat.com', password: 'demo123', name: 'Demo User', role: 'User' }
-    ];
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         
-        if (!email || !password) {
-            setError('Please enter both email and password');
+        if (!employeeid || !password) {
+            setError('Please enter both Employee ID and password');
             return;
         }
 
         setLoading(true);
         setError('');
 
-        // Static authentication
-        setTimeout(() => {
-            const user = users.find(u => u.email === email && u.password === password);
+        try {
+            // Call login API
+            const response = await authAPI.login({ 
+                employeeid: employeeid, 
+                password: password 
+            });
             
-            if (user) {
-                // Store user session
-                localStorage.setItem('userToken', 'user-token-123');
-                localStorage.setItem('userEmail', user.email);
-                localStorage.setItem('userName', user.name);
-                localStorage.setItem('userRole', user.role);
+            if (response.data.success) {
+                // Store token and user data
+                localStorage.setItem('token', response.data.token);
+                localStorage.setItem('user', JSON.stringify(response.data.user));
                 localStorage.setItem('isUserLoggedIn', 'true');
                 
                 // Redirect to home page
                 navigate('/home');
             } else {
-                setError('Invalid email or password');
+                setError(response.data.error || 'Login failed');
             }
+        } catch (err) {
+            console.error('Login error:', err);
+            if (err.response) {
+                // Server responded with error status
+                setError(err.response.data.error || 'Invalid Employee ID or password');
+            } else if (err.request) {
+                // Request was made but no response
+                setError('Network error. Please check your connection.');
+            } else {
+                // Something else happened
+                setError('An unexpected error occurred. Please try again.');
+            }
+        } finally {
             setLoading(false);
-        }, 800);
+        }
     };
 
     return (
@@ -100,21 +108,21 @@ const UserLogin = () => {
                                 </div>
                             )}
 
-                            {/* Email Field */}
+                            {/* Employee ID Field */}
                             <div>
                                 <label className="block text-sm font-medium text-white mb-2">
-                                    Email Address
+                                    Employee ID
                                 </label>
                                 <div className="relative">
                                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                         <Mail className="h-5 w-5 text-white" />
                                     </div>
                                     <input
-                                        type="email"
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
-                                        className="block w-full pl-10 pr-3 py-3 border text-white border-gray-300 rounded-lg focus:ring-1 focus:ring-white transition  placeholder:text-gray-400"
-                                        placeholder="your@email.com"
+                                        type="text"
+                                        value={employeeid}
+                                        onChange={(e) => setEmployeeId(e.target.value)}
+                                        className="block w-full pl-10 pr-3 py-3 border text-white border-gray-300 rounded-lg focus:ring-1 focus:ring-white transition placeholder:text-gray-400"
+                                        placeholder="Enter your Employee ID"
                                         required
                                     />
                                 </div>
