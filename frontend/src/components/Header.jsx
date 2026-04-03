@@ -1,8 +1,8 @@
 // src/components/Header.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { IoNotificationsOutline } from 'react-icons/io5';
-import { LogOut, User, X, Mail, Briefcase, BadgeCheck, Calendar, Image as ImageIcon } from 'lucide-react';
+import { IoNotificationsOutline, IoSendOutline } from 'react-icons/io5';
+import { LogOut, User, X, Mail, Briefcase, BadgeCheck, Calendar, Image as ImageIcon, Share2 } from 'lucide-react';
 import { authAPI } from '../services/api';
 
 const Header = () => {
@@ -75,6 +75,10 @@ const Header = () => {
     setShowProfilePopup(!showProfilePopup);
   };
 
+  const handleSharedPostsClick = () => {
+    navigate('/shared-posts');
+  };
+
   const formatDate = (dateString) => {
     if (!dateString) return 'N/A';
     const date = new Date(dateString);
@@ -132,6 +136,17 @@ const Header = () => {
 
         {/* Right side - Actions */}
         <div className="flex items-center gap-3">
+          {/* Shared Posts Button */}
+          <button 
+            onClick={handleSharedPostsClick}
+            className="relative group"
+            title="Shared Posts"
+          >
+            <div className="p-2.5 bg-gray-100 group-hover:bg-green-100 rounded-full transition-all duration-200">
+              <Share2 className="w-5 h-5 text-gray-600 group-hover:text-green-600 transition-colors" />
+            </div>
+          </button>
+
           {/* Notification Button */}
           <button className="relative group">
             <div className="p-2.5 bg-gray-100 group-hover:bg-gray-200 rounded-full transition-all duration-200">
@@ -227,8 +242,6 @@ const Header = () => {
                       <p className="text-sm font-medium text-gray-900">{userData?.name || 'N/A'}</p>
                     </div>
                   </div>
-
-                 
 
                   {/* Status */}
                   <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">

@@ -1,10 +1,10 @@
 // src/components/CarComponents.jsx
 import React, { useState, useRef, useEffect } from 'react';
 import { Eye, Image as ImageIcon, Video, FileImage, ChevronLeft, ChevronRight, Heart, MessageCircle, Share2, Play, Pause, Send, X, User, Search, Check, ThumbsUp, View, Bookmark, TestTube, HelpCircle, Share, Share2Icon } from 'lucide-react';
-import { userAPI } from '../services/api';
+import { userAPI,shareAPI  } from '../services/api';
 import { IoLogoYoutube } from 'react-icons/io5';
 import Quiz from './Quiz';
-
+import CommentsModal from './CommentsModal';
 
 const CarComponents = ({ posts, loading, onViewPost }) => {
   const [currentMediaIndex, setCurrentMediaIndex] = useState({});
@@ -20,16 +20,12 @@ const CarComponents = ({ posts, loading, onViewPost }) => {
   const [loadingUsers, setLoadingUsers] = useState(false);
   const [shareSuccess, setShareSuccess] = useState(false);
   const [showQuiz, setShowQuiz] = useState(false);
+  const [showCommentsModal, setShowCommentsModal] = useState(false);
+  const [selectedPostForComments, setSelectedPostForComments] = useState(null);
+  const [showYouTubePopup, setShowYouTubePopup] = useState(false);
+  const [currentYouTubeUrl, setCurrentYouTubeUrl] = useState('');
 
   const videoRefs = useRef({});
-
-  // Static YouTube video to be added to the end of all posts
-  const staticYouTubeVideo = {
-    type: 'youtube',
-    url: 'https://www.youtube.com/watch?v=lTRnRVzs5jk',
-    thumbnail: 'https://img.youtube.com/vi/lTRnRVzs5jk/maxresdefault.jpg',
-    title: 'Static YouTube Video'
-  };
 
   const getMediaIcon = (type) => {
     if (type === 'video') return <Video className="w-5 h-5 text-blue-500" />;
@@ -76,21 +72,57 @@ const CarComponents = ({ posts, loading, onViewPost }) => {
     setLikedPosts(prev => ({ ...prev, [postId]: !prev[postId] }));
   };
 
-// Add these functions
-const handleQuizClick = () => {
-  setShowQuiz(true);
-};
+  const handleQuizClick = () => {
+    setShowQuiz(true);
+  };
 
-const handleCloseQuiz = () => {
-  setShowQuiz(false);
-};
+  const handleCloseQuiz = () => {
+    setShowQuiz(false);
+  };
+
+  const handleCommentClick = (post) => {
+    setSelectedPostForComments(post);
+    setShowCommentsModal(true);
+  };
+
+  const handleCloseCommentsModal = () => {
+    setShowCommentsModal(false);
+    setSelectedPostForComments(null);
+  };
+
+  // Function to handle YouTube thumbnail click
+  const handleYouTubeThumbnailClick = (youtubeUrl) => {
+    setCurrentYouTubeUrl(youtubeUrl);
+    setShowYouTubePopup(true);
+  };
+
+  // Function to close YouTube popup
+  const handleCloseYouTubePopup = () => {
+    setShowYouTubePopup(false);
+    setCurrentYouTubeUrl('');
+  };
+
+  // Function to open in YouTube app/website
+  const openInYouTube = () => {
+    window.open(currentYouTubeUrl, '_blank');
+  };
+
+  
 
   // Function to get YouTube embed URL
   const getYouTubeEmbedUrl = (url) => {
     const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
     const match = url.match(regExp);
     const videoId = (match && match[2].length === 11) ? match[2] : null;
-    return videoId ? `https://www.youtube.com/embed/${videoId}?autoplay=0` : url;
+    return videoId ? `https://www.youtube.com/embed/${videoId}?autoplay=1` : url;
+  };
+
+  // Function to get YouTube thumbnail
+  const getYouTubeThumbnail = (url) => {
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = url.match(regExp);
+    const videoId = (match && match[2].length === 11) ? match[2] : null;
+    return videoId ? `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg` : null;
   };
 
   const toggleVideoPlay = (postId) => {
@@ -141,7 +173,6 @@ const handleCloseQuiz = () => {
     try {
       const response = await userAPI.getAll();
       if (response.data) {
-        // Filter out current user (optional)
         const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
         const otherUsers = response.data.filter(user => user.id !== currentUser.id);
         setUsers(otherUsers);
@@ -194,26 +225,35 @@ const handleCloseQuiz = () => {
     });
   };
 
-  const handleSendShare = () => {
-    if (selectedUsers.length === 0) {
-      alert('Please select at least one user to share with');
-      return;
-    }
+const handleSendShare = async () => {
+  if (selectedUsers.length === 0) {
+    alert('Please select at least one user to share with');
+    return;
+  }
 
-    // Here you can implement the actual share logic
-    // For now, just show success message
-    console.log('Sharing post:', selectedPost.id);
-    console.log('Shared with users:', selectedUsers);
+  try {
+    const sharedToUsers = selectedUsers.map(user => user.id);
     
-    setShareSuccess(true);
-    setTimeout(() => {
-      handleClosePopup();
-    }, 2000);
-  };
+    const response = await shareAPI.sharePost(selectedPost.id, sharedToUsers);
+    
+    if (response.data.success) {
+      setShareSuccess(true);
+      // Reset selected users after successful share
+      setSelectedUsers([]);
+      setTimeout(() => {
+        handleClosePopup();
+      }, 2000);
+    } else {
+      alert(response.data.error || 'Failed to share post');
+    }
+  } catch (error) {
+    console.error('Error sharing post:', error);
+    alert(error.response?.data?.error || 'Failed to share post. Please try again.');
+  }
+};
 
   // Reset video state when media index changes
   useEffect(() => {
-    // When media changes, reset video state for that post
     Object.keys(currentMediaIndex).forEach(postId => {
       const video = videoRefs.current[postId];
       if (video) {
@@ -222,13 +262,6 @@ const handleCloseQuiz = () => {
       }
     });
   }, [currentMediaIndex]);
-
-  // Get post media with YouTube video always at the end
-  const getPostMedia = (post) => {
-    const existingMedia = post.media || [];
-    // Always add YouTube video at the end of the media array
-    return [...existingMedia, staticYouTubeVideo];
-  };
 
   if (loading) {
     return (
@@ -258,13 +291,13 @@ const handleCloseQuiz = () => {
     <>
       <div className="max-w-2xl mx-auto px-4 py-6 space-y-8">
         {posts.map((post) => {
-          const postMedia = getPostMedia(post);
+          const postMedia = post.media || [];
           const currentIndex = getCurrentIndex(post.id);
           const currentMedia = postMedia.length > 0 ? postMedia[currentIndex] : null;
           const hasMultipleMedia = postMedia.length > 1;
           const isLiked = likedPosts[post.id] || false;
           const videoState = videoStates[post.id] || 'paused';
-          const isYouTube = currentMedia?.type === 'youtube';
+          const youtubeThumbnail = currentMedia?.type === 'youtube' ? getYouTubeThumbnail(currentMedia.url) : null;
 
           return (
             <article key={post.id} className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
@@ -305,16 +338,30 @@ const handleCloseQuiz = () => {
                         </div>
                       </>
                     ) : currentMedia.type === 'youtube' ? (
-                      <div className="relative" style={{ paddingBottom: '56.25%' }}>
-                        <iframe
-                          src={getYouTubeEmbedUrl(currentMedia.url)}
-                          className="absolute top-0 left-0 w-full h-full"
-                          title="YouTube video player"
-                          frameBorder="0"
-                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                          allowFullScreen
-                        ></iframe>
-                      </div>
+                      <>
+                        {/* YouTube Thumbnail with Play Button */}
+                        <div 
+                          className="relative cursor-pointer group"
+                          onClick={() => handleYouTubeThumbnailClick(currentMedia.url)}
+                        >
+                          <img 
+                            src={youtubeThumbnail}
+                            alt="YouTube Video"
+                            className="w-full h-auto max-h-[600px] object-contain"
+                            style={{ maxHeight: '70vh' }}
+                            onError={(e) => {
+                              // Fallback thumbnail if maxresdefault doesn't exist
+                              e.target.src = 'https://img.youtube.com/vi/' + currentMedia.url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&]+)/)?.[1] + '/hqdefault.jpg';
+                            }}
+                          />
+                          {/* Play Button Overlay */}
+                          <div className="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/40 transition-all duration-300">
+                            <div className="bg-red-600/90 hover:bg-red-600 rounded-full p-5 shadow-lg transition transform group-hover:scale-110">
+                              <Play className="w-12 h-12 text-white fill-current ml-1" />
+                            </div>
+                          </div>
+                        </div>
+                      </>
                     ) : (
                       <img 
                         src={`http://localhost:5000${currentMedia.url}`}
@@ -354,7 +401,6 @@ const handleCloseQuiz = () => {
                         <button
                           key={idx}
                           onClick={() => {
-                            // Pause video before changing media
                             const video = videoRefs.current[post.id];
                             if (video && !video.paused) {
                               video.pause();
@@ -399,7 +445,10 @@ const handleCloseQuiz = () => {
                     <span className="text-xs">{post.views || 2}</span>
                   </button>
                   
-                  <button className="flex items-center gap-1 text-gray-600 hover:text-blue-500 transition">
+                  <button 
+                    onClick={() => handleCommentClick(post)}
+                    className="flex items-center gap-1 text-gray-600 hover:text-blue-500 transition"
+                  >
                     <MessageCircle className="w-6 h-6" />
                   </button>
                   
@@ -413,23 +462,19 @@ const handleCloseQuiz = () => {
 
                 {/* Right side - Additional action buttons */}
                 <div className="flex items-center gap-3">
-                  {/* Quiz button with colorful MCQ icon */}
                   <button 
-  onClick={handleQuizClick}  // Change this line
-  className="relative group transition-all duration-300 transform hover:scale-110 active:scale-95"
-  title="Take Quiz"
->
-                    {/* Colorful glow effect on hover */}
+                    onClick={handleQuizClick}
+                    className="relative group transition-all duration-300 transform hover:scale-110 active:scale-95"
+                    title="Take Quiz"
+                  >
                     <span className="absolute inset-0 rounded-full bg-gradient-to-r from-purple-400 to-pink-400 opacity-0 group-hover:opacity-75 group-hover:animate-ping"></span>
                     
-                    {/* MCQ icon with colorful gradient background */}
                     <div className="relative bg-gradient-to-br from-purple-500 via-pink-500 to-orange-400 rounded-full p-1.5 shadow-lg group-hover:shadow-xl transition-all duration-300">
                       <svg 
                         className="w-5 h-5 text-white" 
                         fill="currentColor" 
                         viewBox="0 0 24 24"
                       >
-                        {/* Multiple choice checkbox style icon */}
                         <path d="M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zm0 2v14h14V5H5zm2 2h10v2H7V7zm0 4h10v2H7v-2zm0 4h7v2H7v-2z"/>
                         <circle cx="17.5" cy="17.5" r="1.5" fill="white"/>
                         <circle cx="17.5" cy="11.5" r="1.5" fill="white"/>
@@ -437,11 +482,9 @@ const handleCloseQuiz = () => {
                       </svg>
                     </div>
                     
-                    {/* Touch ripple effect */}
                     <span className="absolute inset-0 rounded-full bg-purple-500 opacity-0 transition-all duration-300 group-active:opacity-50 group-active:scale-150"></span>
                   </button>
 
-                  {/* Bookmark button */}
                   <button 
                     onClick={() => {/* Add bookmark functionality */}}
                     className="text-gray-600 hover:text-yellow-600 transition"
@@ -478,128 +521,184 @@ const handleCloseQuiz = () => {
         })}
       </div>
 
-      {/* Share Popup Modal */}
-      {showSharePopup && (
-        <div className="fixed inset-0 z-50 overflow-y-auto" onClick={handleClosePopup}>
-          <div className="fixed inset-0 bg-[#00000080] bg-opacity-50 transition-opacity"></div>
+{/* Share Popup Modal */}
+{showSharePopup && (
+  <div className="fixed inset-0 z-50 overflow-y-auto" onClick={handleClosePopup}>
+    <div className="fixed inset-0 bg-[#00000080] bg-opacity-50 transition-opacity"></div>
+    
+    <div className="flex min-h-full items-center justify-center p-4">
+      <div 
+        className="relative bg-white rounded-2xl shadow-xl max-w-2xl w-full transform transition-all"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Header */}
+        <div className="flex items-center justify-between p-4 border-b border-gray-200">
+          <h3 className="text-lg font-semibold text-gray-900">Share Post</h3>
+          <button
+            onClick={handleClosePopup}
+            className="text-gray-400 hover:text-gray-600 transition-colors"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        {/* Success Message */}
+        {shareSuccess && (
+          <div className="m-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+            <div className="flex items-center gap-2">
+              <Check className="w-5 h-5 text-green-600" />
+              <p className="text-sm text-green-700">
+                Shared successfully 
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Search Bar */}
+        <div className="p-4 border-b border-gray-200">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Search users by name or employee ID..."
+              value={searchTerm}
+              onChange={handleSearchUsers}
+              className="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-500 focus:border-blue-500 outline-none"
+            />
+          </div>
+        </div>
+
+        {/* Users Grid - 3 per row */}
+        <div className="max-h-96 overflow-y-auto">
+          {loadingUsers ? (
+            <div className="flex justify-center items-center py-12">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+            </div>
+          ) : filteredUsers.length === 0 ? (
+            <div className="text-center py-12">
+              <User className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+              <p className="text-gray-500">No users found</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-3 gap-3 p-4">
+              {filteredUsers.map((user) => (
+                <button
+                  key={user.id}
+                  onClick={() => toggleUserSelection(user)}
+                  className={`relative flex flex-col items-center p-3 rounded-xl transition-all duration-200 ${
+                    selectedUsers.find(u => u.id === user.id) 
+                      ? 'bg-blue-50 border-2 border-blue-500 shadow-md' 
+                      : 'bg-gray-50 hover:bg-gray-100 border-2 border-transparent'
+                  }`}
+                >
+                  {/* Profile Image */}
+                  <div className="w-16 h-16 rounded-full overflow-hidden bg-gradient-to-r from-purple-500 to-pink-500 mb-2">
+                    {user.profile_image ? (
+                      <img 
+                        src={`http://localhost:5000${user.profile_image}`}
+                        alt={user.name}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                        <User className="w-8 h-8 text-white" />
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* User Info */}
+                  <div className="text-center w-full">
+                    <p className="text-sm font-medium text-gray-900 truncate max-w-full" title={user.name}>
+                      {user.name}
+                    </p>
+                  </div>
+
+                  {/* Selected Checkmark */}
+                  {selectedUsers.find(u => u.id === user.id) && (
+                    <div className="absolute top-2 right-2 w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center">
+                      <Check className="w-3 h-3 text-white" />
+                    </div>
+                  )}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Footer with Send Button */}
+        <div className="p-4 border-t border-gray-200">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-sm text-gray-600">
+              {selectedUsers.length} user{selectedUsers.length !== 1 ? 's' : ''} selected
+            </span>
+          </div>
+          <button
+            onClick={handleSendShare}
+            disabled={selectedUsers.length === 0}
+            className="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white py-2.5 rounded-lg font-medium hover:from-blue-600 hover:to-blue-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          >
+            <Send className="w-5 h-5" />
+            Send to {selectedUsers.length > 0 ? `${selectedUsers.length} user${selectedUsers.length > 1 ? 's' : ''}` : 'users'}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
+
+      {/* YouTube Popup Modal */}
+      {showYouTubePopup && (
+        <div className="fixed inset-0 z-50 overflow-y-auto" onClick={handleCloseYouTubePopup}>
+          <div className="fixed inset-0 bg-[#000000cc] bg-opacity-95 transition-opacity"></div>
           
           <div className="flex min-h-full items-center justify-center p-4">
             <div 
-              className="relative bg-white rounded-2xl shadow-xl max-w-md w-full transform transition-all"
+              className="relative bg-white rounded-2xl shadow-xl max-w-5xl w-full transform transition-all"
               onClick={(e) => e.stopPropagation()}
             >
-              {/* Header */}
               <div className="flex items-center justify-between p-4 border-b border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-900">Share Post</h3>
+                <div className="flex items-center gap-2">
+                  <IoLogoYoutube className="w-6 h-6 text-red-600" />
+                  <h3 className="text-lg font-semibold text-gray-900">YouTube Video</h3>
+                </div>
                 <button
-                  onClick={handleClosePopup}
+                  onClick={handleCloseYouTubePopup}
                   className="text-gray-400 hover:text-gray-600 transition-colors"
                 >
                   <X className="w-5 h-5" />
                 </button>
               </div>
 
-              {/* Success Message */}
-              {shareSuccess && (
-                <div className="m-4 p-3 bg-green-50 border border-green-200 rounded-lg">
-                  <div className="flex items-center gap-2">
-                    <Check className="w-5 h-5 text-green-600" />
-                    <p className="text-sm text-green-700">
-                      Shared successfully with {selectedUsers.length} user{selectedUsers.length > 1 ? 's' : ''}!
-                    </p>
-                  </div>
-                </div>
-              )}
-
-              {/* Search Bar */}
-              <div className="p-4 border-b border-gray-200">
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                  <input
-                    type="text"
-                    placeholder="Search users by name or employee ID..."
-                    value={searchTerm}
-                    onChange={handleSearchUsers}
-                    className="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-500 focus:border-blue-500 outline-none"
-                  />
-                </div>
+              <div className="relative" style={{ paddingBottom: '56.25%' }}>
+                <iframe
+                  className="absolute top-0 left-0 w-full h-full"
+                  src={getYouTubeEmbedUrl(currentYouTubeUrl)}
+                  title="YouTube video player"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                ></iframe>
               </div>
 
-              {/* Users List */}
-              <div className="max-h-96 overflow-y-auto">
-                {loadingUsers ? (
-                  <div className="flex justify-center items-center py-12">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-                  </div>
-                ) : filteredUsers.length === 0 ? (
-                  <div className="text-center py-12">
-                    <User className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-                    <p className="text-gray-500">No users found</p>
-                  </div>
-                ) : (
-                  <div className="divide-y divide-gray-100">
-                    {filteredUsers.map((user) => (
-                      <button
-                        key={user.id}
-                        onClick={() => toggleUserSelection(user)}
-                        className={`w-full px-4 py-3 flex items-center gap-3 hover:bg-gray-50 transition-colors ${
-                          selectedUsers.find(u => u.id === user.id) ? 'bg-blue-50' : ''
-                        }`}
-                      >
-                        {/* Profile Image */}
-                        <div className="w-10 h-10 rounded-full overflow-hidden bg-gradient-to-r from-purple-500 to-pink-500 flex-shrink-0">
-                          {user.profile_image ? (
-                            <img 
-                              src={`http://localhost:5000${user.profile_image}`}
-                              alt={user.name}
-                              className="w-full h-full object-cover"
-                            />
-                          ) : (
-                            <div className="w-full h-full flex items-center justify-center">
-                              <User className="w-5 h-5 text-white" />
-                            </div>
-                          )}
-                        </div>
-                        
-                        {/* User Info */}
-                        <div className="flex-1 text-left">
-                          <p className="text-sm font-medium text-gray-900">{user.name}</p>
-                          <p className="text-xs text-gray-500">ID: {user.employeeid}</p>
-                        </div>
-
-                        {/* Role Badge */}
-                        <div className="flex items-center gap-2">
-                          {selectedUsers.find(u => u.id === user.id) && (
-                            <div className="w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center">
-                              <Check className="w-3 h-3 text-white" />
-                            </div>
-                          )}
-                        </div>
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              {/* Footer with Send Button */}
               <div className="p-4 border-t border-gray-200">
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-sm text-gray-600">
-                    {selectedUsers.length} user{selectedUsers.length !== 1 ? 's' : ''} selected
-                  </span>
-                </div>
                 <button
-                  onClick={handleSendShare}
-                  disabled={selectedUsers.length === 0}
-                  className="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white py-2.5 rounded-lg font-medium hover:from-blue-600 hover:to-blue-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  onClick={openInYouTube}
+                  className="w-full bg-gradient-to-r from-red-500 to-red-600 text-white py-2.5 rounded-lg font-medium hover:from-red-600 hover:to-red-700 transition-all duration-200 flex items-center justify-center gap-2"
                 >
-                  <Send className="w-5 h-5" />
-                  Send to {selectedUsers.length > 0 ? `${selectedUsers.length} user${selectedUsers.length > 1 ? 's' : ''}` : 'users'}
+                  <IoLogoYoutube className="w-5 h-5" />
+                  Open in YouTube
                 </button>
+                <p className="text-xs text-gray-500 text-center mt-2">
+                  Video will open in YouTube app or website
+                </p>
               </div>
             </div>
           </div>
         </div>
+      )}
+
+      {showCommentsModal && selectedPostForComments && (
+        <CommentsModal post={selectedPostForComments} onClose={handleCloseCommentsModal} />
       )}
       {showQuiz && <Quiz onClose={handleCloseQuiz} />}
     </>

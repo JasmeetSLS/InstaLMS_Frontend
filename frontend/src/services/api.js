@@ -115,4 +115,25 @@ export const postAPI = {
     deleteMedia: (postId, mediaId) => api.delete(`/posts/${postId}/media/${mediaId}`),
 };
 
+// Share Post APIs
+export const shareAPI = {
+    // Share post to multiple users
+    sharePost: (postId, sharedToUsers) => api.post('/posts/share', {
+        post_id: postId,
+        shared_to_users: sharedToUsers
+    }),
+    
+    // Get all shares received by current user
+    getReceivedShares: () => api.get('/posts/shares/received'),
+    
+    // Get all shares sent by current user
+    getSentShares: () => api.get('/posts/shares/sent'),
+    
+    // Get shares for a specific post
+    getPostShares: (postId) => api.get(`/posts/${postId}/shares`),
+    
+    // Delete/remove a share
+    deleteShare: (shareId) => api.delete(`/posts/shares/${shareId}`),
+};
+
 export default api;

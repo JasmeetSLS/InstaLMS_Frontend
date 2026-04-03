@@ -7,6 +7,7 @@ import CategoryPage from './pages/CategoryPage';
 import AdminLayout from './components/AdminLayout';
 import AdminLogin from './pages/AdminLogin';
 import UserLogin from './pages/UserLogin';
+import SharedPosts from './pages/SharedPosts';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
       <Routes>
         {/* Home Page - No Admin Layout */}
         <Route path="/home" element={<HomePage />} />
+        <Route path="/shared-posts" element={<SharedPosts />} />
         
         {/* Admin Pages with Layout */}
         <Route 
