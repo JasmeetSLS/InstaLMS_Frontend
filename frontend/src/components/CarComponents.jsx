@@ -3,6 +3,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Eye, Image as ImageIcon, Video, FileImage, ChevronLeft, ChevronRight, Heart, MessageCircle, Share2, Play, Pause, Send, X, User, Search, Check, ThumbsUp, View, Bookmark, TestTube, HelpCircle, Share, Share2Icon } from 'lucide-react';
 import { userAPI } from '../services/api';
 import { IoLogoYoutube } from 'react-icons/io5';
+import Quiz from './Quiz';
+
 
 const CarComponents = ({ posts, loading, onViewPost }) => {
   const [currentMediaIndex, setCurrentMediaIndex] = useState({});
@@ -17,12 +19,22 @@ const CarComponents = ({ posts, loading, onViewPost }) => {
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [loadingUsers, setLoadingUsers] = useState(false);
   const [shareSuccess, setShareSuccess] = useState(false);
-  const [showYouTubePopup, setShowYouTubePopup] = useState(false);
+  const [showQuiz, setShowQuiz] = useState(false);
+
   const videoRefs = useRef({});
+
+  // Static YouTube video to be added to the end of all posts
+  const staticYouTubeVideo = {
+    type: 'youtube',
+    url: 'https://www.youtube.com/watch?v=lTRnRVzs5jk',
+    thumbnail: 'https://img.youtube.com/vi/lTRnRVzs5jk/maxresdefault.jpg',
+    title: 'Static YouTube Video'
+  };
 
   const getMediaIcon = (type) => {
     if (type === 'video') return <Video className="w-5 h-5 text-blue-500" />;
     if (type === 'gif') return <FileImage className="w-5 h-5 text-purple-500" />;
+    if (type === 'youtube') return <IoLogoYoutube className="w-5 h-5 text-red-500" />;
     return <ImageIcon className="w-5 h-5 text-green-500" />;
   };
 
@@ -64,17 +76,22 @@ const CarComponents = ({ posts, loading, onViewPost }) => {
     setLikedPosts(prev => ({ ...prev, [postId]: !prev[postId] }));
   };
 
-  // Add this function to handle YouTube button click
-const handleYouTubeClick = () => {
-  setShowYouTubePopup(true);
+// Add these functions
+const handleQuizClick = () => {
+  setShowQuiz(true);
 };
 
-// Add this function to open in YouTube app/website
-const openInYouTube = () => {
-  window.open('https://www.youtube.com/watch?v=GSyle-JHiDw', '_blank');
-  setShowYouTubePopup(false);
+const handleCloseQuiz = () => {
+  setShowQuiz(false);
 };
 
+  // Function to get YouTube embed URL
+  const getYouTubeEmbedUrl = (url) => {
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = url.match(regExp);
+    const videoId = (match && match[2].length === 11) ? match[2] : null;
+    return videoId ? `https://www.youtube.com/embed/${videoId}?autoplay=0` : url;
+  };
 
   const toggleVideoPlay = (postId) => {
     const video = videoRefs.current[postId];
@@ -206,6 +223,13 @@ const openInYouTube = () => {
     });
   }, [currentMediaIndex]);
 
+  // Get post media with YouTube video always at the end
+  const getPostMedia = (post) => {
+    const existingMedia = post.media || [];
+    // Always add YouTube video at the end of the media array
+    return [...existingMedia, staticYouTubeVideo];
+  };
+
   if (loading) {
     return (
       <div className="px-4 mt-6">
@@ -234,17 +258,19 @@ const openInYouTube = () => {
     <>
       <div className="max-w-2xl mx-auto px-4 py-6 space-y-8">
         {posts.map((post) => {
+          const postMedia = getPostMedia(post);
           const currentIndex = getCurrentIndex(post.id);
-          const currentMedia = post.media && post.media.length > 0 ? post.media[currentIndex] : null;
-          const hasMultipleMedia = post.media && post.media.length > 1;
+          const currentMedia = postMedia.length > 0 ? postMedia[currentIndex] : null;
+          const hasMultipleMedia = postMedia.length > 1;
           const isLiked = likedPosts[post.id] || false;
           const videoState = videoStates[post.id] || 'paused';
+          const isYouTube = currentMedia?.type === 'youtube';
 
           return (
             <article key={post.id} className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
 
               {/* Media Carousel */}
-              {post.media && post.media.length > 0 && currentMedia && (
+              {postMedia.length > 0 && currentMedia && (
                 <div className="relative w-full bg-black">
                   <div className="w-full relative">
                     {currentMedia.type === 'video' ? (
@@ -278,6 +304,17 @@ const openInYouTube = () => {
                           )}
                         </div>
                       </>
+                    ) : currentMedia.type === 'youtube' ? (
+                      <div className="relative" style={{ paddingBottom: '56.25%' }}>
+                        <iframe
+                          src={getYouTubeEmbedUrl(currentMedia.url)}
+                          className="absolute top-0 left-0 w-full h-full"
+                          title="YouTube video player"
+                          frameBorder="0"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                        ></iframe>
+                      </div>
                     ) : (
                       <img 
                         src={`http://localhost:5000${currentMedia.url}`}
@@ -293,15 +330,15 @@ const openInYouTube = () => {
                     <>
                       {currentIndex > 0 && (
                         <button
-                          onClick={() => prevMedia(post.id, post.media.length)}
+                          onClick={() => prevMedia(post.id, postMedia.length)}
                           className="absolute left-3 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 w-8 h-8 rounded-full flex items-center justify-center shadow-md transition z-10"
                         >
                           <ChevronLeft className="w-5 h-5" />
                         </button>
                       )}
-                      {currentIndex < post.media.length - 1 && (
+                      {currentIndex < postMedia.length - 1 && (
                         <button
-                          onClick={() => nextMedia(post.id, post.media.length)}
+                          onClick={() => nextMedia(post.id, postMedia.length)}
                           className="absolute right-3 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 w-8 h-8 rounded-full flex items-center justify-center shadow-md transition z-10"
                         >
                           <ChevronRight className="w-5 h-5" />
@@ -313,7 +350,7 @@ const openInYouTube = () => {
                   {/* Media Indicators */}
                   {hasMultipleMedia && (
                     <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 flex gap-1.5 z-10">
-                      {post.media.map((media, idx) => (
+                      {postMedia.map((media, idx) => (
                         <button
                           key={idx}
                           onClick={() => {
@@ -335,102 +372,85 @@ const openInYouTube = () => {
                       ))}
                     </div>
                   )}
+
+                  {/* YouTube Badge for YouTube videos */}
+                  {currentMedia.type === 'youtube' && (
+                    <div className="absolute top-3 left-3 bg-red-600 text-white px-2 py-1 rounded-md flex items-center gap-1 z-10">
+                      <IoLogoYoutube className="w-4 h-4" />
+                      <span className="text-xs font-medium">YouTube</span>
+                    </div>
+                  )}
                 </div>
               )}
 
+              <div className="px-5 pt-4 pb-2 flex items-center justify-between">
+                {/* Left side - Engagement buttons */}
+                <div className="flex items-center gap-3">
+                  <button 
+                    onClick={() => handleLike(post.id)}
+                    className={`flex items-center gap-1 transition ${isLiked ? 'text-blue-500' : 'text-gray-600 hover:text-blue-500'}`}
+                  >
+                    <ThumbsUp className={`w-6 h-6 ${isLiked ? 'fill-current' : ''}`} />
+                    <span className="text-xs">{post.likes || 1}</span>
+                  </button>
+                  
+                  <button className="flex items-center gap-1 text-gray-600 hover:text-blue-500 transition">
+                    <Eye className="w-6 h-6" />
+                    <span className="text-xs">{post.views || 2}</span>
+                  </button>
+                  
+                  <button className="flex items-center gap-1 text-gray-600 hover:text-blue-500 transition">
+                    <MessageCircle className="w-6 h-6" />
+                  </button>
+                  
+                  <button 
+                    onClick={() => handleShareClick(post)}
+                    className="flex items-center gap-1 text-gray-600 hover:text-green-500 transition"
+                  >
+                    <Share2 className="w-5 h-5" />
+                  </button>
+                </div>
 
-<div className="px-5 pt-4 pb-2 flex items-center justify-between">
-  {/* Left side - Engagement buttons */}
-  <div className="flex items-center gap-3">
-    <button 
-      onClick={() => handleLike(post.id)}
-      className={`flex items-center gap-1 transition ${isLiked ? 'text-blue-500' : 'text-gray-600 hover:text-blue-500'}`}
-    >
-      <ThumbsUp className={`w-6 h-6 ${isLiked ? 'fill-current' : ''}`} />
-      <span className="text-xs">{post.likes || 1}</span>
-    </button>
-    
-    <button className="flex items-center gap-1 text-gray-600 hover:text-blue-500 transition">
-      <Eye className="w-6 h-6" />
-      <span className="text-xs">{post.views || 2}</span>
-    </button>
-    
-    <button className="flex items-center gap-1 text-gray-600 hover:text-blue-500 transition">
-      <MessageCircle className="w-6 h-6" />
-    </button>
-    
-    <button 
-      onClick={() => handleShareClick(post)}
-      className="flex items-center gap-1 text-gray-600 hover:text-green-500 transition"
-    >
-      <Share2 className="w-5 h-5" />
-    </button>
-  </div>
-
-  {/* Right side - Additional action buttons */}
-  <div className="flex items-center gap-3">
-{/* YouTube button with popup */}
-<button 
-  onClick={handleYouTubeClick}
+                {/* Right side - Additional action buttons */}
+                <div className="flex items-center gap-3">
+                  {/* Quiz button with colorful MCQ icon */}
+                  <button 
+  onClick={handleQuizClick}  // Change this line
   className="relative group transition-all duration-300 transform hover:scale-110 active:scale-95"
-  title="Watch on YouTube"
+  title="Take Quiz"
 >
-  {/* Red glow effect on hover */}
-  <span className="absolute inset-0 rounded-full bg-red-400 opacity-0 group-hover:opacity-75 group-hover:animate-ping"></span>
-  
-  {/* YouTube icon with red gradient background */}
-  <div className="relative bg-gradient-to-r from-red-500 to-red-700 rounded-full p-1.5 shadow-lg group-hover:shadow-xl transition-all duration-300">
-    <svg 
-      className="w-5 h-5 text-white" 
-      fill="currentColor" 
-      viewBox="0 0 24 24"
-    >
-      <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.376.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.376-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-    </svg>
-  </div>
-  
-  {/* Touch ripple effect */}
-  <span className="absolute inset-0 rounded-full bg-red-500 opacity-0 transition-all duration-300 group-active:opacity-50 group-active:scale-150"></span>
-</button>
+                    {/* Colorful glow effect on hover */}
+                    <span className="absolute inset-0 rounded-full bg-gradient-to-r from-purple-400 to-pink-400 opacity-0 group-hover:opacity-75 group-hover:animate-ping"></span>
+                    
+                    {/* MCQ icon with colorful gradient background */}
+                    <div className="relative bg-gradient-to-br from-purple-500 via-pink-500 to-orange-400 rounded-full p-1.5 shadow-lg group-hover:shadow-xl transition-all duration-300">
+                      <svg 
+                        className="w-5 h-5 text-white" 
+                        fill="currentColor" 
+                        viewBox="0 0 24 24"
+                      >
+                        {/* Multiple choice checkbox style icon */}
+                        <path d="M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zm0 2v14h14V5H5zm2 2h10v2H7V7zm0 4h10v2H7v-2zm0 4h7v2H7v-2z"/>
+                        <circle cx="17.5" cy="17.5" r="1.5" fill="white"/>
+                        <circle cx="17.5" cy="11.5" r="1.5" fill="white"/>
+                        <circle cx="17.5" cy="7.5" r="1.5" fill="white"/>
+                      </svg>
+                    </div>
+                    
+                    {/* Touch ripple effect */}
+                    <span className="absolute inset-0 rounded-full bg-purple-500 opacity-0 transition-all duration-300 group-active:opacity-50 group-active:scale-150"></span>
+                  </button>
 
-  {/* Quiz button with colorful MCQ icon */}
-  <button 
-    onClick={() => {/* Add quiz functionality */}}
-    className="relative group transition-all duration-300 transform hover:scale-110 active:scale-95"
-    title="Take Quiz"
-  >
-    {/* Colorful glow effect on hover */}
-    <span className="absolute inset-0 rounded-full bg-gradient-to-r from-purple-400 to-pink-400 opacity-0 group-hover:opacity-75 group-hover:animate-ping"></span>
-    
-    {/* MCQ icon with colorful gradient background */}
-    <div className="relative bg-gradient-to-br from-purple-500 via-pink-500 to-orange-400 rounded-full p-1.5 shadow-lg group-hover:shadow-xl transition-all duration-300">
-      <svg 
-        className="w-5 h-5 text-white" 
-        fill="currentColor" 
-        viewBox="0 0 24 24"
-      >
-        {/* Multiple choice checkbox style icon */}
-        <path d="M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zm0 2v14h14V5H5zm2 2h10v2H7V7zm0 4h10v2H7v-2zm0 4h7v2H7v-2z"/>
-        <circle cx="17.5" cy="17.5" r="1.5" fill="white"/>
-        <circle cx="17.5" cy="11.5" r="1.5" fill="white"/>
-        <circle cx="17.5" cy="7.5" r="1.5" fill="white"/>
-      </svg>
-    </div>
-    
-    {/* Touch ripple effect */}
-    <span className="absolute inset-0 rounded-full bg-purple-500 opacity-0 transition-all duration-300 group-active:opacity-50 group-active:scale-150"></span>
-  </button>
-
-    {/* Bookmark button */}
-    <button 
-      onClick={() => {/* Add bookmark functionality */}}
-      className="text-gray-600 hover:text-yellow-600 transition"
-      title="Save to Bookmarks"
-    >
-      <Bookmark className="w-6 h-6" />
-    </button>
-  </div>
-</div>
+                  {/* Bookmark button */}
+                  <button 
+                    onClick={() => {/* Add bookmark functionality */}}
+                    className="text-gray-600 hover:text-yellow-600 transition"
+                    title="Save to Bookmarks"
+                  >
+                    <Bookmark className="w-6 h-6" />
+                  </button>
+                </div>
+              </div>
 
               {/* Title */}
               {post.title && (
@@ -461,7 +481,7 @@ const openInYouTube = () => {
       {/* Share Popup Modal */}
       {showSharePopup && (
         <div className="fixed inset-0 z-50 overflow-y-auto" onClick={handleClosePopup}>
-          <div className="fixed inset-0 bg-black bg-opacity-50 transition-opacity"></div>
+          <div className="fixed inset-0 bg-[#00000080] bg-opacity-50 transition-opacity"></div>
           
           <div className="flex min-h-full items-center justify-center p-4">
             <div 
@@ -549,7 +569,6 @@ const openInYouTube = () => {
 
                         {/* Role Badge */}
                         <div className="flex items-center gap-2">
-                          
                           {selectedUsers.find(u => u.id === user.id) && (
                             <div className="w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center">
                               <Check className="w-3 h-3 text-white" />
@@ -582,60 +601,7 @@ const openInYouTube = () => {
           </div>
         </div>
       )}
-
-      {/* YouTube Popup Modal */}
-{showYouTubePopup && (
-  <div className="fixed inset-0 z-50 overflow-y-auto" onClick={() => setShowYouTubePopup(false)}>
-    <div className="fixed inset-0 bg-[#00000080] bg-opacity-75 transition-opacity"></div>
-    
-    <div className="flex min-h-full items-center justify-center p-4">
-      <div 
-        className="relative bg-white rounded-2xl shadow-xl max-w-4xl w-full transform transition-all"
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-200">
-          <div className="flex items-center gap-2">
-            <IoLogoYoutube className="w-6 h-6 text-red-600" />
-            <h3 className="text-lg font-semibold text-gray-900">YouTube Video</h3>
-          </div>
-          <button
-            onClick={() => setShowYouTubePopup(false)}
-            className="text-gray-400 hover:text-gray-600 transition-colors"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
-
-        {/* Video Player */}
-        <div className="relative" style={{ paddingBottom: '56.25%' }}>
-          <iframe
-            className="absolute top-0 left-0 w-full h-full"
-            src="https://www.youtube.com/embed/GSyle-JHiDw?autoplay=1"
-            title="YouTube video player"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          ></iframe>
-        </div>
-
-        {/* Footer with Open in YouTube button */}
-        <div className="p-4 border-t border-gray-200">
-          <button
-            onClick={openInYouTube}
-            className="w-full bg-gradient-to-r from-red-500 to-red-600 text-white py-2.5 rounded-lg font-medium hover:from-red-600 hover:to-red-700 transition-all duration-200 flex items-center justify-center gap-2"
-          >
-            <IoLogoYoutube className="w-5 h-5" />
-            Open in YouTube
-          </button>
-          <p className="text-xs text-gray-500 text-center mt-2">
-            Video will open in YouTube app or website
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-)}
+      {showQuiz && <Quiz onClose={handleCloseQuiz} />}
     </>
   );
 };
