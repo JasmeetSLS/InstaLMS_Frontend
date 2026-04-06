@@ -1,170 +1,159 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Lock, User, Eye, EyeOff, Shield, AlertCircle, ArrowRight } from 'lucide-react';
-import api from '../services/api';
+import React, { useState } from "react";
+import { User, Lock, Eye, EyeOff } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import api from "../services/api";
 
 const AdminLogin = () => {
-    const navigate = useNavigate();
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [showPassword, setShowPassword] = useState(false);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    
+    if (!username.trim()) {
+      setError("Username is required");
+      return;
+    }
+    
+    if (!password.trim()) {
+      setError("Password is required");
+      return;
+    }
+    
+    setLoading(true);
+    
+    try {
+      const response = await api.adminLogin(username, password);
+      
+      if (response.success) {
+        localStorage.setItem("adminToken", response.token);
         
-        if (!username || !password) {
-            setError('Please enter both username and password');
-            return;
+        if (response.data) {
+          localStorage.setItem("adminData", JSON.stringify(response.data));
         }
+        
+        navigate("/admin/category");
+      } else {
+        setError(response.error || "Login failed");
+      }
+    } catch (err) {
+      console.error("Login error:", err);
+      setError(err.message || "Invalid username or password");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-        setLoading(true);
-        setError('');
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-black">
+      
+      {/* Glass Card */}
+      <div className="p-5 md:p-6 text-white rounded-lg border border-transparent 
+                        shadow-[0_4px_6px_-1px_rgba(255,255,255,0.1),0_2px_4px_-1px_rgba(0,0,0,0.5)] 
+                        backdrop-blur-sm bg-black/10 relative w-[380px]
+                        before:absolute before:inset-0 before:rounded-lg 
+                        before:border-2 before:border-white/70 before:shadow-[0_0_15px_rgba(255,255,255,0.6)] 
+                        before:content-[''] before:pointer-events-none">
+        
+        {/* Logo and Title */}
+        <div className="flex flex-col items-center mb-8">
+          <div className="w-20 h-20 rounded-full overflow-hidden flex items-center justify-center bg-white/10 border border-white/30">
+            <img
+              src="https://img.freepik.com/premium-vector/orange-orange-logo-with-man-cloud-cloud-background_1226483-3761.jpg?semt=ais_incoming&w=740&q=80"
+              alt="logo"
+              className="w-full h-full object-cover"
+            />
+          </div>
 
-        try {
-            // Call admin login API
-            const response = await api.adminLogin(username, password);
-            
-            if (response.success) {
-                // Store admin session
-                localStorage.setItem('adminToken', response.token);
-                localStorage.setItem('adminUsername', username);
-                localStorage.setItem('adminEmail', response.data?.email || username);
-                localStorage.setItem('adminRole', response.data?.role || 'admin');
-                localStorage.setItem('isAdminLoggedIn', 'true');
-                
-                // Redirect to admin dashboard
-                navigate('/admin/user');
-            } else {
-                setError(response.error || 'Login failed');
-            }
-        } catch (err) {
-            console.error('Admin login error:', err);
-            setError(err.message || 'Invalid username or password');
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    return (
-        <div className="min-h-screen flex">
-            {/* Left Side - Image Section */}
-            <div className="hidden lg:flex lg:w-1/2 relative bg-gradient-to-br from-blue-900 to-indigo-900 overflow-hidden">
-                <div className="absolute inset-0 bg-black/40 z-10"></div>
-                <img 
-                    src="https://www.orisoftcomputereducation.com/Photo/Data_security_01.jpg"
-                    alt="Admin Office"
-                    className="absolute inset-0 w-full h-full object-cover"
-                />
-            </div>
-
-            {/* Right Side - Login Form */}
-            <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-black">
-                <div className="max-w-md w-full">
-                    {/* Mobile Logo */}
-                    <div className="lg:hidden text-center mb-8">
-                        <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl shadow-lg mb-4">
-                            <Shield className="w-8 h-8 text-white" />
-                        </div>
-                        <h1 className="text-2xl font-bold text-white">INSTA STYLE LMS ADMIN</h1>
-                    </div>
-
-                    {/* Login Card */}
-                    <div className="text-white rounded-lg border border-transparent 
-                         shadow-[0_4px_6px_-1px_rgba(255,255,255,0.1),0_2px_4px_-1px_rgba(0,0,0,0.5)] 
-                         backdrop-blur-sm bg-black/10 relative
-                         before:absolute before:inset-0 before:rounded-lg 
-                         before:border-2 before:border-white/70 before:shadow-[0_0_15px_rgba(255,255,255,0.6)] 
-                         before:content-[''] before:pointer-events-none p-8">
-                        <div className="text-center mb-8">
-                            <h2 className="text-2xl font-bold text-white">Admin Login</h2>
-                        </div>
-
-                        <form onSubmit={handleSubmit} className="space-y-5">
-                            {/* Error Message */}
-                            {error && (
-                                <div className="bg-red-50 border border-red-200 rounded-lg p-3 flex items-center gap-2">
-                                    <AlertCircle className="w-4 h-4 text-red-500 flex-shrink-0" />
-                                    <span className="text-sm text-red-600">{error}</span>
-                                </div>
-                            )}
-
-                            {/* Username Field */}
-                            <div>
-                                <label className="block text-sm font-medium text-white mb-2">
-                                    Username
-                                </label>
-                                <div className="relative">
-                                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                        <User className="h-5 w-5 text-white" />
-                                    </div>
-                                    <input
-                                        type="text"
-                                        value={username}
-                                        onChange={(e) => setUsername(e.target.value)}
-                                        className="block w-full pl-10 pr-3 py-3 border text-white border-gray-300 rounded-lg focus:ring-1 focus:ring-white transition placeholder:text-gray-400 bg-transparent"
-                                        placeholder="Enter username"
-                                        required
-                                    />
-                                </div>
-                            </div>
-
-                            {/* Password Field */}
-                            <div>
-                                <label className="block text-sm font-medium text-white mb-2">
-                                    Password
-                                </label>
-                                <div className="relative">
-                                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                        <Lock className="h-5 w-5 text-white" />
-                                    </div>
-                                    <input
-                                        type={showPassword ? "text" : "password"}
-                                        value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
-                                        className="block w-full pl-10 pr-10 py-3 text-white border border-gray-300 rounded-lg focus:ring-1 focus:ring-white transition placeholder:text-gray-400 bg-transparent"
-                                        placeholder="••••••••"
-                                        required
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={() => setShowPassword(!showPassword)}
-                                        className="absolute inset-y-0 right-0 pr-3 flex items-center"
-                                    >
-                                        {showPassword ? (
-                                            <EyeOff className="h-5 w-5 text-white" />
-                                        ) : (
-                                            <Eye className="h-5 w-5 text-white" />
-                                        )}
-                                    </button>
-                                </div>
-                            </div>
-
-                            {/* Login Button */}
-                            <button
-                                type="submit"
-                                disabled={loading}
-                                className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 rounded-lg font-semibold hover:shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 group"
-                            >
-                                {loading ? (
-                                    <span className="flex items-center justify-center gap-2">
-                                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                                        Signing in...
-                                    </span>
-                                ) : (
-                                    <>
-                                        Sign In
-                                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                                    </>
-                                )}
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
+          <div className="mt-4 text-center">
+            <h2 className="text-2xl font-bold text-white">
+              Admin Login
+            </h2>
+          </div>
         </div>
-    );
+
+        {/* Error Message */}
+        {error && (
+          <div className="mb-4 p-3 bg-red-500/20 border border-red-500/50 rounded-lg">
+            <p className="text-red-200 text-sm text-center">{error}</p>
+          </div>
+        )}
+
+        {/* Username Field */}
+        <div className="mb-5">
+          <label className="block text-white/70 text-sm mb-2 ml-1">Username</label>
+          <div className="relative">
+            <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/50 w-5 h-5" />
+            <input
+              type="text"
+              placeholder="Enter your username"
+              className="w-full pl-10 pr-3 py-3 bg-white/5 border border-white/20 rounded-lg text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-transparent transition-all"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              disabled={loading}
+            />
+          </div>
+        </div>
+
+        {/* Password Field */}
+        <div className="mb-6">
+          <label className="block text-white/70 text-sm mb-2 ml-1">Password</label>
+          <div className="relative">
+            <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/50 w-5 h-5" />
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Enter your password"
+              className="w-full pl-10 pr-10 py-3 bg-white/5 border border-white/20 rounded-lg text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-transparent transition-all"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              disabled={loading}
+              onKeyPress={(e) => {
+                if (e.key === "Enter") {
+                  handleSubmit(e);
+                }
+              }}
+            />
+            <button
+              type="button"
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white/50 hover:text-white/80 transition"
+              onClick={() => setShowPassword(!showPassword)}
+              disabled={loading}
+            >
+              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+            </button>
+          </div>
+        </div>
+
+        {/* Login Button */}
+        <button
+          onClick={handleSubmit}
+          disabled={loading}
+          className="w-full py-3 rounded-lg bg-white/20 backdrop-blur-sm border border-white/30 text-white font-semibold hover:bg-white/30 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden group"
+        >
+          <span className="relative z-10">
+            {loading ? (
+              <span className="flex items-center justify-center gap-2">
+                <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                LOGGING IN...
+              </span>
+            ) : (
+              "LOGIN"
+            )}
+          </span>
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-500"></div>
+        </button>
+
+      </div>
+    </div>
+  );
 };
 
 export default AdminLogin;

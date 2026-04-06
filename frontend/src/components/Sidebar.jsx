@@ -7,11 +7,6 @@ const Sidebar = ({ isOpen, onClose }) => {
     const navigate = useNavigate();
     const navItems = [
         { 
-            path: '/admin/user', 
-            name: 'User List', 
-            icon: <FolderPlus className="w-5 h-5" />,
-        },
-        { 
             path: '/admin/category', 
             name: 'Category List', 
             icon: <FolderPlus className="w-5 h-5" />,

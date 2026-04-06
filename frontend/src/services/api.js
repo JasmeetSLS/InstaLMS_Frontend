@@ -105,21 +105,11 @@ const api = {
   // Admin APIs
   adminLogin: (username, password) => admin.post('/login', { username, password }),
   
-  // User Management APIs (Admin only)
-  getUsers: () => admin.get('/users'),
-  getUserById: (id) => admin.get(`/users/${id}`),
-  updateUserStatus: (id, status) => admin.put(`/users/${id}/status`, { status }),
-  deleteUser: (id) => admin.delete(`/users/${id}`),
-  importUsers: (formData) => admin.post('/users/bulk/import', formData, { isFormData: true }),
-  exportUsers: () => admin.get('/users/bulk/export', { responseType: 'blob' }),
-  
-  // Category Management APIs (Admin only)
+  // Category APIs
   getCategories: () => admin.get('/categories'),
-  getCategoryById: (id) => admin.get(`/categories/${id}`),
   createCategory: (formData) => admin.post('/categories', formData, { isFormData: true }),
   updateCategory: (id, formData) => admin.put(`/categories/${id}`, formData, { isFormData: true }),
-  updateCategoryStatus: (id, status) => admin.put(`/categories/${id}/status`, { status }),
-  deleteCategory: (id) => admin.delete(`/categories/${id}`)
+  deleteCategory: (id) => admin.delete(`/categories/${id}`),
 };
 
 export default api;
