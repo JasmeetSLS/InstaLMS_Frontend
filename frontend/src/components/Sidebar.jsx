@@ -1,7 +1,7 @@
 // src/components/Sidebar.jsx
 import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { FolderPlus, PlusCircle, Image, X, Menu, LogOut } from 'lucide-react';
+import { FolderPlus, X, LogOut } from 'lucide-react';
 
 const Sidebar = ({ isOpen, onClose }) => {
     const navigate = useNavigate();
@@ -18,11 +18,12 @@ const Sidebar = ({ isOpen, onClose }) => {
         localStorage.removeItem('adminToken');
         localStorage.removeItem('adminEmail');
         localStorage.removeItem('isAdminLoggedIn');
+        localStorage.removeItem('adminData');
         
         // Close sidebar if open
         onClose();
         
-        // blueirect to login page
+        // Redirect to login page
         navigate('/admin/login');
     };
 
@@ -31,31 +32,35 @@ const Sidebar = ({ isOpen, onClose }) => {
             {/* Mobile Overlay */}
             {isOpen && (
                 <div 
-                    className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+                    className="fixed inset-0 bg-black/80 backdrop-blur-sm z-40 lg:hidden"
                     onClick={onClose}
                 />
             )}
 
             {/* Sidebar */}
             <aside className={`
-                fixed top-0 left-0 h-full bg-white shadow-xl z-50 transition-transform duration-300 flex flex-col
+                fixed top-0 left-0 h-full z-50 transition-transform duration-300 flex flex-col
                 w-72 lg:translate-x-0 lg:static lg:w-80
                 ${isOpen ? 'translate-x-0' : '-translate-x-full'}
+                bg-black border-r border-white/20
+                shadow-[4px_0_6px_-1px_rgba(0,0,0,0.5)]
             `}>
                 {/* Header */}
-                <div className="p-5 border-b border-gray-200">
+                <div className="p-5 border-b border-white/20">
                     <div className="flex items-center justify-between">
                         <div>
-                            <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-500 to-blue-600 bg-clip-text text-transparent">
-                                INSTA STYLE LMS
+                            <h1 className="text-2xl font-bold">
+                                <span className="bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">
+                                    INSTA STYLE LMS
+                                </span>
                             </h1>
-                            <p className="text-xs text-gray-500 mt-1">Admin Panel</p>
+                            <p className="text-xs text-white/50 mt-1">Admin Panel</p>
                         </div>
                         <button
                             onClick={onClose}
-                            className="lg:hidden p-2 hover:bg-gray-100 rounded-lg"
+                            className="lg:hidden p-2 hover:bg-white/10 rounded-lg transition-all"
                         >
-                            <X className="w-5 h-5 text-gray-600" />
+                            <X className="w-5 h-5 text-white/70" />
                         </button>
                     </div>
                 </div>
@@ -70,8 +75,8 @@ const Sidebar = ({ isOpen, onClose }) => {
                             className={({ isActive }) => `
                                 flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200
                                 ${isActive 
-                                    ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg' 
-                                    : 'text-gray-700 hover:bg-gray-100'
+                                    ? 'bg-white/20 backdrop-blur-sm border border-white/30 text-white shadow-lg' 
+                                    : 'text-white/70 hover:bg-white/10 hover:text-white'
                                 }
                             `}
                         >
@@ -84,10 +89,10 @@ const Sidebar = ({ isOpen, onClose }) => {
                 </nav>
 
                 {/* Footer with Logout Button */}
-                <div className="p-4 border-t border-gray-200">
+                <div className="p-4 border-t border-white/20">
                     <button
                         onClick={handleLogout}
-                        className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-600 hover:bg-blue-50 transition-all duration-200 group"
+                        className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-400  hover:text-red-300 transition-all duration-200 group"
                     >
                         <LogOut className="w-5 h-5 group-hover:rotate-180 transition-transform duration-300" />
                         <span className="font-medium">Logout</span>

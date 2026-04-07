@@ -107,7 +107,7 @@ const api = {
   
   // Category APIs
   getCategories: () => admin.get('/categories'),
-  createCategory: (formData) => admin.post('/categories', formData, { isFormData: true }),
+  createCategory: (formData) => admin.post('/add-category', formData, { isFormData: true }),
   updateCategory: (id, formData) => admin.put(`/categories/${id}`, formData, { isFormData: true }),
   deleteCategory: (id) => admin.delete(`/categories/${id}`),
 };

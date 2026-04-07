@@ -54,7 +54,7 @@ const Categories = () => {
             }
             
             // Validate file type
-            const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+            const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp', 'image/avif'];
             if (!allowedTypes.includes(file.type)) {
                 setError('Only image files (JPEG, PNG, GIF, WEBP) are allowed');
                 return;
@@ -135,7 +135,7 @@ const handleEdit = (category) => {
         icon: null
     });
     // Add /uploads/ to the path
-    setPreviewUrl(category.icon_url ? `${FILE_BASE_URL}/uploads/${category.icon_url}` : null);
+    setPreviewUrl(category.icon_url ? `${FILE_BASE_URL}${category.icon_url}` : null);
     setShowModal(true);
 };
 
@@ -224,7 +224,7 @@ const handleEdit = (category) => {
                                             <img 
                                                 src={`${FILE_BASE_URL}${category.icon_url}`}
                                                 alt={category.name}
-                                                className="w-10 h-10 object-cover rounded-lg"
+                                                className="w-10 h-10 object-cover rounded-4xl"
                                             />
                                         ) : null}
                                     </td>
@@ -308,7 +308,7 @@ const handleEdit = (category) => {
                                         </div>
                                         <input
                                             type="file"
-                                            accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
+                                            accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,image/avif"
                                             onChange={handleFileChange}
                                             className="hidden"
                                         />
