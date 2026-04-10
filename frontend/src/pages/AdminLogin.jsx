@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { User, Lock, Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import api from "../services/api";
+import logo from '../assets/sls-logo.png'
 
 const AdminLogin = () => {
   const [username, setUsername] = useState("");
@@ -64,9 +65,9 @@ const AdminLogin = () => {
         <div className="flex flex-col items-center mb-8">
           <div className="w-20 h-20 rounded-full overflow-hidden flex items-center justify-center bg-white/10 border border-white/30">
             <img
-              src="https://img.freepik.com/premium-vector/orange-orange-logo-with-man-cloud-cloud-background_1226483-3761.jpg?semt=ais_incoming&w=740&q=80"
+              src={logo}
               alt="logo"
-              className="w-full h-full object-cover"
+              className="w-15 object-cover"
             />
           </div>
 

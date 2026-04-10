@@ -103,13 +103,16 @@ const api = {
   request,
 
   // Admin APIs
-  adminLogin: (username, password) => admin.post('/login', { username, password }),
+  adminLogin: (username, password) => admin.post('/public/login', { username, password }),
   
   // Category APIs
   getCategories: () => admin.get('/categories'),
   createCategory: (formData) => admin.post('/add-category', formData, { isFormData: true }),
   updateCategory: (id, formData) => admin.put(`/categories/${id}`, formData, { isFormData: true }),
   deleteCategory: (id) => admin.delete(`/categories/${id}`),
+
+    // Post APIs
+  getPosts: () => admin.get('/posts'),
 };
 
 export default api;

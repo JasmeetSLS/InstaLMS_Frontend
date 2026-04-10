@@ -5,17 +5,18 @@ import AdminLogin from './pages/AdminLogin';
 import AdminLayout from './components/AdminLayout';
 import UserList from './pages/UserList';
 import Categories from './pages/Categories';
+import Posts from './pages/Posts';
 
 function App() {
   return (
     <Router>
       <Routes>
 
-        <Route path="/admin/login" element={<AdminLogin/>} />
+        <Route path="/" element={<AdminLogin/>} />
 
          <Route path="/admin/user" element={<AdminLayout><UserList/></AdminLayout>} />
           <Route path="/admin/category" element={<AdminLayout><Categories/></AdminLayout>} />
-        
+        <Route path="/admin/post" element={<AdminLayout><Posts/></AdminLayout>} />
         {/* Redirect any unknown routes to home */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

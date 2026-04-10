@@ -1,15 +1,20 @@
 // src/components/Sidebar.jsx
 import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { FolderPlus, X, LogOut } from 'lucide-react';
+import {  X, LogOut, LayoutGrid, Newspaper } from 'lucide-react';
 
 const Sidebar = ({ isOpen, onClose }) => {
     const navigate = useNavigate();
-    const navItems = [
+   const navItems = [
         { 
             path: '/admin/category', 
-            name: 'Category List', 
-            icon: <FolderPlus className="w-5 h-5" />,
+            name: 'Category', 
+            icon: <LayoutGrid className="w-5 h-5" />,
+        },
+        { 
+            path: '/admin/post', 
+            name: 'Post', 
+            icon: <Newspaper className="w-5 h-5" />,
         },
     ];
 
