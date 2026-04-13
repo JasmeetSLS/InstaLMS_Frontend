@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Edit, Trash2, Image, Video, FileText, Eye, ThumbsUp, MessageCircle, Share2 } from 'lucide-react';
+import { FaYoutube } from "react-icons/fa";
 import api, { FILE_BASE_URL } from '../services/api';
 import CreatePostModal from '../components/CreatePostModal';
 
@@ -83,7 +84,7 @@ const Posts = () => {
             case 'video':
                 return <Video className="w-4 h-4 text-blue-600" />;
             case 'youtube':
-                return <Video className="w-4 h-4 text-red-600" />;
+                return <FaYoutube  className="w-4 h-4 text-red-600" />;
             case 'pdf':
                 return <FileText className="w-4 h-4 text-orange-600" />;
             case 'ppt':
@@ -313,7 +314,7 @@ const Posts = () => {
                                                         className="w-full h-48 object-cover"
                                                     />
                                                     <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40">
-                                                        <Video className="w-12 h-12 text-red-600" />
+                                                        <FaYoutube  className="w-12 h-12 text-red-600" />
                                                     </div>
                                                 </div>
                                             )}

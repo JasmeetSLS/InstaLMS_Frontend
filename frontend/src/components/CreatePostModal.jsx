@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X, Upload, Image, FileText, Plus, Trash2, Video } from 'lucide-react';
+import { FaYoutube } from "react-icons/fa";
 
 const CreatePostModal = ({ isOpen, onClose, onSubmit, categories = [] }) => {
     const [submitting, setSubmitting] = useState(false);
@@ -356,7 +357,7 @@ const CreatePostModal = ({ isOpen, onClose, onSubmit, categories = [] }) => {
                                 {formData.youtube_links.map((link, index) => (
                                     <div key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded-lg">
                                         <div className="flex items-center gap-2 flex-1">
-                                            <Video className="w-5 h-5 text-red-600" />
+                                            <FaYoutube  className="w-5 h-5 text-red-600" />
                                             <span className="text-sm text-gray-700 truncate">{link}</span>
                                         </div>
                                         <button
