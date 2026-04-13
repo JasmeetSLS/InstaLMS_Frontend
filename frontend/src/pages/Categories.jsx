@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Edit, Trash2, Image as ImageIcon } from 'lucide-react';
 import api, { FILE_BASE_URL } from '../services/api';
+import { FaToggleOn } from 'react-icons/fa';
 
 const Categories = () => {
     const [categories, setCategories] = useState([]);
@@ -211,8 +212,9 @@ const Categories = () => {
                                     <td className="px-6 py-4 whitespace-nowrap text-sm">
                                         {category.name}
                                     </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm">
-                                        {category.status}
+                                    <td className="px-6 py-4 text-3xl text-green-600 whitespace-nowrap">
+                                        {/* {category.status} */}
+                                        <FaToggleOn />
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm">
                                         <div className="flex items-center gap-2">

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Edit, Trash2, Image, Video, FileText, Eye, ThumbsUp, MessageCircle, Share2 } from 'lucide-react';
-import { FaYoutube } from "react-icons/fa";
+import { FaToggleOn, FaYoutube } from "react-icons/fa";
 import api, { FILE_BASE_URL } from '../services/api';
 import CreatePostModal from '../components/CreatePostModal';
 
@@ -233,9 +233,10 @@ const Posts = () => {
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm">
-                                           {post.status}
-                                        </td>
+                                          <td className="px-6 py-4 text-3xl text-green-600 whitespace-nowrap">
+                                                                                {/* {post.status} */}
+                                                                                <FaToggleOn />
+                                                                            </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm">
                                             <div className="flex items-center gap-2">
                                                 <button
