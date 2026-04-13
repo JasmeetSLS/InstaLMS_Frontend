@@ -189,14 +189,10 @@ const Posts = () => {
                                                 />
                                         </td>
                                         <td className="px-6 py-4 text-sm">
-                                            <div>
-                                                <div className="font-medium text-gray-900">{post.title}</div>                                        
-                                            </div>
+                                           {post.title}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm">
-                                            <span className="px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded-full">
-                                                {post.category_name}
-                                            </span>
+                                           {post.category_name}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm">
                                             {post.media && post.media.length > 0 ? (
@@ -237,13 +233,7 @@ const Posts = () => {
                                             </div>
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm">
-                                            <span className={`px-2 py-1 text-xs rounded-full ${
-                                                post.status === 'active' 
-                                                    ? 'bg-green-100 text-green-700' 
-                                                    : 'bg-gray-100 text-gray-700'
-                                            }`}>
-                                                {post.status}
-                                            </span>
+                                           {post.status}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm">
                                             <div className="flex items-center gap-2">
