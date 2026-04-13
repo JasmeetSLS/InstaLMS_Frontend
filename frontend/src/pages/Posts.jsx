@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Edit, Trash2, Image, Video, FileText, Eye, ThumbsUp, MessageCircle, Share2 } from 'lucide-react';
 import api, { FILE_BASE_URL } from '../services/api';
+import CreatePostModal from '../components/CreatePostModal';
 
 const Posts = () => {
     const [posts, setPosts] = useState([]);
@@ -10,23 +11,23 @@ const Posts = () => {
     const [selectedPost, setSelectedPost] = useState(null);
     const [showViewModal, setShowViewModal] = useState(false);
     const [error, setError] = useState('');
+    const [categories, setCategories] = useState([]);
 
     useEffect(() => {
         fetchPosts();
+        fetchCategories();
     }, []);
 
     const fetchPosts = async () => {
         try {
             setLoading(true);
             const response = await api.getPosts();
-            console.log('API Response:', response); // Debug: Check response structure
+            console.log('API Response:', response);
             
             if (response.success) {
-                // Check if response.data is an array
                 if (Array.isArray(response.data)) {
                     setPosts(response.data);
                 } else if (response.data && Array.isArray(response.data.posts)) {
-                    // If data has posts property
                     setPosts(response.data.posts);
                 } else {
                     setPosts([]);
@@ -42,6 +43,35 @@ const Posts = () => {
             setPosts([]);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const fetchCategories = async () => {
+        try {
+            const response = await api.getCategories();
+            if (response.success && Array.isArray(response.data)) {
+                setCategories(response.data);
+            }
+        } catch (err) {
+            console.error('Error fetching categories:', err);
+        }
+    };
+
+    // Handle post creation from modal
+    const handleCreatePost = async (formData) => {
+        try {
+            const response = await api.createPost(formData);
+            
+            if (response.success) {
+                alert('Post created successfully!');
+                await fetchPosts(); // Refresh the posts list
+                return response;
+            } else {
+                throw new Error(response.error || 'Failed to create post');
+            }
+        } catch (err) {
+            console.error('Error creating post:', err);
+            throw err;
         }
     };
 
@@ -65,39 +95,17 @@ const Posts = () => {
         }
     };
 
-    // Get first media for thumbnail
-    const getThumbnail = (media) => {
-        if (!media || media.length === 0) return null;
-        const firstMedia = media[0];
-        if (firstMedia.thumbnail_url) {
-            return `${FILE_BASE_URL}${firstMedia.thumbnail_url}`;
-        }
-        if (firstMedia.media_url && (firstMedia.media_type === 'image' || firstMedia.media_type === 'gif')) {
-            return `${FILE_BASE_URL}${firstMedia.media_url}`;
-        }
-        return null;
-    };
-
     const handleView = (post) => {
         setSelectedPost(post);
         setShowViewModal(true);
     };
 
     const handleEdit = (post) => {
-        setEditingPost(post);
-        setShowModal(true);
+       alert('Edit functionality will be added soon');
     };
 
-    const handleDelete = async (id, title) => {
-        if (window.confirm(`Are you sure you want to delete post "${title}"?`)) {
-            try {
-                // Add delete API call when available
-                alert('Delete functionality will be added soon');
-            } catch (err) {
-                console.error('Error deleting post:', err);
-                alert(err.message || 'Failed to delete post');
-            }
-        }
+    const handleDelete = (post) => {
+       alert('Delete functionality will be added soon');
     };
 
     if (loading) {
@@ -144,7 +152,7 @@ const Posts = () => {
                                     S.No
                                 </th>
                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Thumbnail
+                                    Category Icon
                                 </th>
                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Title
@@ -174,17 +182,11 @@ const Posts = () => {
                                             {index + 1}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm">
-                                            {getThumbnail(post.media) ? (
-                                                <img 
-                                                    src={getThumbnail(post.media)}
-                                                    alt={post.title}
+                                            <img 
+                                                    src={`${FILE_BASE_URL}${post.category_icon_url}`}
+                                                    // alt={post.title}
                                                     className="w-10 h-10 object-cover rounded-lg"
                                                 />
-                                            ) : (
-                                                <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
-                                                    <Image className="w-5 h-5 text-gray-400" />
-                                                </div>
-                                            )}
                                         </td>
                                         <td className="px-6 py-4 text-sm">
                                             <div>
@@ -253,14 +255,14 @@ const Posts = () => {
                                                     <Eye className="w-4 h-4" />
                                                 </button>
                                                 <button
-                                                    onClick={() => handleEdit(post)}
+                                                    onClick={() => handleEdit()}
                                                     className="p-1 text-indigo-600 hover:bg-indigo-50 rounded-md transition"
                                                     title="Edit"
                                                 >
                                                     <Edit className="w-4 h-4" />
                                                 </button>
                                                 <button
-                                                    onClick={() => handleDelete(post.id, post.title)}
+                                                onClick={() => handleDelete()}
                                                     className="p-1 text-red-600 hover:bg-red-50 rounded-md transition"
                                                     title="Delete"
                                                 >
@@ -282,136 +284,118 @@ const Posts = () => {
                 </div>
             </div>
 
-{/* View Post Modal - Media Files Only */}
-{showViewModal && selectedPost && (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-        <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="sticky top-0 bg-white px-6 py-4 border-b border-gray-200 flex justify-between items-center">
-                <h2 className="text-xl font-semibold text-gray-800">
-                    Media Files ({selectedPost.media?.length || 0})
-                </h2>
-                <button
-                    onClick={() => setShowViewModal(false)}
-                    className="text-gray-500 hover:text-gray-700 text-2xl"
-                >
-                    ×
-                </button>
-            </div>
-            
-            <div className="p-6">
-                {/* Media Files Only */}
-                {selectedPost.media && selectedPost.media.length > 0 ? (
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                        {selectedPost.media.map((media, idx) => (
-                            <div key={idx} className="border rounded-lg overflow-hidden">
-                                {/* Image */}
-                                {media.media_type === 'image' && media.media_url && (
-                                    <img 
-                                        src={`${FILE_BASE_URL}${media.media_url}`}
-                                        alt={`Media ${idx + 1}`}
-                                        className="w-full h-48 object-cover"
-                                    />
-                                )}
-                                
-                                {/* YouTube */}
-                                {media.media_type === 'youtube' && (
-                                    <div className="relative">
-                                        <img 
-                                            src={media.thumbnail_url}
-                                            alt="YouTube thumbnail"
-                                            className="w-full h-48 object-cover"
-                                        />
-                                        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40">
-                                            <Youtube className="w-12 h-12 text-red-600" />
-                                        </div>
-                                    </div>
-                                )}
-                                
-                                {/* Video */}
-                                {media.media_type === 'video' && media.media_url && (
-                                    <video className="w-full h-48 object-cover" controls>
-                                        <source src={`${FILE_BASE_URL}${media.media_url}`} />
-                                    </video>
-                                )}
-                                
-                                {/* GIF */}
-                                {media.media_type === 'gif' && media.media_url && (
-                                    <img 
-                                        src={`${FILE_BASE_URL}${media.media_url}`}
-                                        alt={`GIF ${idx + 1}`}
-                                        className="w-full h-48 object-cover"
-                                    />
-                                )}
-                                
-                                {/* PDF, PPT, WBT */}
-                                {(media.media_type === 'pdf' || media.media_type === 'ppt' || media.media_type === 'wbt') && (
-                                    <div className="w-full h-48 flex flex-col items-center justify-center bg-gray-50">
-                                        {getMediaIcon(media.media_type)}
-                                        <span className="text-sm text-gray-500 mt-2 uppercase">{media.media_type}</span>
-                                        {media.media_url && (
-                                            <a 
-                                                href={`${FILE_BASE_URL}${media.media_url}`}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="text-xs text-blue-600 mt-2 hover:underline"
-                                            >
-                                                Open File
-                                            </a>
-                                        )}
-                                    </div>
-                                )}
-                                
-                                {/* Media Info */}
-                                <div className="p-2 bg-gray-50 text-xs text-gray-600 flex justify-between items-center">
-                                    <span>Type: {media.media_type}</span>
-                                    {media.media_type === 'youtube' && media.media_url && (
-                                        <a 
-                                            href={media.media_url}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="text-red-600 hover:underline"
-                                        >
-                                            Watch on YouTube
-                                        </a>
-                                    )}
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                ) : (
-                    <div className="text-center py-12">
-                        <Image className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                        <p className="text-gray-500">No media files found</p>
-                    </div>
-                )}
-            </div>
-        </div>
-    </div>
-)}
-
-            {/* Add/Edit Post Modal (Placeholder) */}
-            {showModal && (
+            {/* View Post Modal */}
+            {showViewModal && selectedPost && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-                    <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full">
-                        <div className="px-6 py-4 border-b border-gray-200">
+                    <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+                        <div className="sticky top-0 bg-white px-6 py-4 border-b border-gray-200 flex justify-between items-center">
                             <h2 className="text-xl font-semibold text-gray-800">
-                                {editingPost ? 'Edit Post' : 'Create New Post'}
+                                Media Files ({selectedPost.media?.length || 0})
                             </h2>
-                        </div>
-                        <div className="p-6 text-center text-gray-500">
-                            Post creation form will be implemented here
-                        </div>
-                        <div className="px-6 py-4 border-t border-gray-200 flex justify-end">
                             <button
-                                onClick={() => setShowModal(false)}
-                                className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition"
+                                onClick={() => setShowViewModal(false)}
+                                className="text-gray-500 hover:text-gray-700 text-2xl"
                             >
-                                Close
+                                ×
                             </button>
+                        </div>
+                        
+                        <div className="p-6">
+                            {selectedPost.media && selectedPost.media.length > 0 ? (
+                                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                                    {selectedPost.media.map((media, idx) => (
+                                        <div key={idx} className="border rounded-lg overflow-hidden">
+                                            {/* Image */}
+                                            {media.media_type === 'image' && media.media_url && (
+                                                <img 
+                                                    src={`${FILE_BASE_URL}${media.media_url}`}
+                                                    alt={`Media ${idx + 1}`}
+                                                    className="w-full h-48 object-cover"
+                                                />
+                                            )}
+                                            
+                                            {/* YouTube */}
+                                            {media.media_type === 'youtube' && (
+                                                <div className="relative">
+                                                    <img 
+                                                        src={media.thumbnail_url}
+                                                        alt="YouTube thumbnail"
+                                                        className="w-full h-48 object-cover"
+                                                    />
+                                                    <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40">
+                                                        <Video className="w-12 h-12 text-red-600" />
+                                                    </div>
+                                                </div>
+                                            )}
+                                            
+                                            {/* Video */}
+                                            {media.media_type === 'video' && media.media_url && (
+                                                <video className="w-full h-48 object-cover" controls>
+                                                    <source src={`${FILE_BASE_URL}${media.media_url}`} />
+                                                </video>
+                                            )}
+                                            
+                                            {/* GIF */}
+                                            {media.media_type === 'gif' && media.media_url && (
+                                                <img 
+                                                    src={`${FILE_BASE_URL}${media.media_url}`}
+                                                    alt={`GIF ${idx + 1}`}
+                                                    className="w-full h-48 object-cover"
+                                                />
+                                            )}
+                                            
+                                            {/* PDF, PPT, WBT */}
+                                            {(media.media_type === 'pdf' || media.media_type === 'ppt' || media.media_type === 'wbt') && (
+                                                <div className="w-full h-48 flex flex-col items-center justify-center bg-gray-50">
+                                                    {getMediaIcon(media.media_type)}
+                                                    <span className="text-sm text-gray-500 mt-2 uppercase">{media.media_type}</span>
+                                                    {media.media_url && (
+                                                        <a 
+                                                            href={`${FILE_BASE_URL}${media.media_url}`}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="text-xs text-blue-600 mt-2 hover:underline"
+                                                        >
+                                                            Open File
+                                                        </a>
+                                                    )}
+                                                </div>
+                                            )}
+                                            
+                                            <div className="p-2 bg-gray-50 text-xs text-gray-600 flex justify-between items-center">
+                                                <span>Type: {media.media_type}</span>
+                                                {media.media_type === 'youtube' && media.media_url && (
+                                                    <a 
+                                                        href={media.media_url}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="text-red-600 hover:underline"
+                                                    >
+                                                        Watch on YouTube
+                                                    </a>
+                                                )}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            ) : (
+                                <div className="text-center py-12">
+                                    <Image className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                                    <p className="text-gray-500">No media files found</p>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
             )}
+
+            {/* Create Post Modal */}
+            <CreatePostModal
+                isOpen={showModal}
+                onClose={() => setShowModal(false)}
+                onSubmit={handleCreatePost}
+                categories={categories}
+            />
         </div>
     );
 };

@@ -113,6 +113,7 @@ const api = {
 
     // Post APIs
   getPosts: () => admin.get('/posts'),
+   createPost: (formData) => admin.post('/add-post', formData, { isFormData: true }),
 };
 
 export default api;

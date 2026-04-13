@@ -128,32 +128,12 @@ const Categories = () => {
         }
     };
 
-const handleEdit = (category) => {
-    setEditingCategory(category);
-    setFormData({
-        name: category.name,
-        icon: null
-    });
-    // Add /uploads/ to the path
-    setPreviewUrl(category.icon_url ? `${FILE_BASE_URL}${category.icon_url}` : null);
-    setShowModal(true);
-};
+    const handleEdit = (post) => {
+       alert('Edit functionality will be added soon');
+    };
 
-    const handleDelete = async (id, name) => {
-        if (window.confirm(`Are you sure you want to delete category "${name}"?`)) {
-            try {
-                const response = await api.deleteCategory(id);
-                if (response.success) {
-                    alert('Category deleted successfully');
-                    fetchCategories();
-                } else {
-                    alert(response.error || 'Failed to delete category');
-                }
-            } catch (err) {
-                console.error('Error deleting category:', err);
-                alert(err.message || 'Failed to delete category');
-            }
-        }
+    const handleDelete = (post) => {
+       alert('Delete functionality will be added soon');
     };
 
     if (loading) {
@@ -237,14 +217,14 @@ const handleEdit = (category) => {
                                     <td className="px-6 py-4 whitespace-nowrap text-sm">
                                         <div className="flex items-center gap-2">
                                             <button
-                                                onClick={() => handleEdit(category)}
+                                                onClick={() => handleEdit()}
                                                 className="p-1 text-blue-600 hover:bg-blue-50 rounded-md transition"
                                                 title="Edit"
                                             >
                                                 <Edit className="w-4 h-4" />
                                             </button>
                                             <button
-                                                onClick={() => handleDelete(category.id, category.name)}
+                                                onClick={() => handleDelete()}
                                                 className="p-1 text-red-600 hover:bg-red-50 rounded-md transition"
                                                 title="Delete"
                                             >
