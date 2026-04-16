@@ -197,10 +197,10 @@ const Categories = () => {
                         <tbody className="bg-white divide-y divide-gray-200">
                             {categories.map((category, index) => (
                                 <tr key={category.id} className="hover:bg-gray-50">
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm">
+                                    <td className="px-4 py-2 whitespace-nowrap text-sm">
                                         {index + 1}
                                     </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm">
+                                    <td className="px-4 py-2 whitespace-nowrap text-sm">
                                         {category.icon_url ? (
                                             <img 
                                                 src={`${FILE_BASE_URL}${category.icon_url}`}
@@ -209,14 +209,14 @@ const Categories = () => {
                                             />
                                         ) : null}
                                     </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm">
+                                    <td className="px-4 py-2 whitespace-nowrap text-sm">
                                         {category.name}
                                     </td>
-                                    <td className="px-6 py-4 text-3xl text-green-600 whitespace-nowrap">
+                                    <td className="px-4 py-2 text-3xl text-green-600 whitespace-nowrap">
                                         {/* {category.status} */}
                                         <FaToggleOn />
                                     </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm">
+                                    <td className="px-4 py-2 whitespace-nowrap text-sm">
                                         <div className="flex items-center gap-2">
                                             <button
                                                 onClick={() => handleEdit()}
@@ -252,7 +252,7 @@ const Categories = () => {
             {showModal && (
                 <div className="fixed inset-0 bg-[#00000080] bg-opacity-50 flex items-center justify-center z-50 p-4">
                     <div className="bg-white rounded-lg shadow-xl max-w-md w-full">
-                        <div className="px-6 py-4 border-b border-gray-200">
+                        <div className="px-4 py-2 border-b border-gray-200">
                             <h2 className="text-xl font-semibold text-gray-800">
                                 {editingCategory ? 'Edit Category' : 'Add New Category'}
                             </h2>
