@@ -179,23 +179,23 @@ const Posts = () => {
                             {posts && posts.length > 0 ? (
                                 posts.map((post, index) => (
                                     <tr key={post.id || index} className="hover:bg-gray-50">
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm">
+                                        <td className="px-4 py-2 whitespace-nowrap text-sm">
                                             {index + 1}
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm">
+                                        <td className="px-4 py-2 whitespace-nowrap text-sm">
                                             <img 
                                                     src={`${FILE_BASE_URL}${post.category_icon_url}`}
                                                     // alt={post.title}
                                                     className="w-10 h-10 object-cover rounded-lg"
                                                 />
                                         </td>
-                                        <td className="px-6 py-4 text-sm">
+                                        <td className="px-4 py-2 text-sm">
                                            {post.title}
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm">
+                                        <td className="px-4 py-2 whitespace-nowrap text-sm">
                                            {post.category_name}
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm">
+                                        <td className="px-4 py-2 whitespace-nowrap text-sm">
                                             {post.media && post.media.length > 0 ? (
                                                 <div className="flex items-center gap-1">
                                                     {post.media.slice(0, 3).map((media, idx) => (
@@ -213,7 +213,7 @@ const Posts = () => {
                                                 <span className="text-gray-400 text-xs">No media</span>
                                             )}
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm">
+                                        <td className="px-4 py-2 whitespace-nowrap text-sm">
                                             <div className="flex items-center gap-3">
                                                 <div className="flex items-center gap-1" title="Views">
                                                     <Eye className="w-3 h-3 text-gray-400" />
@@ -233,11 +233,11 @@ const Posts = () => {
                                                 </div>
                                             </div>
                                         </td>
-                                          <td className="px-6 py-4 text-3xl text-green-600 whitespace-nowrap">
+                                          <td className="px-4 py-2 text-3xl text-green-600 whitespace-nowrap">
                                                                                 {/* {post.status} */}
                                                                                 <FaToggleOn />
                                                                             </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm">
+                                        <td className="px-4 py-2 whitespace-nowrap text-sm">
                                             <div className="flex items-center gap-2">
                                                 <button
                                                     onClick={() => handleView(post)}
@@ -280,7 +280,7 @@ const Posts = () => {
             {showViewModal && selectedPost && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
                     <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-                        <div className="sticky top-0 bg-white px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+                        <div className="sticky top-0 bg-white px-4 py-2 border-b border-gray-200 flex justify-between items-center">
                             <h2 className="text-xl font-semibold text-gray-800">
                                 Media Files ({selectedPost.media?.length || 0})
                             </h2>
