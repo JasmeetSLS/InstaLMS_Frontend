@@ -7,13 +7,14 @@ const CreatePostModal = ({ isOpen, onClose, onSubmit, categories = [] }) => {
     const [error, setError] = useState('');
     
     // Form state
-    const [formData, setFormData] = useState({
-        title: '',
-        category_id: '',
-        description: '',
-        hashtags: '',
-        youtube_links: []
-    });
+const [formData, setFormData] = useState({
+    title: '',
+    category_id: '',
+    description: '',
+    hashtags: '',
+    youtube_links: [],
+    thumbnail_type: 'landscape'  // Add this
+});
     
     const [mediaFiles, setMediaFiles] = useState([]);
     const [thumbnailFiles, setThumbnailFiles] = useState([]);
@@ -26,20 +27,21 @@ const CreatePostModal = ({ isOpen, onClose, onSubmit, categories = [] }) => {
         }
     }, [isOpen]);
 
-    const resetForm = () => {
-        setFormData({
-            title: '',
-            category_id: '',
-            description: '',
-            hashtags: '',
-            youtube_links: []
-        });
-        setMediaFiles([]);
-        setThumbnailFiles([]);
-        setYoutubeInput('');
-        setError('');
-        setPreviewUrls([]);
-    };
+   const resetForm = () => {
+    setFormData({
+        title: '',
+        category_id: '',
+        description: '',
+        hashtags: '',
+        youtube_links: [],
+        thumbnail_type: 'landscape'  // Add this
+    });
+    setMediaFiles([]);
+    setThumbnailFiles([]);
+    setYoutubeInput('');
+    setError('');
+    setPreviewUrls([]);
+};
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -127,6 +129,7 @@ const CreatePostModal = ({ isOpen, onClose, onSubmit, categories = [] }) => {
             const submitFormData = new FormData();
             submitFormData.append('title', formData.title);
             submitFormData.append('category_id', formData.category_id);
+             submitFormData.append('thumbnail_type', formData.thumbnail_type); // Add this
             
             if (formData.description) {
                 submitFormData.append('description', formData.description);
@@ -252,6 +255,37 @@ const CreatePostModal = ({ isOpen, onClose, onSubmit, categories = [] }) => {
                             placeholder="e.g., #learning #training"
                         />
                     </div>
+
+                    {/* Thumbnail Type */}
+<div className="mb-4">
+    <label className="block text-sm font-medium text-gray-700 mb-2">
+        Thumbnail Type <span className="text-red-500">*</span>
+    </label>
+    <div className="flex gap-4">
+        <label className="flex items-center gap-2">
+            <input
+                type="radio"
+                name="thumbnail_type"
+                value="portrait"
+                checked={formData.thumbnail_type === 'portrait'}
+                onChange={handleInputChange}
+                className="w-4 h-4 text-blue-600"
+            />
+            <span className="text-sm text-gray-700">Portrait</span>
+        </label>
+        <label className="flex items-center gap-2">
+            <input
+                type="radio"
+                name="thumbnail_type"
+                value="landscape"
+                checked={formData.thumbnail_type === 'landscape'}
+                onChange={handleInputChange}
+                className="w-4 h-4 text-blue-600"
+            />
+            <span className="text-sm text-gray-700">Landscape</span>
+        </label>
+</div>
+</div>
 
                     {/* Media Files */}
                     <div className="mb-4">
