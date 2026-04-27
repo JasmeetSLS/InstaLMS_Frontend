@@ -155,14 +155,14 @@ const Posts = () => {
                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Category Icon
                                 </th>
+                                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Category
+                                </th>
                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Title
                                 </th>
                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Category
-                                </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Thumbnail Type
+                                    Post Layout
                                 </th>
                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Media
@@ -192,12 +192,13 @@ const Posts = () => {
                                                     className="w-10 h-10 object-cover rounded-lg"
                                                 />
                                         </td>
-                                        <td className="px-4 py-2 text-sm">
-                                           {post.title}
-                                        </td>
                                         <td className="px-4 py-2 whitespace-nowrap text-sm">
                                            {post.category_name}
                                         </td>
+                                        <td className="px-4 py-2 text-sm">
+                                           {post.title}
+                                        </td>
+                                        
                                         <td className="px-4 py-2 whitespace-nowrap text-sm">
                                            {post.thumbnail_type}
                                         </td>
