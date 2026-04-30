@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Edit, Trash2, Eye, Image as ImageIcon, X } from 'lucide-react';
+import Editor from 'react-simple-wysiwyg';
 import api, { FILE_BASE_URL } from '../services/api';
 import { FaToggleOn } from 'react-icons/fa';
 
@@ -42,11 +43,14 @@ const CMS = () => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
         
-        // Auto-generate slug from title
         if (name === 'title') {
             const slug = value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
             setFormData(prev => ({ ...prev, slug }));
         }
+    };
+
+    const handleContentChange = (e) => {
+        setFormData(prev => ({ ...prev, content: e.target.value }));
     };
 
     const handleImageChange = (e) => {
@@ -145,79 +149,44 @@ const CMS = () => {
                     <table className="min-w-full divide-y divide-gray-200">
                         <thead className="bg-gray-50">
                             <tr>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    S.No
-                                </th>
-                               
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Title
-                                </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Slug
-                                </th>
-                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Image
-                                </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Status
-                                </th>
-                               
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Actions
-                                </th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">S.No</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Slug</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Image</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                             </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-200">
                             {pages && pages.length > 0 ? (
                                 pages.map((page, index) => (
                                     <tr key={page.id} className="hover:bg-gray-50">
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                            {index + 1}
-                                        </td>
-                                        
-                                        <td className="px-6 py-4 text-sm text-gray-900">
-                                            {page.title}
-                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{index + 1}</td>
+                                        <td className="px-6 py-4 text-sm text-gray-900">{page.title}</td>
                                         <td className="px-6 py-4 text-sm text-gray-500">
-                                            <code className="text-xs bg-gray-100 px-2 py-1 rounded">
-                                                {page.slug}
-                                            </code>
+                                            <code className="text-xs bg-gray-100 px-2 py-1 rounded">{page.slug}</code>
                                         </td>
-                                         <td className="px-6 py-4 whitespace-nowrap text-sm">
-                                            {page.image_url  && (
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm">
+                                            {page.image_url && (
                                                 <img 
-                                                   src={`${FILE_BASE_URL}${page.image_url}`}
+                                                    src={`${FILE_BASE_URL}${page.image_url}`}
                                                     alt={page.title}
                                                     className="w-10 h-10 object-cover rounded-lg border border-gray-200"
                                                 />
                                             )}
                                         </td>
-                                         <td className="px-4 py-2 text-3xl text-green-600 whitespace-nowrap">
-                                                                                {/* {category.status} */}
-                                                                                <FaToggleOn />
-                                                                            </td>
-                                        
+                                        <td className="px-4 py-2 text-3xl text-green-600 whitespace-nowrap">
+                                            <FaToggleOn />
+                                        </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm">
                                             <div className="flex items-center gap-2">
-                                                <button
-                                                    onClick={() => handleView(page)}
-                                                    className="p-1 text-blue-600 hover:bg-blue-50 rounded-md transition"
-                                                    title="View"
-                                                >
+                                                <button onClick={() => handleView(page)} className="p-1 text-blue-600 hover:bg-blue-50 rounded-md transition" title="View">
                                                     <Eye className="w-4 h-4" />
                                                 </button>
-                                                <button
-                                                    onClick={() => handleEdit(page)}
-                                                    className="p-1 text-indigo-600 hover:bg-indigo-50 rounded-md transition"
-                                                    title="Edit"
-                                                >
+                                                <button onClick={() => handleEdit(page)} className="p-1 text-indigo-600 hover:bg-indigo-50 rounded-md transition" title="Edit">
                                                     <Edit className="w-4 h-4" />
                                                 </button>
-                                                <button
-                                                    onClick={() => handleDelete(page)}
-                                                    className="p-1 text-red-600 hover:bg-red-50 rounded-md transition"
-                                                    title="Delete"
-                                                >
+                                                <button onClick={() => handleDelete(page)} className="p-1 text-red-600 hover:bg-red-50 rounded-md transition" title="Delete">
                                                     <Trash2 className="w-4 h-4" />
                                                 </button>
                                             </div>
@@ -226,9 +195,7 @@ const CMS = () => {
                                 ))
                             ) : (
                                 <tr>
-                                    <td colSpan="7" className="px-6 py-8 text-center text-gray-500">
-                                        No CMS pages found
-                                    </td>
+                                    <td colSpan="6" className="px-6 py-8 text-center text-gray-500">No CMS pages found</td>
                                 </tr>
                             )}
                         </tbody>
@@ -236,18 +203,15 @@ const CMS = () => {
                 </div>
             </div>
 
-            {/* Create/Edit Modal */}
+            {/* Create/Edit Modal with Rich Text Editor */}
             {showModal && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-                    <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+                    <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
                         <div className="sticky top-0 bg-white px-6 py-4 border-b border-gray-200 flex justify-between items-center">
                             <h2 className="text-xl font-semibold text-gray-800">
                                 {editingPage ? 'Edit CMS Page' : 'Create New CMS Page'}
                             </h2>
-                            <button
-                                onClick={resetForm}
-                                className="text-gray-500 hover:text-gray-700"
-                            >
+                            <button onClick={resetForm} className="text-gray-500 hover:text-gray-700">
                                 <X className="w-5 h-5" />
                             </button>
                         </div>
@@ -328,15 +292,15 @@ const CMS = () => {
                                 <label className="block text-sm font-medium text-gray-700 mb-1">
                                     Content
                                 </label>
-                                <textarea
-                                    name="content"
-                                    value={formData.content}
-                                    onChange={handleInputChange}
-                                    rows="8"
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-mono"
-                                    placeholder="Enter HTML content here..."
+                                <Editor 
+                                    value={formData.content} 
+                                    onChange={handleContentChange}
+                                    style={{
+                                        border: '1px solid #e2e8f0',
+                                        borderRadius: '0.5rem',
+                                        minHeight: '300px'
+                                    }}
                                 />
-                                <p className="text-xs text-gray-500 mt-1">HTML content is supported</p>
                             </div>
                             
                             <div className="flex justify-end gap-3 pt-4 border-t">
@@ -397,7 +361,6 @@ const CMS = () => {
                                     dangerouslySetInnerHTML={{ __html: selectedPage.content }}
                                 />
                             </div>
-                           
                         </div>
                     </div>
                 </div>
