@@ -1,7 +1,7 @@
 // src/components/Sidebar.jsx
 import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import {  X, LogOut, LayoutGrid, Newspaper, TestTube, Brain } from 'lucide-react';
+import {  X, LogOut, LayoutGrid, Newspaper, TestTube, Brain, Layers } from 'lucide-react';
 
 const Sidebar = ({ isOpen, onClose }) => {
     const navigate = useNavigate();
@@ -24,7 +24,7 @@ const Sidebar = ({ isOpen, onClose }) => {
          { 
             path: '/admin/cms', 
             name: 'CMS', 
-            icon: <Brain className="w-5 h-5" />,
+            icon: <Layers className="w-5 h-5" />,
         },
     ];
 
