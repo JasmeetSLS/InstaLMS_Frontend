@@ -119,6 +119,10 @@ const api = {
   bulkUploadQuiz: (formData) => admin.post('/quiz/bulk-upload', formData, { isFormData: true }),
   getQuizQuestions: (postId) => admin.get(`/quiz/questions/${postId}`),
   getAllPostTitles: () => admin.get('/posts/titles'),
+
+    // CMS APIs (NEW)
+  getCMSPages: () => admin.get('/cms/pages'),
+  createCMSPage: (formData) => admin.post('/cms/page', formData, { isFormData: true }),
 };
 
 export default api;

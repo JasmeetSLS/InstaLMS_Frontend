@@ -21,6 +21,11 @@ const Sidebar = ({ isOpen, onClose }) => {
             name: 'Quiz', 
             icon: <Brain className="w-5 h-5" />,
         },
+         { 
+            path: '/admin/cms', 
+            name: 'CMS', 
+            icon: <Brain className="w-5 h-5" />,
+        },
     ];
 
     const handleLogout = () => {
