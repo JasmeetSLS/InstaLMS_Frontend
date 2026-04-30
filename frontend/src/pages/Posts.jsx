@@ -121,7 +121,7 @@ const Posts = () => {
         <div className="p-6">
             <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold text-gray-800">Posts</h1>
+                    <h1 className="text-2xl font-bold text-gray-800">Post Management</h1>
                 </div>
                 
                 <button
