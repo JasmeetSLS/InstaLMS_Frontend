@@ -93,19 +93,12 @@ const Quiz = () => {
         }
     };
 
-    const handleDeleteQuestion = async (questionId) => {
-        if (!window.confirm('Are you sure you want to delete this question?')) return;
+    const handleEdit = (post) => {
+       alert('Edit functionality will be added soon');
+    };
 
-        try {
-            // Add your delete API call here
-            // await api.deleteQuizQuestion(questionId);
-            alert('Question deleted successfully!');
-            if (selectedPost) {
-                fetchQuizQuestions(selectedPost.id);
-            }
-        } catch (err) {
-            alert('Failed to delete question: ' + (err.message || 'Unknown error'));
-        }
+    const handleDelete = (post) => {
+       alert('Delete functionality will be added soon');
     };
 
     const exportToExcel = () => {
@@ -284,13 +277,14 @@ const Quiz = () => {
                                             <td className="px-6 py-4 whitespace-nowrap text-sm">
                                                 <div className="flex items-center gap-2">
                                                   <button
+                                                        onClick={() => handleEdit()}
                                                         className="p-1 text-blue-600 hover:bg-red-50 rounded-md transition"
                                                         title="edit"
                                                     >
                                                         <Edit className="w-4 h-4" />
                                                     </button>
                                                     <button
-                                                        onClick={() => handleDeleteQuestion(question.id)}
+                                                          onClick={() => handleDelete()}
                                                         className="p-1 text-red-600 hover:bg-red-50 rounded-md transition"
                                                         title="Delete"
                                                     >
