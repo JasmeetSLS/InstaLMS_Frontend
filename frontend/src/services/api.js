@@ -111,9 +111,14 @@ const api = {
   updateCategory: (id, formData) => admin.put(`/categories/${id}`, formData, { isFormData: true }),
   deleteCategory: (id) => admin.delete(`/categories/${id}`),
 
-    // Post APIs
+  // Post APIs
   getPosts: () => admin.get('/posts'),
-   createPost: (formData) => admin.post('/add-post', formData, { isFormData: true }),
+  createPost: (formData) => admin.post('/add-post', formData, { isFormData: true }),
+  
+  // Quiz APIs (NEW)
+  bulkUploadQuiz: (formData) => admin.post('/quiz/bulk-upload', formData, { isFormData: true }),
+  getQuizQuestions: (postId) => admin.get(`/quiz/questions/${postId}`),
+  getAllPostTitles: () => admin.get('/posts/titles'),
 };
 
 export default api;

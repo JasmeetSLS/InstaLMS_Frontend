@@ -6,6 +6,7 @@ import AdminLayout from './components/AdminLayout';
 import UserList from './pages/UserList';
 import Categories from './pages/Categories';
 import Posts from './pages/Posts';
+import Quiz from './pages/Quiz';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
          <Route path="/admin/user" element={<AdminLayout><UserList/></AdminLayout>} />
           <Route path="/admin/category" element={<AdminLayout><Categories/></AdminLayout>} />
         <Route path="/admin/post" element={<AdminLayout><Posts/></AdminLayout>} />
+         <Route path="/admin/quiz" element={<AdminLayout><Quiz/></AdminLayout>} />
         {/* Redirect any unknown routes to home */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
