@@ -2,19 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { X, Upload, Image, FileText, Plus, Trash2, Video } from 'lucide-react';
 import { FaYoutube } from "react-icons/fa";
 
-const CreatePostModal = ({ isOpen, onClose, onSubmit, categories = [] }) => {
+const CreatePostModal = ({ isOpen, onClose, onSubmit, categories = [], roles = [] }) => {
     const [submitting, setSubmitting] = useState(false);
     const [error, setError] = useState('');
     
     // Form state
-const [formData, setFormData] = useState({
-    title: '',
-    category_id: '',
-    description: '',
-    hashtags: '',
-    youtube_links: [],
-    thumbnail_type: 'landscape'  // Add this
-});
+    const [formData, setFormData] = useState({
+        title: '',
+        category_id: '',
+        role_id: '',
+        description: '',
+        hashtags: '',
+        youtube_links: [],
+        thumbnail_type: 'landscape'
+    });
     
     const [mediaFiles, setMediaFiles] = useState([]);
     const [thumbnailFiles, setThumbnailFiles] = useState([]);
@@ -27,21 +28,22 @@ const [formData, setFormData] = useState({
         }
     }, [isOpen]);
 
-   const resetForm = () => {
-    setFormData({
-        title: '',
-        category_id: '',
-        description: '',
-        hashtags: '',
-        youtube_links: [],
-        thumbnail_type: 'landscape'  // Add this
-    });
-    setMediaFiles([]);
-    setThumbnailFiles([]);
-    setYoutubeInput('');
-    setError('');
-    setPreviewUrls([]);
-};
+    const resetForm = () => {
+        setFormData({
+            title: '',
+            category_id: '',
+            role_id: '',
+            description: '',
+            hashtags: '',
+            youtube_links: [],
+            thumbnail_type: 'landscape'
+        });
+        setMediaFiles([]);
+        setThumbnailFiles([]);
+        setYoutubeInput('');
+        setError('');
+        setPreviewUrls([]);
+    };
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -106,6 +108,11 @@ const [formData, setFormData] = useState({
             return false;
         }
         
+        if (!formData.role_id) {
+            setError('Please select a role');
+            return false;
+        }
+        
         if (mediaFiles.length === 0 && formData.youtube_links.length === 0) {
             setError('Please add at least one media file or YouTube link');
             return false;
@@ -129,7 +136,8 @@ const [formData, setFormData] = useState({
             const submitFormData = new FormData();
             submitFormData.append('title', formData.title);
             submitFormData.append('category_id', formData.category_id);
-             submitFormData.append('thumbnail_type', formData.thumbnail_type); // Add this
+            submitFormData.append('role_id', formData.role_id);
+            submitFormData.append('thumbnail_type', formData.thumbnail_type);
             
             if (formData.description) {
                 submitFormData.append('description', formData.description);
@@ -226,6 +234,26 @@ const [formData, setFormData] = useState({
                         </select>
                     </div>
 
+                    {/* Role */}
+                    <div className="mb-4">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Role <span className="text-red-500">*</span>
+                        </label>
+                        <select
+                            name="role_id"
+                            value={formData.role_id}
+                            onChange={handleInputChange}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        >
+                            <option value="">Select a role</option>
+                            {roles.map(role => (
+                                <option key={role.id} value={role.id}>
+                                    {role.name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
                     {/* Description */}
                     <div className="mb-4">
                         <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -257,35 +285,35 @@ const [formData, setFormData] = useState({
                     </div>
 
                     {/* Thumbnail Type */}
-<div className="mb-4">
-    <label className="block text-sm font-medium text-gray-700 mb-2">
-        Thumbnail Type <span className="text-red-500">*</span>
-    </label>
-    <div className="flex gap-4">
-        <label className="flex items-center gap-2">
-            <input
-                type="radio"
-                name="thumbnail_type"
-                value="portrait"
-                checked={formData.thumbnail_type === 'portrait'}
-                onChange={handleInputChange}
-                className="w-4 h-4 text-blue-600"
-            />
-            <span className="text-sm text-gray-700">Portrait</span>
-        </label>
-        <label className="flex items-center gap-2">
-            <input
-                type="radio"
-                name="thumbnail_type"
-                value="landscape"
-                checked={formData.thumbnail_type === 'landscape'}
-                onChange={handleInputChange}
-                className="w-4 h-4 text-blue-600"
-            />
-            <span className="text-sm text-gray-700">Landscape</span>
-        </label>
-</div>
-</div>
+                    <div className="mb-4">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Thumbnail Type <span className="text-red-500">*</span>
+                        </label>
+                        <div className="flex gap-4">
+                            <label className="flex items-center gap-2">
+                                <input
+                                    type="radio"
+                                    name="thumbnail_type"
+                                    value="portrait"
+                                    checked={formData.thumbnail_type === 'portrait'}
+                                    onChange={handleInputChange}
+                                    className="w-4 h-4 text-blue-600"
+                                />
+                                <span className="text-sm text-gray-700">Portrait</span>
+                            </label>
+                            <label className="flex items-center gap-2">
+                                <input
+                                    type="radio"
+                                    name="thumbnail_type"
+                                    value="landscape"
+                                    checked={formData.thumbnail_type === 'landscape'}
+                                    onChange={handleInputChange}
+                                    className="w-4 h-4 text-blue-600"
+                                />
+                                <span className="text-sm text-gray-700">Landscape</span>
+                            </label>
+                        </div>
+                    </div>
 
                     {/* Media Files */}
                     <div className="mb-4">
@@ -391,7 +419,7 @@ const [formData, setFormData] = useState({
                                 {formData.youtube_links.map((link, index) => (
                                     <div key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded-lg">
                                         <div className="flex items-center gap-2 flex-1">
-                                            <FaYoutube  className="w-5 h-5 text-red-600" />
+                                            <FaYoutube className="w-5 h-5 text-red-600" />
                                             <span className="text-sm text-gray-700 truncate">{link}</span>
                                         </div>
                                         <button

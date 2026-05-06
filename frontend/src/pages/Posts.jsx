@@ -13,10 +13,12 @@ const Posts = () => {
     const [showViewModal, setShowViewModal] = useState(false);
     const [error, setError] = useState('');
     const [categories, setCategories] = useState([]);
+    const [roles, setRoles] = useState([]);
 
     useEffect(() => {
         fetchPosts();
         fetchCategories();
+        fetchRoles();
     }, []);
 
     const fetchPosts = async () => {
@@ -58,6 +60,17 @@ const Posts = () => {
         }
     };
 
+    const fetchRoles = async () => {
+        try {
+            const response = await api.getRoles();
+            if (response.success && Array.isArray(response.data)) {
+                setRoles(response.data);
+            }
+        } catch (err) {
+            console.error('Error fetching roles:', err);
+        }
+    };
+
     // Handle post creation from modal
     const handleCreatePost = async (formData) => {
         try {
@@ -84,7 +97,7 @@ const Posts = () => {
             case 'video':
                 return <Video className="w-4 h-4 text-blue-600" />;
             case 'youtube':
-                return <FaYoutube  className="w-4 h-4 text-red-600" />;
+                return <FaYoutube className="w-4 h-4 text-red-600" />;
             case 'pdf':
                 return <FileText className="w-4 h-4 text-orange-600" />;
             case 'ppt':
@@ -102,11 +115,11 @@ const Posts = () => {
     };
 
     const handleEdit = (post) => {
-       alert('Edit functionality will be added soon');
+        alert('Edit functionality will be added soon');
     };
 
     const handleDelete = (post) => {
-       alert('Delete functionality will be added soon');
+        alert('Delete functionality will be added soon');
     };
 
     if (loading) {
@@ -155,8 +168,11 @@ const Posts = () => {
                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Category Icon
                                 </th>
-                                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Category
+                                </th>
+                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Role
                                 </th>
                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Title
@@ -187,20 +203,22 @@ const Posts = () => {
                                         </td>
                                         <td className="px-4 py-2 whitespace-nowrap text-sm">
                                             <img 
-                                                    src={`${FILE_BASE_URL}${post.category_icon_url}`}
-                                                    // alt={post.title}
-                                                    className="w-10 h-10 object-cover rounded-lg"
-                                                />
+                                                src={`${FILE_BASE_URL}${post.category_icon_url}`}
+                                                className="w-10 h-10 object-cover rounded-lg"
+                                                alt="Category"
+                                            />
                                         </td>
                                         <td className="px-4 py-2 whitespace-nowrap text-sm">
-                                           {post.category_name}
+                                            {post.category_name}
+                                        </td>
+                                         <td className="px-4 py-2 whitespace-nowrap text-sm">
+                                            {post.role_name}
                                         </td>
                                         <td className="px-4 py-2 text-sm">
-                                           {post.title}
+                                            {post.title}
                                         </td>
-                                        
                                         <td className="px-4 py-2 whitespace-nowrap text-sm">
-                                           {post.thumbnail_type}
+                                            {post.thumbnail_type}
                                         </td>
                                         <td className="px-4 py-2 whitespace-nowrap text-sm">
                                             {post.media && post.media.length > 0 ? (
@@ -240,10 +258,9 @@ const Posts = () => {
                                                 </div>
                                             </div>
                                         </td>
-                                          <td className="px-4 py-2 text-3xl text-green-600 whitespace-nowrap">
-                                                                                {/* {post.status} */}
-                                                                                <FaToggleOn />
-                                                                            </td>
+                                        <td className="px-4 py-2 text-3xl text-green-600 whitespace-nowrap">
+                                            <FaToggleOn />
+                                        </td>
                                         <td className="px-4 py-2 whitespace-nowrap text-sm">
                                             <div className="flex items-center gap-2">
                                                 <button
@@ -254,14 +271,14 @@ const Posts = () => {
                                                     <Eye className="w-4 h-4" />
                                                 </button>
                                                 <button
-                                                    onClick={() => handleEdit()}
+                                                    onClick={() => handleEdit(post)}
                                                     className="p-1 text-indigo-600 hover:bg-indigo-50 rounded-md transition"
                                                     title="Edit"
                                                 >
                                                     <Edit className="w-4 h-4" />
                                                 </button>
                                                 <button
-                                                onClick={() => handleDelete()}
+                                                    onClick={() => handleDelete(post)}
                                                     className="p-1 text-red-600 hover:bg-red-50 rounded-md transition"
                                                     title="Delete"
                                                 >
@@ -273,7 +290,7 @@ const Posts = () => {
                                 ))
                             ) : (
                                 <tr>
-                                    <td colSpan="8" className="px-6 py-8 text-center text-gray-500">
+                                    <td colSpan="10" className="px-6 py-8 text-center text-gray-500">
                                         No posts found
                                     </td>
                                 </tr>
@@ -322,7 +339,7 @@ const Posts = () => {
                                                         className="w-full h-48 object-cover"
                                                     />
                                                     <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40">
-                                                        <FaYoutube  className="w-12 h-12 text-red-600" />
+                                                        <FaYoutube className="w-12 h-12 text-red-600" />
                                                     </div>
                                                 </div>
                                             )}
@@ -394,6 +411,7 @@ const Posts = () => {
                 onClose={() => setShowModal(false)}
                 onSubmit={handleCreatePost}
                 categories={categories}
+                roles={roles}
             />
         </div>
     );

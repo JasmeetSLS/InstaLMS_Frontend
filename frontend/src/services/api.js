@@ -123,6 +123,9 @@ const api = {
     // CMS APIs (NEW)
   getCMSPages: () => admin.get('/cms/pages'),
   createCMSPage: (formData) => admin.post('/cms/page', formData, { isFormData: true }),
+
+    // Role APIs (NEW)
+  getRoles: () => admin.get('/roles'),
 };
 
 export default api;
