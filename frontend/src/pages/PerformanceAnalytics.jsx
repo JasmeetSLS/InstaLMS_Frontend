@@ -96,6 +96,288 @@ const userData = [
   { role: "SM", total: 275 },
 ];
 
+// ================= ROLE WISE USAGE HIERARCHY =================
+
+const roleUsageHierarchy = {
+  // ================= ALL INDIA =================
+  All: {
+    roles: [
+      { role: "DSE", hours: 1170 },
+      { role: "TL", hours: 850 },
+      { role: "SM", hours: 770 },
+      { role: "DSC", hours: 600 },
+      { role: "Manager", hours: 700 },
+    ],
+  },
+
+  // ================= NORTH REGION =================
+  North: {
+    roles: [
+      { role: "DSE", hours: 420 },
+      { role: "TL", hours: 310 },
+      { role: "SM", hours: 280 },
+      { role: "DSC", hours: 220 },
+      { role: "Manager", hours: 260 },
+    ],
+
+    cities: {
+      Delhi: [
+        { role: "DSE", hours: 120 },
+        { role: "TL", hours: 90 },
+        { role: "SM", hours: 80 },
+        { role: "DSC", hours: 70 },
+        { role: "Manager", hours: 60 },
+      ],
+
+      Chandigarh: [
+        { role: "DSE", hours: 95 },
+        { role: "TL", hours: 75 },
+        { role: "SM", hours: 65 },
+        { role: "DSC", hours: 50 },
+        { role: "Manager", hours: 45 },
+      ],
+
+      Jaipur: [
+        { role: "DSE", hours: 110 },
+        { role: "TL", hours: 80 },
+        { role: "SM", hours: 70 },
+        { role: "DSC", hours: 55 },
+        { role: "Manager", hours: 50 },
+      ],
+
+      Lucknow: [
+        { role: "DSE", hours: 60 },
+        { role: "TL", hours: 40 },
+        { role: "SM", hours: 35 },
+        { role: "DSC", hours: 25 },
+        { role: "Manager", hours: 30 },
+      ],
+
+      Noida: [
+        { role: "DSE", hours: 35 },
+        { role: "TL", hours: 25 },
+        { role: "SM", hours: 30 },
+        { role: "DSC", hours: 20 },
+        { role: "Manager", hours: 25 },
+      ],
+    },
+  },
+
+  // ================= SOUTH REGION =================
+  South: {
+    roles: [
+      { role: "DSE", hours: 390 },
+      { role: "TL", hours: 280 },
+      { role: "SM", hours: 250 },
+      { role: "DSC", hours: 200 },
+      { role: "Manager", hours: 230 },
+    ],
+
+    cities: {
+      Bangalore: [
+        { role: "DSE", hours: 140 },
+        { role: "TL", hours: 110 },
+        { role: "SM", hours: 90 },
+        { role: "DSC", hours: 75 },
+        { role: "Manager", hours: 65 },
+      ],
+
+      Chennai: [
+        { role: "DSE", hours: 120 },
+        { role: "TL", hours: 90 },
+        { role: "SM", hours: 80 },
+        { role: "DSC", hours: 60 },
+        { role: "Manager", hours: 50 },
+      ],
+
+      Hyderabad: [
+        { role: "DSE", hours: 130 },
+        { role: "TL", hours: 80 },
+        { role: "SM", hours: 70 },
+        { role: "DSC", hours: 65 },
+        { role: "Manager", hours: 55 },
+      ],
+
+      Kochi: [
+        { role: "DSE", hours: 55 },
+        { role: "TL", hours: 40 },
+        { role: "SM", hours: 35 },
+        { role: "DSC", hours: 30 },
+        { role: "Manager", hours: 28 },
+      ],
+
+      Coimbatore: [
+        { role: "DSE", hours: 45 },
+        { role: "TL", hours: 30 },
+        { role: "SM", hours: 25 },
+        { role: "DSC", hours: 20 },
+        { role: "Manager", hours: 18 },
+      ],
+    },
+  },
+
+  // ================= WEST REGION =================
+  West: {
+    roles: [
+      { role: "DSE", hours: 360 },
+      { role: "TL", hours: 260 },
+      { role: "SM", hours: 240 },
+      { role: "DSC", hours: 180 },
+      { role: "Manager", hours: 210 },
+    ],
+
+    cities: {
+      Mumbai: [
+        { role: "DSE", hours: 150 },
+        { role: "TL", hours: 120 },
+        { role: "SM", hours: 100 },
+        { role: "DSC", hours: 70 },
+        { role: "Manager", hours: 60 },
+      ],
+
+      Pune: [
+        { role: "DSE", hours: 110 },
+        { role: "TL", hours: 80 },
+        { role: "SM", hours: 75 },
+        { role: "DSC", hours: 55 },
+        { role: "Manager", hours: 50 },
+      ],
+
+      Ahmedabad: [
+        { role: "DSE", hours: 100 },
+        { role: "TL", hours: 60 },
+        { role: "SM", hours: 65 },
+        { role: "DSC", hours: 45 },
+        { role: "Manager", hours: 40 },
+      ],
+
+      Surat: [
+        { role: "DSE", hours: 55 },
+        { role: "TL", hours: 35 },
+        { role: "SM", hours: 30 },
+        { role: "DSC", hours: 25 },
+        { role: "Manager", hours: 30 },
+      ],
+
+      Goa: [
+        { role: "DSE", hours: 40 },
+        { role: "TL", hours: 25 },
+        { role: "SM", hours: 20 },
+        { role: "DSC", hours: 15 },
+        { role: "Manager", hours: 20 },
+      ],
+    },
+  },
+
+  // ================= EAST REGION =================
+  East: {
+    roles: [
+      { role: "DSE", hours: 320 },
+      { role: "TL", hours: 240 },
+      { role: "SM", hours: 220 },
+      { role: "DSC", hours: 170 },
+      { role: "Manager", hours: 200 },
+    ],
+
+    cities: {
+      Kolkata: [
+        { role: "DSE", hours: 130 },
+        { role: "TL", hours: 95 },
+        { role: "SM", hours: 85 },
+        { role: "DSC", hours: 70 },
+        { role: "Manager", hours: 65 },
+      ],
+
+      Bhubaneswar: [
+        { role: "DSE", hours: 75 },
+        { role: "TL", hours: 55 },
+        { role: "SM", hours: 50 },
+        { role: "DSC", hours: 35 },
+        { role: "Manager", hours: 40 },
+      ],
+
+      Patna: [
+        { role: "DSE", hours: 60 },
+        { role: "TL", hours: 45 },
+        { role: "SM", hours: 40 },
+        { role: "DSC", hours: 30 },
+        { role: "Manager", hours: 35 },
+      ],
+
+      Ranchi: [
+        { role: "DSE", hours: 35 },
+        { role: "TL", hours: 25 },
+        { role: "SM", hours: 20 },
+        { role: "DSC", hours: 18 },
+        { role: "Manager", hours: 22 },
+      ],
+
+      Guwahati: [
+        { role: "DSE", hours: 20 },
+        { role: "TL", hours: 20 },
+        { role: "SM", hours: 25 },
+        { role: "DSC", hours: 17 },
+        { role: "Manager", hours: 18 },
+      ],
+    },
+  },
+
+  // ================= CENTRAL REGION =================
+  Central: {
+    roles: [
+      { role: "DSE", hours: 300 },
+      { role: "TL", hours: 220 },
+      { role: "SM", hours: 210 },
+      { role: "DSC", hours: 160 },
+      { role: "Manager", hours: 190 },
+    ],
+
+    cities: {
+      Bhopal: [
+        { role: "DSE", hours: 90 },
+        { role: "TL", hours: 70 },
+        { role: "SM", hours: 60 },
+        { role: "DSC", hours: 45 },
+        { role: "Manager", hours: 50 },
+      ],
+
+      Indore: [
+        { role: "DSE", hours: 80 },
+        { role: "TL", hours: 60 },
+        { role: "SM", hours: 55 },
+        { role: "DSC", hours: 40 },
+        { role: "Manager", hours: 45 },
+      ],
+
+      Raipur: [
+        { role: "DSE", hours: 55 },
+        { role: "TL", hours: 40 },
+        { role: "SM", hours: 35 },
+        { role: "DSC", hours: 30 },
+        { role: "Manager", hours: 32 },
+      ],
+
+      Nagpur: [
+        { role: "DSE", hours: 45 },
+        { role: "TL", hours: 30 },
+        { role: "SM", hours: 35 },
+        { role: "DSC", hours: 25 },
+        { role: "Manager", hours: 28 },
+      ],
+
+      Jabalpur: [
+        { role: "DSE", hours: 30 },
+        { role: "TL", hours: 20 },
+        { role: "SM", hours: 25 },
+        { role: "DSC", hours: 20 },
+        { role: "Manager", hours: 25 },
+      ],
+    },
+  },
+};
+
+
+
 // ---------------- REGION DATA ----------------
 const regionCityData = {
   Regions: [
@@ -278,7 +560,21 @@ const PerformanceAnalytics = () => {
     const [selectedDealership, setSelectedDealership] = useState("All");
     const [currentImage1, setCurrentImage1] = useState(0);
 const [currentImage2, setCurrentImage2] = useState(0);
+const [selectedUsageRegion, setSelectedUsageRegion] =
+  useState("All");
+
+const [selectedUsageCity, setSelectedUsageCity] =
+  useState("All");
 const [activeTab, setActiveTab] = useState(0);
+
+{/* ================= DYNAMIC DATA ================= */}
+const usageData =
+  selectedUsageRegion === "All"
+    ? roleUsageHierarchy.All.roles
+    : selectedUsageCity === "All"
+    ? roleUsageHierarchy[selectedUsageRegion].roles
+    : roleUsageHierarchy[selectedUsageRegion]
+        .cities[selectedUsageCity];
 
 
 React.useEffect(() => {
@@ -573,33 +869,33 @@ const indiaHeatMapOptions = {
     map: mapDataIndia,
     backgroundColor: "transparent",
     height: 500,
-events: {
-  render: function () {
-    const chart = this;
 
-    chart.series[0].points.forEach((point) => {
+    events: {
+      render: function () {
+        const chart = this;
 
-      if (point.graphic && point.graphic.element) {
+        chart.series[0].points.forEach((point) => {
 
-        // REMOVE OLD CLASS FIRST
-        point.graphic.element.classList.remove(
-          "highcharts-point-dark-orange"
-        );
+          if (point.graphic && point.graphic.element) {
 
-        // ADD BLINK TO HIGH USER STATES
-        if (point.value >= 160) {
-          point.graphic.element.classList.add(
-            "highcharts-point-dark-orange"
-          );
-        }
-      }
-    });
-  },
-},
+            point.graphic.element.classList.remove(
+              "highcharts-point-dark-orange"
+            );
+
+            // BLINK HIGH USAGE STATES
+            if (point.value >= 1600) {
+              point.graphic.element.classList.add(
+                "highcharts-point-dark-orange"
+              );
+            }
+          }
+        });
+      },
+    },
   },
 
   title: {
-    text: "India Heat Map (Usage Intensity)",
+    text: "India State Usage Heat Map",
   },
 
   credits: {
@@ -608,70 +904,82 @@ events: {
 
   colorAxis: {
     min: 0,
-    max: 200,
+    max: 2000,
+
     stops: [
-      [0, '#fff7ed'],   // Very Light Orange - low usage (0-30)
-      [0.15, '#ffedd5'], // Light Orange (30-60)
-      [0.3, '#fed7aa'],  // Light-Medium Orange (60-90)
-      [0.5, '#fdba74'],  // Medium Orange (90-120)
-      [0.7, '#f97316'],  // Orange (120-150)
-      [0.85, '#ea580c'], // Dark Orange (150-180)
-      [1, '#c2410c']     // Very Dark Orange (180-200)
+      [0, "#fff7ed"],
+      [0.15, "#ffedd5"],
+      [0.3, "#fed7aa"],
+      [0.5, "#fdba74"],
+      [0.7, "#f97316"],
+      [0.85, "#ea580c"],
+      [1, "#c2410c"],
     ],
   },
 
   tooltip: {
-    formatter: function() {
-      return '<b>' + this.point.name + '</b><br/>' +
-             'Users: <b>' + this.point.value + '</b>';
+    formatter: function () {
+      return (
+        "<b>" +
+        this.point.name +
+        "</b><br/>Usage Hours: <b>" +
+        this.point.value +
+        " hrs</b>"
+      );
     },
+
     borderWidth: 2,
-    borderColor: '#ea580c',
+    borderColor: "#ea580c",
     borderRadius: 8,
     padding: 10,
+
     style: {
-      fontSize: '12px',
-      fontWeight: 'bold'
-    }
+      fontSize: "12px",
+      fontWeight: "bold",
+    },
   },
 
   series: [
     {
       data: [
-        ["in-dl", 195],   // Delhi - 195 users (Always Blink)
-        ["in-mh", 185],   // Maharashtra - 185 users (Always Blink)
-        ["in-ka", 175],   // Karnataka - 175 users (Always Blink)
-        ["in-tn", 185],   // Tamil Nadu - 165 users (Always Blink)
-        ["in-up", 160],   // Uttar Pradesh - 160 users (Always Blink)
-        ["in-gj", 120],   // Gujarat - 140 users (No Blink)
-        ["in-wb", 110],   // West Bengal - 110 users (No Blink)
-        ["in-rj", 85],    // Rajasthan - 85 users (No Blink)
-        ["in-mp", 65],    // Madhya Pradesh - 65 users (No Blink)
-        ["in-kl", 50],    // Kerala - 50 users (No Blink)
-        ["in-pb", 40],    // Punjab - 40 users (No Blink)
-        ["in-hr", 30],    // Haryana - 30 users (No Blink)
-        ["in-br", 25],    // Bihar - 25 users (No Blink)
-        ["in-or", 20],    // Odisha - 20 users (No Blink)
-        ["in-jk", 15],    // Jammu & Kashmir - 15 users (No Blink)
-        ["in-as", 10],    // Assam - 10 users (No Blink)
-        ["in-hp", 8],     // Himachal Pradesh - 8 users (No Blink)
-        ["in-ut", 5]      // Uttarakhand - 5 users (No Blink)
+        ["in-dl", 1950],
+        ["in-mh", 1850],
+        ["in-ka", 1750],
+        ["in-tn", 1650],
+        ["in-up", 1600],
+        ["in-gj", 1400],
+        ["in-wb", 1100],
+        ["in-rj", 850],
+        ["in-mp", 650],
+        ["in-kl", 500],
+        ["in-pb", 400],
+        ["in-hr", 300],
+        ["in-br", 250],
+        ["in-or", 200],
+        ["in-jk", 150],
+        ["in-as", 100],
+        ["in-hp", 80],
+        ["in-ut", 50],
       ],
-      name: "Users",
+
+      name: "Usage Hours",
+
       joinBy: "hc-key",
+
       states: {
         hover: {
           enabled: true,
           brightness: 0.2,
-          color: '#ff6b6b'
-        }
+          color: "#ff6b6b",
+        },
       },
+
       dataLabels: {
-        enabled: false
+        enabled: false,
       },
+
       borderWidth: 1,
-      borderColor: '#ffffff'
-      // Remove point.events section completely
+      borderColor: "#ffffff",
     },
   ],
 };
@@ -1253,409 +1561,491 @@ events: {
 
 </div>
 
-  {/* ================= INDIA HEAT MAP ================= */}
-  <div className="bg-white  rounded-md shadow-[0_10px_40px_rgba(0,0,0,0.15)] p-4 h-[520px] overflow-hidden flex flex-col">
+{/* ================= INDIA HEAT MAP ================= */}
+<div className="bg-white rounded-md shadow-[0_10px_40px_rgba(0,0,0,0.15)] p-4 h-[520px] overflow-hidden flex flex-col">
 
-    <h2 className="text-base font-bold mb-3 text-gray-800">
-      India Heat Map
-    </h2>
+  <h2 className="text-base font-bold mb-3 text-gray-800">
+    India State Usage Heat Map
+  </h2>
 
-    <div className="flex flex-col lg:flex-row gap-3 flex-1 overflow-hidden">
+  <div className="flex flex-col lg:flex-row gap-3 flex-1 overflow-hidden">
 
-{/* ACTIVE USERS + STATES SECTION */}
-<div className="lg:w-[32%] flex flex-col gap-3 h-full">
-
-<div className="px-3 py-3 flex flex-col flex-1 min-h-[125px]">
-
-  <div className="flex-1 flex flex-col justify-center items-center text-center">
-
-    {/* LABEL (INCREASED SIZE) */}
-    <div className="text-[16px] font-bold text-gray-700 mb-2">
-     Active Users
-    </div>
-
-    {/* BIG COUNT */}
-    <div className="text-5xl font-black text-[#f97316] leading-none">
-      {totalUsers.toLocaleString()}
-    </div>
-
-    {/* SUB TEXT */}
-    <div className="text-[11px] italic text-gray-600 mt-2">
-       Across <span className="font-bold">18 States</span>
-    </div>
-
-    {/* LOADER */}
-    <div className="mt-3">
-      <Hourglass
-        visible={true}
-        height="30"
-        width="30"
-        colors={["#f97316", "#fdba74"]}
-      />
-    </div>
-
-  </div>
-
-</div>
-
-{/* ================= TOP STATES LIST ================= */}
-<div className="overflow-hidden flex-1 bg-white">
-
-  <table className="w-full h-full text-[9px]">
-
- <thead>
-  <tr className="bg-[#4a4a4a] text-white uppercase font-semibold">
-
-    <th className="px-2 py-1.5 text-center  w-[35px] leading-4">
-      No
-    </th>
-
-    <th className="px-2 py-1.5 text-center  leading-4">
-      State
-    </th>
-
-    <th className="px-2 py-1.5 text-center  w-[55px] leading-4">
-      Users
-    </th>
-
-  </tr>
-</thead>
-
-    {/* BODY */}
-    <tbody>
-      {indiaHeatMapOptions.series[0].data
-        .sort((a, b) => b[1] - a[1])
-        .slice(0, 6)
-        .map((item, i) => {
-
-          const stateNameMap = {
-            "in-dl": "Delhi",
-            "in-mh": "Maharashtra",
-            "in-ka": "Karnataka",
-            "in-tn": "Tamil Nadu",
-            "in-up": "Uttar Pradesh",
-            "in-gj": "Gujarat",
-            "in-wb": "West Bengal",
-            "in-rj": "Rajasthan",
-            "in-mp": "Madhya Pradesh",
-            "in-kl": "Kerala",
-            "in-pb": "Punjab",
-            "in-hr": "Haryana",
-            "in-br": "Bihar",
-            "in-or": "Odisha",
-            "in-jk": "Jammu & Kashmir",
-            "in-as": "Assam",
-            "in-hp": "Himachal Pradesh",
-            "in-ut": "Uttarakhand",
-          };
-
-          const users = item[1];
-
-          // SAME COLOR LOGIC AS HEATMAP
-          let stateColor = "#fff7ed";
-
-          if (users >= 180) {
-            stateColor = "#c2410c";
-          } else if (users >= 150) {
-            stateColor = "#ea580c";
-          } else if (users >= 120) {
-            stateColor = "#f97316";
-          } else if (users >= 90) {
-            stateColor = "#fdba74";
-          } else if (users >= 60) {
-            stateColor = "#fed7aa";
-          } else if (users >= 30) {
-            stateColor = "#ffedd5";
-          }
-
-          // TOP STATES BLINK
-          const isBlinking = users >= 160;
-
-          return (
-            <tr
-              key={i}
-            className={`hover:bg-gray-200 transition ${
-  isBlinking ? "top-state-blink" : ""
-}`}
-            >
-
-              {/* SERIAL */}
-              <td className=" px-1 py-[3px] text-center font-semibold text-gray-800">
-                {i + 1}
-              </td>
-
-              {/* STATE */}
-              <td className=" px-1 py-[3px]">
-
-                <div className="flex items-center gap-1 font-medium text-gray-700">
-
-                  {/* COLOR DOT */}
-                  <span
-                 className={`w-2 h-2 rounded-full flex-shrink-0 ${
-  isBlinking ? "top-state-dot-blink" : ""
-}`}
-                    style={{
-                      backgroundColor: stateColor,
-                    }}
-                  />
-
-                  <span className="truncate  font-semibold">
-                    {stateNameMap[item[0]]}
-                  </span>
-
-                </div>
-
-              </td>
-
-              {/* USERS */}
-              <td
-                className={` px-1 py-[3px] text-center font-bold ${
-                  isBlinking
-                    ? "text-[#c2410c]"
-                    : "text-gray-800"
-                }`}
-              >
-                {users}
-              </td>
-
-            </tr>
-          );
-        })}
-    </tbody>
-
-  </table>
-
-</div>
-
-</div>
-
-      {/* MAP */}
-      <div className="lg:w-[68%] h-full overflow-hidden rounded-2xl">
-
-        <HighchartsReact
-          highcharts={Highcharts}
-          constructorType={"mapChart"}
-          options={{
-            ...indiaHeatMapOptions,
-            chart: {
-              ...indiaHeatMapOptions.chart,
-              height: 450,
-              backgroundColor: "transparent",
-            },
-          }}
-        />
-
-      </div>
-
-    </div>
-
-  </div>
-
-</div>
-
-{/* ================= ROW 5 (Left: India City Usage | Right: Role Holder + Weekly Usage) ================= */}
-<div className="grid grid-cols-1 xl:grid-cols-2 gap-5 mb-6 items-stretch auto-rows-fr">
-
-  {/* ================= LEFT COLUMN: INDIA CITY USAGE ================= */}
-  <div className="bg-white rounded-md shadow-[0_10px_40px_rgba(0,0,0,0.15)] p-4 flex flex-col min-h-[820px]">
-
-    {/* TITLE */}
-    <h2 className="text-base font-bold text-gray-800 mb-3">
-      India City Usage
-    </h2>
-
-    {/* TOP SECTION */}
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-3 items-stretch">
+    {/* ================= LEFT SIDE ================= */}
+    <div className="lg:w-[32%] flex flex-col gap-3 h-full">
 
       {/* KPI CARD */}
       <div className="px-3 py-3 flex flex-col flex-1 min-h-[125px]">
 
         <div className="flex-1 flex flex-col justify-center items-center text-center">
 
-          <div className="text-[16px] font-bold text-gray-700 mt-2">
-            {selectedRegion === "Regions"
-              ? "All India Usage"
-              : `${selectedRegion} Region`}
+          {/* LABEL */}
+          <div className="text-[16px] font-bold text-gray-700 mb-2">
+            State Usage
           </div>
 
-          <div className="text-4xl font-black text-[#10b981] leading-none mt-2">
-            {selectedRegion === "Regions"
-              ? Object.keys(regionCityData)
-                  .filter((r) => r !== "Regions")
-                  .reduce(
-                    (sum, r) =>
-                      sum + regionCityData[r].reduce((a, b) => a + b[1], 0),
-                    0
-                  )
-              : regionCityData[selectedRegion].reduce(
-                  (sum, city) => sum + city[1],
-                  0
-                )}
+          {/* TOTAL HOURS */}
+          <div className="text-5xl font-black text-[#f97316] leading-none">
+            {indiaHeatMapOptions.series[0].data
+              .reduce((sum, item) => sum + item[1], 0)
+              .toLocaleString()}
           </div>
 
+          {/* SUBTEXT */}
           <div className="text-[11px] italic text-gray-600 mt-2">
-            Total Usage Hours
+            Across <span className="font-bold">18 States Usage</span>
           </div>
 
+          {/* LOADER */}
           <div className="mt-3">
             <Hourglass
               visible={true}
               height="30"
               width="30"
-              colors={["#10b981", "#6ee7b7"]}
+              colors={["#f97316", "#fdba74"]}
             />
           </div>
 
-          {selectedRegion !== "Regions" && (
-            <button
-              onClick={() => setSelectedRegion("Regions")}
-              className="mt-3 px-4 py-1 bg-black text-white text-[10px] rounded-md"
-            >
-              Back
-            </button>
-          )}
-
         </div>
+
       </div>
 
-      {/* PIE CHART */}
-      <div className="md:col-span-2 h-[320px] flex items-center justify-center overflow-hidden">
+      {/* ================= TOP STATES TABLE ================= */}
+      <div className="overflow-hidden flex-1 bg-white">
 
-        <HighchartsReact
-          highcharts={Highcharts}
-          options={{
-            chart: {
-              type: "pie",
-              backgroundColor: "transparent",
-              height: 320,
-              options3d: {
-                enabled: true,
-                alpha: 45,
-              },
-            },
-            title: {
-              text: null,
-            },
-            subtitle: {
-              text: null,
-            },
-            credits: {
-              enabled: false,
-            },
-            tooltip: {
-              formatter: function () {
+        <table className="w-full h-full text-[9px]">
+
+          <thead>
+            <tr className="bg-[#4a4a4a] text-white uppercase font-semibold">
+
+              <th className="px-2 py-1.5 text-center w-[35px] leading-4">
+                No
+              </th>
+
+              <th className="px-2 py-1.5 text-center leading-4">
+                State
+              </th>
+
+              <th className="px-2 py-1.5 text-center w-[65px] leading-4">
+                Hours
+              </th>
+
+            </tr>
+          </thead>
+
+          <tbody>
+            {indiaHeatMapOptions.series[0].data
+              .sort((a, b) => b[1] - a[1])
+              .slice(0, 6)
+              .map((item, i) => {
+
+                const stateNameMap = {
+                  "in-dl": "Delhi",
+                  "in-mh": "Maharashtra",
+                  "in-ka": "Karnataka",
+                  "in-tn": "Tamil Nadu",
+                  "in-up": "Uttar Pradesh",
+                  "in-gj": "Gujarat",
+                  "in-wb": "West Bengal",
+                  "in-rj": "Rajasthan",
+                  "in-mp": "Madhya Pradesh",
+                  "in-kl": "Kerala",
+                  "in-pb": "Punjab",
+                  "in-hr": "Haryana",
+                  "in-br": "Bihar",
+                  "in-or": "Odisha",
+                  "in-jk": "Jammu & Kashmir",
+                  "in-as": "Assam",
+                  "in-hp": "Himachal Pradesh",
+                  "in-ut": "Uttarakhand",
+                };
+
+                const hours = item[1];
+
+                // COLOR SCALE
+                let stateColor = "#fff7ed";
+
+                if (hours >= 1800) {
+                  stateColor = "#c2410c";
+                } else if (hours >= 1500) {
+                  stateColor = "#ea580c";
+                } else if (hours >= 1200) {
+                  stateColor = "#f97316";
+                } else if (hours >= 900) {
+                  stateColor = "#fdba74";
+                } else if (hours >= 600) {
+                  stateColor = "#fed7aa";
+                } else if (hours >= 300) {
+                  stateColor = "#ffedd5";
+                }
+
+                // BLINKING STATES
+                const isBlinking = hours >= 1600;
+
                 return (
-                  "<b>" +
-                  this.point.name +
-                  "</b><br/>" +
-                  this.y +
-                  " hours"
+                  <tr
+                    key={i}
+                    className={`hover:bg-gray-200 transition ${
+                      isBlinking ? "top-state-blink" : ""
+                    }`}
+                  >
+
+                    {/* SERIAL */}
+                    <td className="px-1 py-[3px] text-center font-semibold text-gray-800">
+                      {i + 1}
+                    </td>
+
+                    {/* STATE */}
+                    <td className="px-1 py-[3px]">
+
+                      <div className="flex items-center gap-1 font-medium text-gray-700">
+
+                        {/* DOT */}
+                        <span
+                          className={`w-2 h-2 rounded-full flex-shrink-0 ${
+                            isBlinking ? "top-state-dot-blink" : ""
+                          }`}
+                          style={{
+                            backgroundColor: stateColor,
+                          }}
+                        />
+
+                        <span className="truncate font-semibold">
+                          {stateNameMap[item[0]]}
+                        </span>
+
+                      </div>
+
+                    </td>
+
+                    {/* HOURS */}
+                    <td
+                      className={`px-1 py-[3px] text-center font-bold ${
+                        isBlinking
+                          ? "text-[#c2410c]"
+                          : "text-gray-800"
+                      }`}
+                    >
+                      {hours} hrs
+                    </td>
+
+                  </tr>
                 );
-              },
-              followPointer: true,
-            },
-            plotOptions: {
-              pie: {
-                innerSize: 100,
-                depth: 45,
-                allowPointSelect: true,
-                cursor: "pointer",
-                dataLabels: {
-                  enabled: false,
-                },
-                point: {
-                  events: {
-                    click: function () {
-                      if (selectedRegion === "Regions") {
-                        setSelectedRegion(this.name);
-                      }
-                    },
-                  },
-                },
-              },
-            },
-            series: [
-              {
-                name: "Usage",
-                data: regionCityData[selectedRegion].map((item) => ({
-                  name: item[0],
-                  y: item[1],
-                })),
-              },
-            ],
-          }}
-        />
+              })}
+          </tbody>
+
+        </table>
 
       </div>
+
     </div>
 
-    {/* TABLE */}
-    <div className="mt-5 overflow-hidden flex-1">
+    {/* ================= MAP ================= */}
+    <div className="lg:w-[68%] h-full overflow-hidden rounded-2xl">
 
-      <table className="w-full text-[11px] border-collapse">
+      <HighchartsReact
+        highcharts={Highcharts}
+        constructorType={"mapChart"}
+        options={{
+          ...indiaHeatMapOptions,
 
-        <thead>
-          <tr className="bg-gray-600 text-white">
-            <th className="p-2 text-center">S.No</th>
-            <th className="p-2 text-center"></th>
-            <th className="p-2 text-center">City / Region</th>
-            <th className="p-2 text-center">Hours</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {regionCityData[selectedRegion].map((item, i) => {
-
-            const colors = [
-              "#10b981",
-              "#06b6d4",
-              "#f97316",
-              "#8b5cf6",
-              "#ef4444",
-              "#eab308",
-              "#3b82f6",
-            ];
-
-            return (
-              <tr
-                key={i}
-                className={i % 2 === 0 ? "bg-gray-50" : "bg-white"}
-              >
-
-                <td className="p-2 text-center font-medium">
-                  {i + 1}
-                </td>
-
-                <td className="p-2 text-center">
-                  <div className="flex justify-center items-center">
-                    <span
-                      className="w-3 h-3 rounded-sm"
-                      style={{
-                        backgroundColor:
-                          colors[i % colors.length],
-                      }}
-                    />
-                  </div>
-                </td>
-
-                <td className="p-2 text-center font-medium truncate">
-                  {item[0]}
-                </td>
-
-                <td className="p-2 text-center font-bold">
-                  {item[1]} hrs
-                </td>
-
-              </tr>
-            );
-          })}
-        </tbody>
-
-      </table>
+          chart: {
+            ...indiaHeatMapOptions.chart,
+            height: 450,
+            backgroundColor: "transparent",
+          },
+        }}
+      />
 
     </div>
 
   </div>
+
+</div>
+
+</div>
+
+{/* ================= ROW 5 (Left: India City Usage | Right: Role Holder + Weekly Usage) ================= */}
+<div className="grid grid-cols-1 xl:grid-cols-2 gap-5 mb-6 items-stretch auto-rows-fr">
+
+{/* ================= ROLE WISE USAGE ================= */}
+<div className="bg-white rounded-md shadow-[0_10px_40px_rgba(0,0,0,0.15)] p-4 flex flex-col min-h-[820px]">
+
+  {/* TITLE + FILTERS */}
+  <div className="flex justify-between items-center mb-4">
+
+    <h2 className="text-base font-bold text-gray-800">
+      Role Wise Usage
+    </h2>
+
+    <div className="flex gap-3">
+
+      {/* REGION FILTER */}
+      <select
+        value={selectedUsageRegion}
+        onChange={(e) => {
+          setSelectedUsageRegion(e.target.value);
+          setSelectedUsageCity("All");
+        }}
+        className="px-4 py-2 rounded-md border border-gray-300 text-sm"
+      >
+
+        <option value="All">
+          All Regions
+        </option>
+
+        {Object.keys(roleUsageHierarchy)
+          .filter((r) => r !== "All")
+          .map((region) => (
+            <option
+              key={region}
+              value={region}
+            >
+              {region}
+            </option>
+          ))}
+
+      </select>
+
+      {/* CITY FILTER */}
+      {selectedUsageRegion !== "All" && (
+
+        <select
+          value={selectedUsageCity}
+          onChange={(e) =>
+            setSelectedUsageCity(e.target.value)
+          }
+          className="px-4 py-2 rounded-md border border-gray-300 text-sm"
+        >
+
+          <option value="All">
+            All Cities
+          </option>
+
+          {Object.keys(
+            roleUsageHierarchy[selectedUsageRegion]
+              .cities
+          ).map((city) => (
+
+            <option
+              key={city}
+              value={city}
+            >
+              {city}
+            </option>
+
+          ))}
+
+        </select>
+
+      )}
+
+    </div>
+
+  </div>
+
+  {/* TOP SECTION */}
+  <div className="grid grid-cols-1 md:grid-cols-3 gap-3 items-stretch">
+
+    {/* KPI CARD */}
+    <div className="px-3 py-3 flex flex-col flex-1 min-h-[125px]">
+
+      <div className="flex-1 flex flex-col justify-center items-center text-center">
+
+        <div className="text-[16px] font-bold text-gray-700 mt-2">
+
+          {selectedUsageRegion === "All"
+            ? "All Region Usage"
+            : selectedUsageCity === "All"
+            ? `${selectedUsageRegion} Region Usage`
+            : `${selectedUsageCity} Usage`}
+
+        </div>
+
+        <div className="text-4xl font-black text-[#10b981] leading-none mt-2">
+
+          {usageData.reduce(
+            (sum, item) => sum + item.hours,
+            0
+          )}
+
+        </div>
+
+        <div className="text-[11px] italic text-gray-600 mt-2">
+          Total Usage Hours
+        </div>
+
+        <div className="mt-3">
+          <Hourglass
+            visible={true}
+            height="30"
+            width="30"
+            colors={["#10b981", "#6ee7b7"]}
+          />
+        </div>
+
+      </div>
+
+    </div>
+
+    {/* PIE CHART */}
+    <div className="md:col-span-2 h-[320px] flex items-center justify-center overflow-hidden">
+
+      <HighchartsReact
+        highcharts={Highcharts}
+        options={{
+          chart: {
+            type: "pie",
+            backgroundColor: "transparent",
+            height: 320,
+            options3d: {
+              enabled: true,
+              alpha: 45,
+            },
+          },
+
+          title: {
+            text: null,
+          },
+
+          credits: {
+            enabled: false,
+          },
+
+          tooltip: {
+            formatter: function () {
+              return (
+                "<b>" +
+                this.point.name +
+                "</b><br/>Hours: " +
+                this.y
+              );
+            },
+          },
+
+          plotOptions: {
+            pie: {
+              innerSize: 100,
+              depth: 45,
+
+              dataLabels: {
+                enabled: false,
+              },
+            },
+          },
+
+          series: [
+            {
+              name: "Usage",
+
+              data: usageData.map((item) => ({
+                name: item.role,
+                y: item.hours,
+              })),
+            },
+          ],
+        }}
+      />
+
+    </div>
+
+  </div>
+
+  {/* TABLE */}
+  <div className="mt-5 overflow-hidden flex-1">
+
+    <table className="w-full text-[11px] border-collapse">
+
+      {/* HEADER */}
+      <thead>
+
+        <tr className="bg-gray-600 text-white">
+
+          <th className="p-2 text-center">
+            S.No
+          </th>
+
+          <th className="p-2 text-center"></th>
+
+          <th className="p-2 text-center">
+            Role
+          </th>
+
+          <th className="p-2 text-center">
+            Hours
+          </th>
+
+        </tr>
+
+      </thead>
+
+      {/* BODY */}
+      <tbody>
+
+        {usageData.map((item, i) => {
+
+          const colors = [
+            "#10b981",
+            "#06b6d4",
+            "#f97316",
+            "#8b5cf6",
+            "#ef4444",
+          ];
+
+          return (
+
+            <tr
+              key={i}
+              className={
+                i % 2 === 0
+                  ? "bg-gray-50"
+                  : "bg-white"
+              }
+            >
+
+              {/* SERIAL */}
+              <td className="p-2 text-center font-medium">
+                {i + 1}
+              </td>
+
+              {/* DOT */}
+              <td className="p-2 text-center">
+
+                <div className="flex justify-center items-center">
+
+                  <span
+                    className="w-3 h-3 rounded-sm"
+                    style={{
+                      backgroundColor:
+                        colors[i % colors.length],
+                    }}
+                  />
+
+                </div>
+
+              </td>
+
+              {/* ROLE */}
+              <td className="p-2 text-center font-medium">
+                {item.role}
+              </td>
+
+              {/* HOURS */}
+              <td className="p-2 text-center font-bold">
+                {item.hours} hrs
+              </td>
+
+            </tr>
+
+          );
+        })}
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>
 
   {/* ================= RIGHT COLUMN ================= */}
   <div className="flex flex-col gap-5 min-h-[820px]">
