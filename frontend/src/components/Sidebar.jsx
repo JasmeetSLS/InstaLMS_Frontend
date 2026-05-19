@@ -26,6 +26,11 @@ const Sidebar = ({ isOpen, onClose }) => {
             name: 'CMS', 
             icon: <Layers className="w-5 h-5" />,
         },
+        { 
+            path: '/admin/performanceAnalytics', 
+            name: 'Performance Analytics', 
+            icon: <Layers className="w-5 h-5" />,
+        },
     ];
 
     const handleLogout = () => {
@@ -55,7 +60,7 @@ const Sidebar = ({ isOpen, onClose }) => {
             {/* Sidebar */}
             <aside className={`
                 fixed top-0 left-0 h-full z-50 transition-transform duration-300 flex flex-col
-                w-72 lg:translate-x-0 lg:static lg:w-80
+               w-62 lg:translate-x-0 lg:static lg:w-68
                 ${isOpen ? 'translate-x-0' : '-translate-x-full'}
                 bg-black border-r border-white/20
                 shadow-[4px_0_6px_-1px_rgba(0,0,0,0.5)]
@@ -66,7 +71,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                         <div>
                             <h1 className="text-2xl font-bold">
                                 <span className="bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">
-                                    INSTA STYLE LMS
+                                    My Skillz
                                 </span>
                             </h1>
                             <p className="text-xs text-white/50 mt-1">Admin Panel</p>
