@@ -728,6 +728,7 @@ const courseOptions = {
   chart: {
     type: "column",
     backgroundColor: "transparent",
+
     options3d: {
       enabled: true,
       alpha: 15,
@@ -735,40 +736,43 @@ const courseOptions = {
       depth: 50,
     },
   },
-  credits: {
-    enabled: false,
-  },
-  title: {
-    text: null,
-  },
+
+  credits: { enabled: false },
+  title: { text: null },
+
   xAxis: {
     type: "category",
-    labels: {
-      rotation: -45,
-      style: {
-        fontSize: '11px'
-      }
-    }
+    labels: { enabled: false },
+    gridLineWidth: 0,
+    lineWidth: 0,
+    tickLength: 0,
   },
+
   yAxis: {
-    title: {
-      text: null,
-    },
+    title: { text: null },
+    labels: { enabled: false },
+    gridLineWidth: 0,
   },
-  tooltip: {
-    formatter: function() {
-      // Show only the count in tooltip
-      return '<b>' + this.y + ' Courses</b>';
-    },
-    followPointer: true,
+
+  // ✅ THIS REMOVES 3D BACKGROUND PANES (MAIN FIX)
+  pane: {
+    background: [],
   },
+
   plotOptions: {
     column: {
       depth: 25,
       colorByPoint: true,
-      // Remove dataLabels section completely
+      borderWidth: 0,
     },
   },
+
+  tooltip: {
+    formatter: function () {
+      return "<b>" + this.key + ":</b> " + this.y + " Courses";
+    },
+  },
+
   series: [
     {
       name: "Courses",
@@ -784,7 +788,6 @@ const courseOptions = {
     },
   ],
 };
-
   // ---------------- REGION / CITY PIE ----------------
 const indiaRegionOptions = {
   chart: {
@@ -874,6 +877,12 @@ const indiaHeatMapOptions = {
       render: function () {
         const chart = this;
 
+        // GET TOP 4 VALUES
+        const top4Values = [...chart.series[0].points]
+          .map((p) => p.value)
+          .sort((a, b) => b - a)
+          .slice(0, 4);
+
         chart.series[0].points.forEach((point) => {
 
           if (point.graphic && point.graphic.element) {
@@ -882,8 +891,8 @@ const indiaHeatMapOptions = {
               "highcharts-point-dark-orange"
             );
 
-            // BLINK HIGH USAGE STATES
-            if (point.value >= 1600) {
+            // BLINK TOP 4 STATES
+            if (top4Values.includes(point.value)) {
               point.graphic.element.classList.add(
                 "highcharts-point-dark-orange"
               );
@@ -895,10 +904,14 @@ const indiaHeatMapOptions = {
   },
 
   title: {
-    text: "India State Usage Heat Map",
+    text: null,
   },
 
   credits: {
+    enabled: false,
+  },
+
+  mapNavigation: {
     enabled: false,
   },
 
@@ -919,19 +932,22 @@ const indiaHeatMapOptions = {
 
   tooltip: {
     formatter: function () {
-      return (
-        "<b>" +
-        this.point.name +
-        "</b><br/>Usage Hours: <b>" +
-        this.point.value +
-        " hrs</b>"
-      );
+      return `
+        <div style="padding:4px">
+          <b>${this.point.name}</b><br/>
+          Usage Hours:
+          <b style="color:#ea580c">
+            ${this.point.value} hrs
+          </b>
+        </div>
+      `;
     },
 
     borderWidth: 2,
     borderColor: "#ea580c",
     borderRadius: 8,
     padding: 10,
+    shadow: true,
 
     style: {
       fontSize: "12px",
@@ -941,30 +957,14 @@ const indiaHeatMapOptions = {
 
   series: [
     {
-      data: [
-        ["in-dl", 1950],
-        ["in-mh", 1850],
-        ["in-ka", 1750],
-        ["in-tn", 1650],
-        ["in-up", 1600],
-        ["in-gj", 1400],
-        ["in-wb", 1100],
-        ["in-rj", 850],
-        ["in-mp", 650],
-        ["in-kl", 500],
-        ["in-pb", 400],
-        ["in-hr", 300],
-        ["in-br", 250],
-        ["in-or", 200],
-        ["in-jk", 150],
-        ["in-as", 100],
-        ["in-hp", 80],
-        ["in-ut", 50],
-      ],
-
       name: "Usage Hours",
 
       joinBy: "hc-key",
+
+      borderWidth: 1,
+      borderColor: "#ffffff",
+
+      nullColor: "#f5f5f5",
 
       states: {
         hover: {
@@ -978,8 +978,17 @@ const indiaHeatMapOptions = {
         enabled: false,
       },
 
-      borderWidth: 1,
-      borderColor: "#ffffff",
+      // DELHI REMOVED
+      data: [
+        ["in-mh", 1850], // Maharashtra
+        ["in-ka", 1750], // Karnataka
+        ["in-tn", 1650], // Tamil Nadu
+        ["in-up", 1600], // Uttar Pradesh
+        ["in-gj", 1400], // Gujarat
+        ["in-wb", 1100], // West Bengal
+        ["in-rj", 850],  // Rajasthan
+        ["in-mp", 700],  // Madhya Pradesh
+      ],
     },
   ],
 };
@@ -996,7 +1005,7 @@ const indiaHeatMapOptions = {
       value={selectedRegion}
       onChange={(e) => setSelectedRegion(e.target.value)}
       className="px-5 py-2.5 pr-10 rounded-md bg-white shadow-sm
-                 focus:outline-none focus:ring-2 focus:ring-[#f4ae3d] focus:border-transparent
+                 focus:outline-none focus:ring-2 focus:ring-[#f97316] focus:border-transparent
                  hover:bg-gray-50 transition-all duration-200 cursor-pointer
                  font-medium text-gray-700 appearance-none"
     >
@@ -1022,7 +1031,7 @@ const indiaHeatMapOptions = {
       value={selectedRole}
       onChange={(e) => setSelectedRole(e.target.value)}
       className="px-5 py-2.5 pr-10 rounded-md bg-white shadow-sm
-                 focus:outline-none focus:ring-2 focus:ring-[#f4ae3d] focus:border-transparent
+                 focus:outline-none focus:ring-2 focus:ring-[#f97316] focus:border-transparent
                  hover:bg-gray-50 transition-all duration-200 cursor-pointer
                  font-medium text-gray-700 appearance-none"
     >
@@ -1046,7 +1055,7 @@ const indiaHeatMapOptions = {
       value={selectedDealership}
       onChange={(e) => setSelectedDealership(e.target.value)}
       className="px-5 py-2.5 pr-10 rounded-md bg-white shadow-sm
-                 focus:outline-none focus:ring-2 focus:ring-[#f4ae3d] focus:border-transparent
+                 focus:outline-none focus:ring-2 focus:ring-[#f97316] focus:border-transparent
                  hover:bg-gray-50 transition-all duration-200 cursor-pointer
                  font-medium text-gray-700 appearance-none"
     >
@@ -1201,51 +1210,45 @@ const indiaHeatMapOptions = {
   </div>
 </div>
 
-{/* ROW 3*/}
-<div className="grid grid-cols-1 xl:grid-cols-2 gap-5 mb-6">
+{/* ROW 3 */}
+<div className="grid grid-cols-1 xl:grid-cols-[1.3fr_1.3fr_1fr] gap-5 mb-6">
 
   {/* ================= USER ANALYTICS ================= */}
-  <div className="bg-white  rounded-md shadow-[0_10px_40px_rgba(0,0,0,0.15)] p-4 flex flex-col">
+  <div className="bg-white rounded-md shadow-[0_10px_40px_rgba(0,0,0,0.15)] p-4 flex flex-col">
 
     <h2 className="text-base font-bold text-gray-800 mb-3">
       User Analytics
     </h2>
 
-    {/* ========== TOP SECTION ========== */}
     <div className="grid grid-cols-1 md:grid-cols-3 gap-3 items-stretch">
-{/* KPI CARD - TOTAL USERS */}
-<div className="px-3 py-3 flex flex-col flex-1 min-h-[125px]">
 
-  <div className="flex-1 flex flex-col justify-center items-center text-center">
+      {/* KPI */}
+      <div className="flex flex-col flex-1 min-h-[125px]">
+        <div className="flex-1 flex flex-col justify-center items-center text-center">
 
-    {/* LABEL (INCREASED SIZE) */}
-    <div className="text-[16px] font-bold text-gray-700 mb-2">
-      Total Users
-    </div>
+          <div className="text-[16px] font-bold text-gray-700 mb-2">
+            Total Users
+          </div>
 
-    {/* BIG COUNT */}
-    <div className="text-5xl font-black text-[#f97316] leading-none">
-      {totalUsers.toLocaleString()}
-    </div>
+          <div className="text-5xl font-black text-[#f97316] leading-none">
+            {totalUsers.toLocaleString()}
+          </div>
 
-    {/* SUB TEXT */}
-    <div className="text-[11px] italic text-gray-600 mt-2">
-      Last updated <span className="font-bold">2hr ago</span>
-    </div>
+          <div className="text-[11px] italic text-gray-600 mt-2">
+            Last updated <span className="font-bold">2hr ago</span>
+          </div>
 
-    {/* LOADER */}
-    <div className="mt-3">
-      <Hourglass
-        visible={true}
-        height="30"
-        width="30"
-        colors={["#f97316", "#fdba74"]}
-      />
-    </div>
+          <div className="mt-3">
+            <Hourglass
+              visible={true}
+              height="30"
+              width="30"
+              colors={["#f97316", "#fdba74"]}
+            />
+          </div>
 
-  </div>
-
-</div>
+        </div>
+      </div>
 
       {/* PIE CHART */}
       <div className="md:col-span-2 h-[240px] flex items-center justify-center overflow-hidden">
@@ -1264,64 +1267,52 @@ const indiaHeatMapOptions = {
 
     </div>
 
-    {/* ========== BOTTOM TABLE ========== */}
-<div className="mt-3 overflow-hidden">
-  <table className="w-full text-[11px] border-collapse">
+    {/* TABLE */}
+    <div className="mt-3 overflow-hidden">
+      <table className="w-full text-[11px] border-collapse">
 
-    {/* HEADER */}
-    <thead>
-      <tr className="bg-gray-600 text-white">
-        <th className="p-2 text-center">S.No</th>
-        <th className="p-2 text-center"></th> {/* Dot column */}
-        <th className="p-2 text-center w-[100px]">Role</th>
-        <th className="p-2 text-center">Count</th>
-      </tr>
-    </thead>
-
-    {/* BODY */}
-    <tbody>
-      {roleData.map((role, i) => {
-        const colors = [
-          "#f97316","#0f766e","#84cc16",
-          "#ea580c","#eab308","#60a5fa","#8b5cf6"
-        ];
-
-        return (
-          <tr
-            key={i}
-            className={i % 2 === 0 ? "bg-gray-50" : "bg-white"}
-          >
-            {/* NO */}
-            <td className="p-1 text-center font-medium">
-              {i + 1}
-            </td>
-
-            {/* COLOR DOT COLUMN */}
-           <td className="p-1 text-center">
-  <div className="flex justify-end items-center">
-    <span
-      className="w-3 h-3 text-center"
-      style={{ backgroundColor: colors[i % colors.length] }}
-    />
-  </div>
-</td>
-
-            {/* ROLE TEXT — TRUE CENTER */}
-            <td className="p-1 text-center font-medium truncate">
-              {role.name}
-            </td>
-
-            {/* COUNT */}
-            <td className="p-1 text-center font-bold">
-              {role.y}
-            </td>
+        <thead>
+          <tr className="bg-gray-600 text-white">
+            <th className="p-2 text-center">S.No</th>
+            <th className="p-2 text-center"></th>
+            <th className="p-2 text-center w-[100px]">Role</th>
+            <th className="p-2 text-center">Count</th>
           </tr>
-        );
-      })}
-    </tbody>
+        </thead>
 
-  </table>
-</div>
+        <tbody>
+          {roleData.map((role, i) => {
+            const colors = ["#f97316","#0f766e","#84cc16","#ea580c","#eab308","#60a5fa","#8b5cf6"];
+
+            return (
+              <tr key={i} className={i % 2 === 0 ? "bg-gray-50" : "bg-white"}>
+
+                <td className="p-1 text-center font-medium">{i + 1}</td>
+
+                <td className="p-1 text-center">
+                  <div className="flex justify-end items-center">
+                    <span
+                      className="w-3 h-3"
+                      style={{ backgroundColor: colors[i % colors.length] }}
+                    />
+                  </div>
+                </td>
+
+                <td className="p-1 text-center font-medium truncate">
+                  {role.name}
+                </td>
+
+                <td className="p-1 text-center font-bold">
+                  {role.y}
+                </td>
+
+              </tr>
+            );
+          })}
+        </tbody>
+
+      </table>
+    </div>
 
   </div>
 
@@ -1332,42 +1323,35 @@ const indiaHeatMapOptions = {
       Course Analytics
     </h2>
 
-    {/* ========== TOP SECTION ========== */}
     <div className="grid grid-cols-1 md:grid-cols-3 gap-3 items-stretch">
 
-      {/* KPI CARD - TOTAL COURSES */}
-    <div className="px-3 py-3 flex flex-col flex-1 min-h-[125px]">
+      {/* KPI */}
+      <div className="flex flex-col flex-1 min-h-[125px]">
+        <div className="flex-1 flex flex-col justify-center items-center text-center">
 
-  <div className="flex-1 flex flex-col justify-center items-center text-center">
+          <div className="text-[16px] font-bold text-gray-700 mb-2">
+            Total Courses
+          </div>
 
-    {/* LABEL (INCREASED SIZE) */}
-    <div className="text-[16px] font-bold text-gray-700 mb-2">
-      Total Courses
-    </div>
+          <div className="text-5xl font-black text-[#f97316] leading-none">
+            {courseOptions.series[0].data.reduce((s, i) => s + i[1], 0)}
+          </div>
 
-    {/* BIG COUNT */}
-    <div className="text-5xl font-black text-[#f97316] leading-none">
-      {courseOptions.series[0].data.reduce((s, i) => s + i[1], 0)}
-    </div>
+          <div className="text-[11px] italic text-gray-600 mt-2">
+            Last updated <span className="font-bold">2hr ago</span>
+          </div>
 
-    {/* SUB TEXT */}
-    <div className="text-[11px] italic text-gray-600 mt-2">
-       Last updated <span className="font-bold">2hr ago</span>
-    </div>
+          <div className="mt-3">
+            <Hourglass
+              visible={true}
+              height="30"
+              width="30"
+              colors={["#f97316", "#fdba74"]}
+            />
+          </div>
 
-    {/* LOADER */}
-    <div className="mt-3">
-      <Hourglass
-        visible={true}
-        height="30"
-        width="30"
-        colors={["#f97316", "#fdba74"]}
-      />
-    </div>
-
-  </div>
-
-</div>
+        </div>
+      </div>
 
       {/* BAR CHART */}
       <div className="md:col-span-2 h-[240px] flex items-center justify-center overflow-hidden">
@@ -1386,165 +1370,98 @@ const indiaHeatMapOptions = {
 
     </div>
 
-    {/* ========== BOTTOM TABLE ========== */}
-<div className="mt-3 overflow-hidden">
-  <table className="w-full text-[11px] border-collapse">
+    {/* TABLE */}
+    <div className="mt-3 overflow-hidden">
+      <table className="w-full text-[11px] border-collapse">
 
-    {/* HEADER */}
-    <thead>
-      <tr className="bg-gray-600 text-white">
-        <th className="p-2 text-center">S.No</th>
-        <th className="p-2 text-center"></th> {/* Dot column */}
-        <th className="p-2 text-center w-[100px]">Course</th>
-        <th className="p-2 text-center">Count</th>
-      </tr>
-    </thead>
-
-    {/* BODY */}
-    <tbody>
-      {courseOptions.series[0].data.map((c, i) => {
-        const colors = [
-          "#f59e0b","#3b82f6","#10b981",
-          "#8b5cf6","#ef4444","#f97316","#ec4899"
-        ];
-
-        return (
-          <tr
-            key={i}
-            className={i % 2 === 0 ? "bg-gray-50" : "bg-white"}
-          >
-            {/* NO */}
-            <td className="p-1 text-center font-medium">
-              {i + 1}
-            </td>
-
-            {/* DOT COLUMN (same as Role) */}
-            <td className="p-1 text-center">
-              <div className="flex justify-end items-center">
-                <span
-                  className="w-3 h-3"
-                  style={{ backgroundColor: colors[i % colors.length] }}
-                />
-              </div>
-            </td>
-
-            {/* COURSE TEXT */}
-            <td className="p-1 text-center font-medium truncate">
-              {c[0]}
-            </td>
-
-            {/* COUNT */}
-            <td className="p-1 text-center font-bold">
-              {c[1]}
-            </td>
+        <thead>
+          <tr className="bg-gray-600 text-white">
+            <th className="p-2 text-center">S.No</th>
+            <th className="p-2 text-center"></th>
+            <th className="p-2 text-center w-[100px]">Course</th>
+            <th className="p-2 text-center">Count</th>
           </tr>
-        );
-      })}
-    </tbody>
+        </thead>
 
-  </table>
-</div>
+        <tbody>
+          {courseOptions.series[0].data.map((c, i) => {
+            const colors = ["#f59e0b","#3b82f6","#10b981","#8b5cf6","#ef4444","#f97316","#ec4899"];
 
-  </div>
+            return (
+              <tr key={i} className={i % 2 === 0 ? "bg-gray-50" : "bg-white"}>
 
-</div>
+                <td className="p-1 text-center font-medium">{i + 1}</td>
 
-{/* ROW 4 */}
-<div className="grid grid-cols-1 xl:grid-cols-2 gap-5 mb-6 items-stretch">
+                <td className="p-1 text-center">
+                  <div className="flex justify-end items-center">
+                    <span
+                      className="w-3 h-3"
+                      style={{ backgroundColor: colors[i % colors.length] }}
+                    />
+                  </div>
+                </td>
 
-{/* ================= LEFT SIDE ================= */}
-<div className="flex flex-col gap-5 h-[520px]">
+                <td className="p-1 text-center font-medium truncate">
+                  {c[0]}
+                </td>
 
-  {/* ================= TOP CAROUSEL ================= */}
- <div className="bg-white rounded-md shadow-[0_10px_40px_rgba(0,0,0,0.15)] overflow-hidden h-[240px] relative">
+                <td className="p-1 text-center font-bold">
+                  {c[1]}
+                </td>
 
-    {/* IMAGE */}
-    <img
-     src={carouselImages2[currentImage2]}
-      alt="analytics-banner"
-      className="w-full h-full object-cover transition-all duration-700"
-    />
+              </tr>
+            );
+          })}
+        </tbody>
 
-
-
-    {/* DOTS */}
-    <div className="absolute bottom-4 right-4 flex gap-2">
-      {carouselImages2.map((_, idx) => (
-        <div
-          key={idx}
-          className={`w-3 h-3 rounded-full ${
-            currentImage2 === idx
-              ? "bg-white"
-              : "bg-white/40"
-          }`}
-        />
-      ))}
+      </table>
     </div>
 
   </div>
 
   {/* ================= ASSESSMENT SCORE BREAKUP ================= */}
- <div className="bg-white  rounded-md shadow-[0_10px_40px_rgba(0,0,0,0.15)] p-4 h-[260px] overflow-hidden flex flex-col">
+  <div className="bg-white rounded-md shadow-[0_10px_40px_rgba(0,0,0,0.15)] p-4 flex flex-col">
 
-    <h2 className="text-base font-bold  text-gray-800">
+    <h2 className="text-base font-bold text-gray-800 mb-3">
       Assessment Score Breakup
     </h2>
 
-    <div className="overflow-hidden flex-1">
+   <div className="overflow-x-auto">
 
       <table className="w-full table-auto border-collapse text-[10px]">
 
         <thead>
           <tr className="bg-gray-600 text-white uppercase font-semibold">
-
-            <th className="px-2 py-2 ">
-              Categories
-            </th>
-
-            <th className="px-2 py-2 ">A1</th>
-            <th className="px-2 py-2 ">A2</th>
-            <th className="px-2 py-2 ">A3</th>
-            <th className="px-2 py-2 ">A4</th>
-            <th className="px-2 py-2 ">A5</th>
-
-            <th className="px-2 py-2 ">
-              Avg
-            </th>
-
+            <th className="px-2 py-2">Categories</th>
+            <th className="px-2 py-2">A1</th>
+            <th className="px-2 py-2">A2</th>
+            <th className="px-2 py-2">A3</th>
+            <th className="px-2 py-2">A4</th>
+            <th className="px-2 py-2">A5</th>
+            <th className="px-2 py-2">Avg</th>
           </tr>
         </thead>
 
         <tbody>
           {assessmentData.map((row, idx) => {
             const average = Math.round(
-              row.scores.reduce((a, b) => a + b, 0) /
-              row.scores.length
+              row.scores.reduce((a, b) => a + b, 0) / row.scores.length
             );
 
             return (
-              <tr
-                key={idx}
-                className={
-                  idx % 2 === 0
-                    ? "bg-gray-50"
-                    : "bg-white"
-                }
-              >
+              <tr key={idx} className={idx % 2 === 0 ? "bg-gray-50" : "bg-white"}>
 
                 <td className="px-2 py-2 text-center font-semibold whitespace-nowrap">
                   {row.category}
                 </td>
 
                 {row.scores.map((score, i) => (
-                  <td
-                    key={i}
-                    className="px-2 py-2  text-center"
-                  >
+                  <td key={i} className="px-2 py-2 text-center">
                     {score}%
                   </td>
                 ))}
 
-                <td className="px-2 py-2  text-center font-bold text-[#f97316]">
+                <td className="px-2 py-2 text-center font-bold text-[#f97316]">
                   {average}%
                 </td>
 
@@ -1561,12 +1478,419 @@ const indiaHeatMapOptions = {
 
 </div>
 
-{/* ================= INDIA HEAT MAP ================= */}
-<div className="bg-white rounded-md shadow-[0_10px_40px_rgba(0,0,0,0.15)] p-4 h-[520px] overflow-hidden flex flex-col">
+{/* ROW 4 */}
+<div className="grid grid-cols-1 xl:grid-cols-2 gap-5 mb-6 items-stretch">
 
-  <h2 className="text-base font-bold mb-3 text-gray-800">
-    India State Usage Heat Map
-  </h2>
+{/* ================= LEFT SIDE ================= */}
+<div className="flex flex-col h-full">
+
+{/* ================= Total USAGE ================= */}
+<div className="bg-white rounded-md shadow-[0_10px_40px_rgba(0,0,0,0.15)] p-4 flex flex-col h-[640px]">
+
+  {/* ================= TOTAL HOURS ================= */}
+  {/*
+    4090 = overall target / total available hours
+    usageData changes dynamically on filter
+  */}
+  {(() => {
+
+    const totalUsageHours = usageData.reduce(
+      (sum, item) => sum + item.hours,
+      0
+    );
+
+    const usagePercentage = (
+      (totalUsageHours / 4090) *
+      100
+    ).toFixed(1);
+
+    return (
+
+      <>
+        {/* TITLE + FILTERS */}
+        <div className="flex justify-between items-center mb-4">
+
+          <h2 className="text-xl font-bold text-gray-600">
+            Total Usage :
+            <span className="text-xl font-black text-[#10b981]  ml-2">
+              4090 hrs
+            </span>
+          </h2>
+
+          <div className="flex gap-3">
+
+            {/* REGION FILTER */}
+            <select
+              value={selectedUsageRegion}
+              onChange={(e) => {
+                setSelectedUsageRegion(e.target.value);
+                setSelectedUsageCity("All");
+              }}
+              className="px-4 py-2 rounded-md border border-gray-300 text-sm"
+            >
+
+              <option value="All">
+                All Regions
+              </option>
+
+              {Object.keys(roleUsageHierarchy)
+                .filter((r) => r !== "All")
+                .map((region) => (
+
+                  <option
+                    key={region}
+                    value={region}
+                  >
+                    {region}
+                  </option>
+
+                ))}
+
+            </select>
+
+            {/* CITY FILTER */}
+            {selectedUsageRegion !== "All" && (
+
+              <select
+                value={selectedUsageCity}
+                onChange={(e) =>
+                  setSelectedUsageCity(e.target.value)
+                }
+                className="px-4 py-2 rounded-md border border-gray-300 text-sm"
+              >
+
+                <option value="All">
+                  All Cities
+                </option>
+
+                {Object.keys(
+                  roleUsageHierarchy[selectedUsageRegion]
+                    .cities
+                ).map((city) => (
+
+                  <option
+                    key={city}
+                    value={city}
+                  >
+                    {city}
+                  </option>
+
+                ))}
+
+              </select>
+
+            )}
+
+          </div>
+
+        </div>
+
+        {/* ================= TOP SECTION ================= */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 items-stretch">
+
+          {/* KPI CARD */}
+          <div className="px-3 py-3 flex flex-col flex-1 min-h-[125px]">
+
+            <div className="flex-1 flex flex-col justify-center items-center text-center">
+
+              <div className="text-[16px] font-bold text-gray-700 mt-2">
+
+                {selectedUsageRegion === "All"
+                  ? "All India Usage"
+                  : selectedUsageCity === "All"
+                  ? `${selectedUsageRegion} Region Usage`
+                  : `${selectedUsageCity} Usage`}
+
+              </div>
+
+             <div className="text-xl font-black leading-none mt-3 flex flex-col items-center">
+
+  <span className="text-[#10b981]">
+    {totalUsageHours} / 4090
+  </span>
+
+  <span className="text-red-500 mt-2">
+    = {usagePercentage}%
+  </span>
+
+</div>
+
+              {/* ICON */}
+              <div className="mt-4">
+
+                <Hourglass
+                  visible={true}
+                  height="34"
+                  width="34"
+                  colors={["#10b981", "#6ee7b7"]}
+                />
+
+              </div>
+
+            </div>
+
+          </div>
+
+          {/* ================= PIE CHART ================= */}
+          <div className="md:col-span-2 h-[320px] flex items-center justify-center overflow-hidden">
+
+            <HighchartsReact
+              highcharts={Highcharts}
+              options={{
+                chart: {
+                  type: "pie",
+                  backgroundColor: "transparent",
+                  height: 320,
+
+                  options3d: {
+                    enabled: true,
+                    alpha: 45,
+                  },
+                },
+
+                title: {
+                  text: null,
+                },
+
+                credits: {
+                  enabled: false,
+                },
+
+                tooltip: {
+                  formatter: function () {
+                    return (
+                      "<b>" +
+                      this.point.name +
+                      "</b><br/>Hours: " +
+                      this.y
+                    );
+                  },
+                },
+
+                plotOptions: {
+                  pie: {
+                    innerSize: 100,
+                    depth: 45,
+
+                    dataLabels: {
+                      enabled: false,
+                    },
+                  },
+                },
+
+                series: [
+                  {
+                    name: "Usage",
+
+                    data: usageData.map((item) => ({
+                      name: item.role,
+                      y: item.hours,
+                    })),
+                  },
+                ],
+              }}
+            />
+
+          </div>
+
+        </div>
+
+        {/* ================= TABLE ================= */}
+        <div className="mt-5 overflow-hidden flex-1">
+
+          <table className="w-full text-[11px] border-collapse">
+
+            {/* HEADER */}
+            <thead>
+
+              <tr className="bg-gray-600 text-white">
+
+                <th className="p-2 text-center">
+                  S.No
+                </th>
+
+                <th className="p-2 text-center"></th>
+
+                <th className="p-2 text-center">
+                  Role
+                </th>
+
+                <th className="p-2 text-center">
+                  Hours
+                </th>
+
+              </tr>
+
+            </thead>
+
+            {/* BODY */}
+            <tbody>
+
+              {usageData.map((item, i) => {
+
+                const colors = [
+                  "#10b981",
+                  "#06b6d4",
+                  "#f97316",
+                  "#8b5cf6",
+                  "#ef4444",
+                ];
+
+                return (
+
+                  <tr
+                    key={i}
+                    className={
+                      i % 2 === 0
+                        ? "bg-gray-50"
+                        : "bg-white"
+                    }
+                  >
+
+                    {/* SERIAL */}
+                    <td className="p-2 text-center font-medium">
+                      {i + 1}
+                    </td>
+
+                    {/* COLOR DOT */}
+                    <td className="p-2 text-center">
+
+                      <div className="flex justify-center items-center">
+
+                        <span
+                          className="w-3 h-3 rounded-sm"
+                          style={{
+                            backgroundColor:
+                              colors[i % colors.length],
+                          }}
+                        />
+
+                      </div>
+
+                    </td>
+
+                    {/* ROLE */}
+                    <td className="p-2 text-center font-medium">
+                      {item.role}
+                    </td>
+
+                    {/* HOURS */}
+                    <td className="p-2 text-center font-bold">
+                      {item.hours} hrs
+                    </td>
+
+                  </tr>
+
+                );
+              })}
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </>
+
+    );
+  })()}
+
+</div>
+
+</div>
+
+{/* ================= INDIA HEAT MAP ================= */}
+<div className="bg-white rounded-md shadow-[0_10px_40px_rgba(0,0,0,0.15)] p-4 h-[640px] overflow-hidden flex flex-col">
+
+  {/* ================= HEADER ================= */}
+  <div className="flex items-center justify-between mb-3">
+
+    {/* LEFT TITLE */}
+    <h2 className="text-base font-bold text-gray-800">
+      State Wise Usage Heat Map
+    </h2>
+
+{/* RIGHT FILTERS */}
+<div className="flex items-center gap-3">
+
+  {/* YEAR */}
+  <select
+    className="
+      border border-gray-300
+      rounded-md
+      px-3 py-2
+      min-w-[90px]
+      h-[38px]
+      text-[12px]
+      font-semibold
+      text-gray-700
+      outline-none
+      focus:border-[#000]
+      border-2
+    "
+  >
+    <option>2026</option>
+    <option>2025</option>
+    <option>2024</option>
+  </select>
+
+  {/* MONTH */}
+  <select
+    className="
+      border border-gray-300
+      rounded-md
+      px-3 py-2
+      min-w-[130px]
+      h-[38px]
+      text-[12px]
+      font-semibold
+      text-gray-700
+      outline-none
+      focus:border-[#000]
+      border-2
+    "
+  >
+    <option>All Months</option>
+    <option>January</option>
+    <option>February</option>
+    <option>March</option>
+    <option>April</option>
+    <option>May</option>
+    <option>June</option>
+    <option>July</option>
+    <option>August</option>
+    <option>September</option>
+    <option>October</option>
+    <option>November</option>
+    <option>December</option>
+  </select>
+
+  {/* WEEK */}
+  <select
+    className="
+      border border-gray-300
+      rounded-md
+      px-3 py-2
+      min-w-[115px]
+      h-[38px]
+      text-[12px]
+      font-semibold
+      text-gray-700
+      outline-none
+      focus:border-[#000]
+      border-2
+    "
+  >
+    <option>All Weeks</option>
+    <option>Week 1</option>
+    <option>Week 2</option>
+    <option>Week 3</option>
+    <option>Week 4</option>
+  </select>
+
+</div>
+
+  </div>
 
   <div className="flex flex-col lg:flex-row gap-3 flex-1 overflow-hidden">
 
@@ -1592,7 +1916,7 @@ const indiaHeatMapOptions = {
 
           {/* SUBTEXT */}
           <div className="text-[11px] italic text-gray-600 mt-2">
-            Across <span className="font-bold">18 States Usage</span>
+            Across <span className="font-bold">8 States Usage</span>
           </div>
 
           {/* LOADER */}
@@ -1633,13 +1957,12 @@ const indiaHeatMapOptions = {
           </thead>
 
           <tbody>
-            {indiaHeatMapOptions.series[0].data
+            {[...indiaHeatMapOptions.series[0].data]
               .sort((a, b) => b[1] - a[1])
-              .slice(0, 6)
+              .slice(0, 8)
               .map((item, i) => {
 
                 const stateNameMap = {
-                  "in-dl": "Delhi",
                   "in-mh": "Maharashtra",
                   "in-ka": "Karnataka",
                   "in-tn": "Tamil Nadu",
@@ -1648,20 +1971,10 @@ const indiaHeatMapOptions = {
                   "in-wb": "West Bengal",
                   "in-rj": "Rajasthan",
                   "in-mp": "Madhya Pradesh",
-                  "in-kl": "Kerala",
-                  "in-pb": "Punjab",
-                  "in-hr": "Haryana",
-                  "in-br": "Bihar",
-                  "in-or": "Odisha",
-                  "in-jk": "Jammu & Kashmir",
-                  "in-as": "Assam",
-                  "in-hp": "Himachal Pradesh",
-                  "in-ut": "Uttarakhand",
                 };
 
                 const hours = item[1];
 
-                // COLOR SCALE
                 let stateColor = "#fff7ed";
 
                 if (hours >= 1800) {
@@ -1678,8 +1991,13 @@ const indiaHeatMapOptions = {
                   stateColor = "#ffedd5";
                 }
 
-                // BLINKING STATES
-                const isBlinking = hours >= 1600;
+                const allHours = [...indiaHeatMapOptions.series[0].data]
+                  .sort((a, b) => b[1] - a[1])
+                  .map(d => d[1]);
+
+                const top4Hours = allHours.slice(0, 4);
+
+                const isBlinking = top4Hours.includes(hours);
 
                 return (
                   <tr
@@ -1764,142 +2082,29 @@ const indiaHeatMapOptions = {
 
 </div>
 
-{/* ================= ROW 5 (Left: India City Usage | Right: Role Holder + Weekly Usage) ================= */}
+
+{/* ================= ROW 5 ================= */}
 <div className="grid grid-cols-1 xl:grid-cols-2 gap-5 mb-6 items-stretch auto-rows-fr">
 
-{/* ================= ROLE WISE USAGE ================= */}
-<div className="bg-white rounded-md shadow-[0_10px_40px_rgba(0,0,0,0.15)] p-4 flex flex-col min-h-[820px]">
+  {/* ================= LEFT: ROLE HOLDER USAGE ================= */}
+  <div className="bg-white rounded-md shadow-[0_10px_40px_rgba(0,0,0,0.15)] p-4 min-h-[420px] flex flex-col">
 
-  {/* TITLE + FILTERS */}
-  <div className="flex justify-between items-center mb-4">
-
-    <h2 className="text-base font-bold text-gray-800">
-      Role Wise Usage
+    <h2 className="text-base font-bold mb-2 text-gray-800">
+      Role Holder Usage (Last 24 Hours)
     </h2>
 
-    <div className="flex gap-3">
-
-      {/* REGION FILTER */}
-      <select
-        value={selectedUsageRegion}
-        onChange={(e) => {
-          setSelectedUsageRegion(e.target.value);
-          setSelectedUsageCity("All");
-        }}
-        className="px-4 py-2 rounded-md border border-gray-300 text-sm"
-      >
-
-        <option value="All">
-          All Regions
-        </option>
-
-        {Object.keys(roleUsageHierarchy)
-          .filter((r) => r !== "All")
-          .map((region) => (
-            <option
-              key={region}
-              value={region}
-            >
-              {region}
-            </option>
-          ))}
-
-      </select>
-
-      {/* CITY FILTER */}
-      {selectedUsageRegion !== "All" && (
-
-        <select
-          value={selectedUsageCity}
-          onChange={(e) =>
-            setSelectedUsageCity(e.target.value)
-          }
-          className="px-4 py-2 rounded-md border border-gray-300 text-sm"
-        >
-
-          <option value="All">
-            All Cities
-          </option>
-
-          {Object.keys(
-            roleUsageHierarchy[selectedUsageRegion]
-              .cities
-          ).map((city) => (
-
-            <option
-              key={city}
-              value={city}
-            >
-              {city}
-            </option>
-
-          ))}
-
-        </select>
-
-      )}
-
-    </div>
-
-  </div>
-
-  {/* TOP SECTION */}
-  <div className="grid grid-cols-1 md:grid-cols-3 gap-3 items-stretch">
-
-    {/* KPI CARD */}
-    <div className="px-3 py-3 flex flex-col flex-1 min-h-[125px]">
-
-      <div className="flex-1 flex flex-col justify-center items-center text-center">
-
-        <div className="text-[16px] font-bold text-gray-700 mt-2">
-
-          {selectedUsageRegion === "All"
-            ? "All Region Usage"
-            : selectedUsageCity === "All"
-            ? `${selectedUsageRegion} Region Usage`
-            : `${selectedUsageCity} Usage`}
-
-        </div>
-
-        <div className="text-4xl font-black text-[#10b981] leading-none mt-2">
-
-          {usageData.reduce(
-            (sum, item) => sum + item.hours,
-            0
-          )}
-
-        </div>
-
-        <div className="text-[11px] italic text-gray-600 mt-2">
-          Total Usage Hours
-        </div>
-
-        <div className="mt-3">
-          <Hourglass
-            visible={true}
-            height="30"
-            width="30"
-            colors={["#10b981", "#6ee7b7"]}
-          />
-        </div>
-
-      </div>
-
-    </div>
-
-    {/* PIE CHART */}
-    <div className="md:col-span-2 h-[320px] flex items-center justify-center overflow-hidden">
+    <div className="flex-1 min-h-0">
 
       <HighchartsReact
         highcharts={Highcharts}
         options={{
           chart: {
-            type: "pie",
+            type: "bubble",
             backgroundColor: "transparent",
-            height: 320,
-            options3d: {
-              enabled: true,
-              alpha: 45,
+            height: 350,
+            plotBorderWidth: 1,
+            zooming: {
+              type: "xy",
             },
           },
 
@@ -1911,382 +2116,215 @@ const indiaHeatMapOptions = {
             enabled: false,
           },
 
-          tooltip: {
-            formatter: function () {
-              return (
-                "<b>" +
-                this.point.name +
-                "</b><br/>Hours: " +
-                this.y
-              );
+          legend: {
+            enabled: false,
+          },
+
+          xAxis: {
+            gridLineWidth: 1,
+            title: {
+              text: "Role Holders",
+              style: {
+                fontSize: "11px",
+                fontWeight: "bold",
+              },
+            },
+            categories: [
+              "DSE",
+              "TL",
+              "SM",
+              "DSC",
+              "VP",
+              "EXE",
+              "MGR",
+            ],
+            labels: {
+              style: {
+                fontSize: "10px",
+                fontWeight: "bold",
+              },
+              rotation: -45,
             },
           },
 
-          plotOptions: {
-            pie: {
-              innerSize: 100,
-              depth: 45,
+          yAxis: {
+            min: 1,
+            max: 24,
+            tickInterval: 2,
+            gridLineWidth: 1,
+            title: {
+              text: "Hour of Day",
+              style: {
+                fontSize: "11px",
+                fontWeight: "bold",
+              },
+            },
+            labels: {
+              format: "{value}:00",
+              style: {
+                fontSize: "9px",
+              },
+            },
+          },
 
+          tooltip: {
+            useHTML: true,
+            pointFormat:
+              "<b>{point.role}</b><br/>" +
+              "Peak Hour: {point.y}:00<br/>" +
+              "Activity Level: {point.z}%",
+          },
+
+          plotOptions: {
+            bubble: {
+              minSize: 15,
+              maxSize: 60,
+            },
+            series: {
+              color: "#f97316",
               dataLabels: {
-                enabled: false,
+                enabled: true,
+                format: "{point.name}",
+                style: {
+                  fontSize: "9px",
+                  fontWeight: "bold",
+                },
               },
             },
           },
 
           series: [
             {
-              name: "Usage",
-
-              data: usageData.map((item) => ({
-                name: item.role,
-                y: item.hours,
-              })),
+              data: [
+                { x: 0, y: 14, z: 92, name: "DSE", role: "Digital Sales Executive" },
+                { x: 1, y: 10, z: 78, name: "TL", role: "Team Leader" },
+                { x: 2, y: 16, z: 85, name: "SM", role: "Sales Manager" },
+                { x: 3, y: 6, z: 45, name: "DSC", role: "Digital Sales Coordinator" },
+                { x: 4, y: 22, z: 35, name: "VP", role: "Vice President" },
+                { x: 5, y: 11, z: 95, name: "EXE", role: "Executive" },
+                { x: 6, y: 19, z: 72, name: "MGR", role: "Manager" },
+              ],
             },
           ],
         }}
       />
 
     </div>
-
   </div>
 
-  {/* TABLE */}
-  <div className="mt-5 overflow-hidden flex-1">
+  {/* ================= RIGHT: WEEKLY USAGE ================= */}
+  <div className="bg-white rounded-md shadow-[0_10px_40px_rgba(0,0,0,0.15)] p-4 min-h-[420px] flex flex-col">
 
-    <table className="w-full text-[11px] border-collapse">
+    <h2 className="text-base font-bold mb-2 text-gray-800">
+      Weekly Usage (Monday to Sunday)
+    </h2>
 
-      {/* HEADER */}
-      <thead>
+    <div className="flex-1 min-h-0">
 
-        <tr className="bg-gray-600 text-white">
+      <HighchartsReact
+        highcharts={Highcharts}
+        options={{
+          chart: {
+            type: "bubble",
+            backgroundColor: "transparent",
+            height: 350,
+            plotBorderWidth: 1,
+            zooming: {
+              type: "xy",
+            },
+          },
 
-          <th className="p-2 text-center">
-            S.No
-          </th>
+          title: {
+            text: null,
+          },
 
-          <th className="p-2 text-center"></th>
+          credits: {
+            enabled: false,
+          },
 
-          <th className="p-2 text-center">
-            Role
-          </th>
+          legend: {
+            enabled: false,
+          },
 
-          <th className="p-2 text-center">
-            Hours
-          </th>
-
-        </tr>
-
-      </thead>
-
-      {/* BODY */}
-      <tbody>
-
-        {usageData.map((item, i) => {
-
-          const colors = [
-            "#10b981",
-            "#06b6d4",
-            "#f97316",
-            "#8b5cf6",
-            "#ef4444",
-          ];
-
-          return (
-
-            <tr
-              key={i}
-              className={
-                i % 2 === 0
-                  ? "bg-gray-50"
-                  : "bg-white"
-              }
-            >
-
-              {/* SERIAL */}
-              <td className="p-2 text-center font-medium">
-                {i + 1}
-              </td>
-
-              {/* DOT */}
-              <td className="p-2 text-center">
-
-                <div className="flex justify-center items-center">
-
-                  <span
-                    className="w-3 h-3 rounded-sm"
-                    style={{
-                      backgroundColor:
-                        colors[i % colors.length],
-                    }}
-                  />
-
-                </div>
-
-              </td>
-
-              {/* ROLE */}
-              <td className="p-2 text-center font-medium">
-                {item.role}
-              </td>
-
-              {/* HOURS */}
-              <td className="p-2 text-center font-bold">
-                {item.hours} hrs
-              </td>
-
-            </tr>
-
-          );
-        })}
-
-      </tbody>
-
-    </table>
-
-  </div>
-
-</div>
-
-  {/* ================= RIGHT COLUMN ================= */}
-  <div className="flex flex-col gap-5 min-h-[820px]">
-
-    {/* ================= TOP: ROLE HOLDER USAGE ================= */}
-    <div className="bg-white rounded-md shadow-[0_10px_40px_rgba(0,0,0,0.15)] p-4 flex-1 overflow-hidden flex flex-col">
-
-      <h2 className="text-base font-bold mb-2 text-gray-800">
-        Role Holder Usage (Last 24 Hours)
-      </h2>
-
-      <div className="flex-1 min-h-0">
-
-        <HighchartsReact
-          highcharts={Highcharts}
-          options={{
-            chart: {
-              type: "bubble",
-              backgroundColor: "transparent",
-              height: 320,
-              plotBorderWidth: 1,
-              zooming: {
-                type: "xy",
+          xAxis: {
+            categories: [
+              "Monday",
+              "Tuesday",
+              "Wednesday",
+              "Thursday",
+              "Friday",
+              "Saturday",
+              "Sunday",
+            ],
+            labels: {
+              rotation: -45,
+              style: {
+                fontSize: "10px",
+                fontWeight: "bold",
               },
             },
+          },
 
+          yAxis: {
             title: {
-              text: null,
-            },
-
-            credits: {
-              enabled: false,
-            },
-
-            legend: {
-              enabled: false,
-            },
-
-            xAxis: {
-              gridLineWidth: 1,
-              title: {
-                text: "Role Holders",
-                style: {
-                  fontSize: "11px",
-                  fontWeight: "bold",
-                },
-              },
-              categories: [
-                "DSE",
-                "TL",
-                "SM",
-                "DSC",
-                "VP",
-                "EXE",
-                "MGR",
-              ],
-              labels: {
-                style: {
-                  fontSize: "10px",
-                  fontWeight: "bold",
-                },
-                rotation: -45,
+              text: "Active Users",
+              style: {
+                fontSize: "11px",
+                fontWeight: "bold",
               },
             },
+            gridLineWidth: 1,
+          },
 
-            yAxis: {
-              min: 1,
-              max: 24,
-              tickInterval: 2,
-              gridLineWidth: 1,
-              title: {
-                text: "Hour of Day",
-                style: {
-                  fontSize: "11px",
-                  fontWeight: "bold",
-                },
-              },
-              labels: {
-                format: "{value}:00",
+          tooltip: {
+            useHTML: true,
+            pointFormat:
+              "<b>{point.day}</b><br/>" +
+              "Users: {point.y}<br/>" +
+              "Engagement: {point.z}%",
+          },
+
+          plotOptions: {
+            bubble: {
+              minSize: 15,
+              maxSize: 60,
+            },
+            series: {
+              color: "#10b981",
+              dataLabels: {
+                enabled: true,
+                format: "{point.name}",
                 style: {
                   fontSize: "9px",
+                  fontWeight: "bold",
                 },
               },
             },
+          },
 
-            tooltip: {
-              useHTML: true,
-              pointFormat:
-                "<b>{point.role}</b><br/>" +
-                "Peak Hour: {point.y}:00<br/>" +
-                "Activity Level: {point.z}%",
-            },
-
-            plotOptions: {
-              bubble: {
-                minSize: 15,
-                maxSize: 60,
-              },
-              series: {
-                color: "#f97316",
-                dataLabels: {
-                  enabled: true,
-                  format: "{point.name}",
-                  style: {
-                    fontSize: "9px",
-                    fontWeight: "bold",
-                  },
-                },
-              },
-            },
-
-            series: [
-              {
-                data: [
-                  { x: 0, y: 14, z: 92, name: "DSE", role: "Digital Sales Executive" },
-                  { x: 1, y: 10, z: 78, name: "TL", role: "Team Leader" },
-                  { x: 2, y: 16, z: 85, name: "SM", role: "Sales Manager" },
-                  { x: 3, y: 6, z: 45, name: "DSC", role: "Digital Sales Coordinator" },
-                  { x: 4, y: 22, z: 35, name: "VP", role: "Vice President" },
-                  { x: 5, y: 11, z: 95, name: "EXE", role: "Executive" },
-                  { x: 6, y: 19, z: 72, name: "MGR", role: "Manager" },
-                ],
-              },
-            ],
-          }}
-        />
-
-      </div>
-    </div>
-
-    {/* ================= BOTTOM: WEEKLY USAGE ================= */}
-    <div className="bg-white rounded-md shadow-[0_10px_40px_rgba(0,0,0,0.15)] p-4 flex-1 overflow-hidden flex flex-col">
-
-      <h2 className="text-base font-bold mb-2 text-gray-800">
-        Weekly Usage (Monday to Sunday)
-      </h2>
-
-      <div className="flex-1 min-h-0">
-
-        <HighchartsReact
-          highcharts={Highcharts}
-          options={{
-            chart: {
-              type: "bubble",
-              backgroundColor: "transparent",
-              height: 320,
-              plotBorderWidth: 1,
-              zooming: {
-                type: "xy",
-              },
-            },
-
-            title: {
-              text: null,
-            },
-
-            credits: {
-              enabled: false,
-            },
-
-            legend: {
-              enabled: false,
-            },
-
-            xAxis: {
-              categories: [
-                "Monday",
-                "Tuesday",
-                "Wednesday",
-                "Thursday",
-                "Friday",
-                "Saturday",
-                "Sunday",
+          series: [
+            {
+              data: [
+                { x: 0, y: 120, z: 65, name: "Mon", day: "Monday" },
+                { x: 1, y: 150, z: 72, name: "Tue", day: "Tuesday" },
+                { x: 2, y: 180, z: 78, name: "Wed", day: "Wednesday" },
+                { x: 3, y: 200, z: 85, name: "Thu", day: "Thursday" },
+                { x: 4, y: 170, z: 80, name: "Fri", day: "Friday" },
+                { x: 5, y: 90, z: 45, name: "Sat", day: "Saturday" },
+                { x: 6, y: 75, z: 38, name: "Sun", day: "Sunday" },
               ],
-              labels: {
-                rotation: -45,
-                style: {
-                  fontSize: "10px",
-                  fontWeight: "bold",
-                },
-              },
             },
+          ],
+        }}
+      />
 
-            yAxis: {
-              title: {
-                text: "Active Users",
-                style: {
-                  fontSize: "11px",
-                  fontWeight: "bold",
-                },
-              },
-              gridLineWidth: 1,
-            },
-
-            tooltip: {
-              useHTML: true,
-              pointFormat:
-                "<b>{point.day}</b><br/>" +
-                "Users: {point.y}<br/>" +
-                "Engagement: {point.z}%",
-            },
-
-            plotOptions: {
-              bubble: {
-                minSize: 15,
-                maxSize: 60,
-              },
-              series: {
-                dataLabels: {
-                  enabled: true,
-                  format: "{point.name}",
-                  style: {
-                    fontSize: "9px",
-                    fontWeight: "bold",
-                  },
-                },
-              },
-            },
-
-            series: [
-              {
-                data: [
-                  { x: 0, y: 120, z: 65, name: "Mon", day: "Monday" },
-                  { x: 1, y: 150, z: 72, name: "Tue", day: "Tuesday" },
-                  { x: 2, y: 180, z: 78, name: "Wed", day: "Wednesday" },
-                  { x: 3, y: 200, z: 85, name: "Thu", day: "Thursday" },
-                  { x: 4, y: 170, z: 80, name: "Fri", day: "Friday" },
-                  { x: 5, y: 90, z: 45, name: "Sat", day: "Saturday" },
-                  { x: 6, y: 75, z: 38, name: "Sun", day: "Sunday" },
-                ],
-              },
-            ],
-          }}
-        />
-
-      </div>
     </div>
-
   </div>
 
 </div>
+
+
+
     </div>
   );
 };
