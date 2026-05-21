@@ -7,6 +7,8 @@ import './PerformanceAnalytics.css'
 
 import "highcharts/highcharts-3d";
 import Cylinder from "highcharts/modules/cylinder";
+import { FaMapMarkedAlt, FaMapMarkerAlt } from "react-icons/fa";
+import IndiaMap from '../assets/india_green.png'
 
 import {
   UsersIcon,
@@ -14,7 +16,6 @@ import {
   MapPinIcon,
 } from "@animateicons/react/lucide";
 import { FiRefreshCw } from "react-icons/fi";
-import { Hourglass } from "react-loader-spinner";
 import banner1 from "../assets/banner2.png";
 import banner2 from "../assets/banner2.png";
 import image_1 from "../assets/image_1.png";
@@ -102,63 +103,59 @@ const roleUsageHierarchy = {
   // ================= ALL INDIA =================
   All: {
     roles: [
-      { role: "DSE", hours: 1170 },
-      { role: "TL", hours: 850 },
-      { role: "SM", hours: 770 },
-      { role: "DSC", hours: 600 },
-      { role: "Manager", hours: 700 },
+      { role: "DSE", hours: 4291 },
+      { role: "TL", hours: 3117 },
+      { role: "RSE", hours: 2824 },
+      { role: "DSM", hours: 2200 },
+      { role: "GM", hours: 2568 },
     ],
   },
 
   // ================= NORTH REGION =================
   North: {
     roles: [
-      { role: "DSE", hours: 420 },
-      { role: "TL", hours: 310 },
-      { role: "SM", hours: 280 },
-      { role: "DSC", hours: 220 },
-      { role: "Manager", hours: 260 },
+      { role: "DSE", hours: 1540 },
+      { role: "TL", hours: 1136 },
+      { role: "RSE", hours: 1029 },
+      { role: "DSM", hours: 802 },
+      { role: "GM", hours: 936 },
     ],
 
     cities: {
       Delhi: [
-        { role: "DSE", hours: 120 },
-        { role: "TL", hours: 90 },
-        { role: "SM", hours: 80 },
-        { role: "DSC", hours: 70 },
-        { role: "Manager", hours: 60 },
+        { role: "DSE", hours: 440 },
+        { role: "TL", hours: 330 },
+        { role: "RSE", hours: 294 },
+        { role: "DSM", hours: 255 },
+        { role: "GM", hours: 216 },
       ],
-
       Chandigarh: [
-        { role: "DSE", hours: 95 },
-        { role: "TL", hours: 75 },
-        { role: "SM", hours: 65 },
-        { role: "DSC", hours: 50 },
-        { role: "Manager", hours: 45 },
+        { role: "DSE", hours: 349 },
+        { role: "TL", hours: 275 },
+        { role: "RSE", hours: 239 },
+        { role: "DSM", hours: 182 },
+        { role: "GM", hours: 162 },
       ],
-
       Jaipur: [
-        { role: "DSE", hours: 110 },
-        { role: "TL", hours: 80 },
-        { role: "SM", hours: 70 },
-        { role: "DSC", hours: 55 },
-        { role: "Manager", hours: 50 },
+        { role: "DSE", hours: 404 },
+        { role: "TL", hours: 293 },
+        { role: "RSE", hours: 257 },
+        { role: "DSM", hours: 200 },
+        { role: "GM", hours: 180 },
       ],
-
       Lucknow: [
-        { role: "DSE", hours: 60 },
-        { role: "TL", hours: 40 },
-        { role: "SM", hours: 35 },
-        { role: "DSC", hours: 25 },
-        { role: "Manager", hours: 30 },
+        { role: "DSE", hours: 220 },
+        { role: "TL", hours: 147 },
+        { role: "RSE", hours: 129 },
+        { role: "DSM", hours: 91 },
+        { role: "GM", hours: 108 },
       ],
-
       Noida: [
-        { role: "DSE", hours: 35 },
-        { role: "TL", hours: 25 },
-        { role: "SM", hours: 30 },
-        { role: "DSC", hours: 20 },
-        { role: "Manager", hours: 25 },
+        { role: "DSE", hours: 128 },
+        { role: "TL", hours: 92 },
+        { role: "RSE", hours: 110 },
+        { role: "DSM", hours: 73 },
+        { role: "GM", hours: 90 },
       ],
     },
   },
@@ -166,52 +163,48 @@ const roleUsageHierarchy = {
   // ================= SOUTH REGION =================
   South: {
     roles: [
-      { role: "DSE", hours: 390 },
-      { role: "TL", hours: 280 },
-      { role: "SM", hours: 250 },
-      { role: "DSC", hours: 200 },
-      { role: "Manager", hours: 230 },
+      { role: "DSE", hours: 1431 },
+      { role: "TL", hours: 1027 },
+      { role: "RSE", hours: 918 },
+      { role: "DSM", hours: 728 },
+      { role: "GM", hours: 828 },
     ],
 
     cities: {
       Bangalore: [
-        { role: "DSE", hours: 140 },
-        { role: "TL", hours: 110 },
-        { role: "SM", hours: 90 },
-        { role: "DSC", hours: 75 },
-        { role: "Manager", hours: 65 },
+        { role: "DSE", hours: 514 },
+        { role: "TL", hours: 403 },
+        { role: "RSE", hours: 330 },
+        { role: "DSM", hours: 273 },
+        { role: "GM", hours: 234 },
       ],
-
       Chennai: [
-        { role: "DSE", hours: 120 },
-        { role: "TL", hours: 90 },
-        { role: "SM", hours: 80 },
-        { role: "DSC", hours: 60 },
-        { role: "Manager", hours: 50 },
+        { role: "DSE", hours: 440 },
+        { role: "TL", hours: 330 },
+        { role: "RSE", hours: 294 },
+        { role: "DSM", hours: 218 },
+        { role: "GM", hours: 180 },
       ],
-
       Hyderabad: [
-        { role: "DSE", hours: 130 },
-        { role: "TL", hours: 80 },
-        { role: "SM", hours: 70 },
-        { role: "DSC", hours: 65 },
-        { role: "Manager", hours: 55 },
+        { role: "DSE", hours: 477 },
+        { role: "TL", hours: 293 },
+        { role: "RSE", hours: 257 },
+        { role: "DSM", hours: 237 },
+        { role: "GM", hours: 198 },
       ],
-
       Kochi: [
-        { role: "DSE", hours: 55 },
-        { role: "TL", hours: 40 },
-        { role: "SM", hours: 35 },
-        { role: "DSC", hours: 30 },
-        { role: "Manager", hours: 28 },
+        { role: "DSE", hours: 202 },
+        { role: "TL", hours: 147 },
+        { role: "RSE", hours: 129 },
+        { role: "DSM", hours: 109 },
+        { role: "GM", hours: 101 },
       ],
-
       Coimbatore: [
-        { role: "DSE", hours: 45 },
-        { role: "TL", hours: 30 },
-        { role: "SM", hours: 25 },
-        { role: "DSC", hours: 20 },
-        { role: "Manager", hours: 18 },
+        { role: "DSE", hours: 165 },
+        { role: "TL", hours: 110 },
+        { role: "RSE", hours: 92 },
+        { role: "DSM", hours: 73 },
+        { role: "GM", hours: 65 },
       ],
     },
   },
@@ -219,52 +212,48 @@ const roleUsageHierarchy = {
   // ================= WEST REGION =================
   West: {
     roles: [
-      { role: "DSE", hours: 360 },
-      { role: "TL", hours: 260 },
-      { role: "SM", hours: 240 },
-      { role: "DSC", hours: 180 },
-      { role: "Manager", hours: 210 },
+      { role: "DSE", hours: 1321 },
+      { role: "TL", hours: 953 },
+      { role: "RSE", hours: 881 },
+      { role: "DSM", hours: 655 },
+      { role: "GM", hours: 756 },
     ],
 
     cities: {
       Mumbai: [
-        { role: "DSE", hours: 150 },
-        { role: "TL", hours: 120 },
-        { role: "SM", hours: 100 },
-        { role: "DSC", hours: 70 },
-        { role: "Manager", hours: 60 },
+        { role: "DSE", hours: 550 },
+        { role: "TL", hours: 440 },
+        { role: "RSE", hours: 367 },
+        { role: "DSM", hours: 255 },
+        { role: "GM", hours: 216 },
       ],
-
       Pune: [
-        { role: "DSE", hours: 110 },
-        { role: "TL", hours: 80 },
-        { role: "SM", hours: 75 },
-        { role: "DSC", hours: 55 },
-        { role: "Manager", hours: 50 },
+        { role: "DSE", hours: 404 },
+        { role: "TL", hours: 293 },
+        { role: "RSE", hours: 275 },
+        { role: "DSM", hours: 200 },
+        { role: "GM", hours: 180 },
       ],
-
       Ahmedabad: [
-        { role: "DSE", hours: 100 },
-        { role: "TL", hours: 60 },
-        { role: "SM", hours: 65 },
-        { role: "DSC", hours: 45 },
-        { role: "Manager", hours: 40 },
+        { role: "DSE", hours: 367 },
+        { role: "TL", hours: 220 },
+        { role: "RSE", hours: 239 },
+        { role: "DSM", hours: 164 },
+        { role: "GM", hours: 144 },
       ],
-
       Surat: [
-        { role: "DSE", hours: 55 },
-        { role: "TL", hours: 35 },
-        { role: "SM", hours: 30 },
-        { role: "DSC", hours: 25 },
-        { role: "Manager", hours: 30 },
+        { role: "DSE", hours: 202 },
+        { role: "TL", hours: 128 },
+        { role: "RSE", hours: 110 },
+        { role: "DSM", hours: 91 },
+        { role: "GM", hours: 108 },
       ],
-
       Goa: [
-        { role: "DSE", hours: 40 },
-        { role: "TL", hours: 25 },
-        { role: "SM", hours: 20 },
-        { role: "DSC", hours: 15 },
-        { role: "Manager", hours: 20 },
+        { role: "DSE", hours: 147 },
+        { role: "TL", hours: 92 },
+        { role: "RSE", hours: 73 },
+        { role: "DSM", hours: 55 },
+        { role: "GM", hours: 72 },
       ],
     },
   },
@@ -272,52 +261,48 @@ const roleUsageHierarchy = {
   // ================= EAST REGION =================
   East: {
     roles: [
-      { role: "DSE", hours: 320 },
-      { role: "TL", hours: 240 },
-      { role: "SM", hours: 220 },
-      { role: "DSC", hours: 170 },
-      { role: "Manager", hours: 200 },
+      { role: "DSE", hours: 1174 },
+      { role: "TL", hours: 880 },
+      { role: "RSE", hours: 807 },
+      { role: "DSM", hours: 619 },
+      { role: "GM", hours: 720 },
     ],
 
     cities: {
       Kolkata: [
-        { role: "DSE", hours: 130 },
-        { role: "TL", hours: 95 },
-        { role: "SM", hours: 85 },
-        { role: "DSC", hours: 70 },
-        { role: "Manager", hours: 65 },
+        { role: "DSE", hours: 477 },
+        { role: "TL", hours: 348 },
+        { role: "RSE", hours: 312 },
+        { role: "DSM", hours: 255 },
+        { role: "GM", hours: 234 },
       ],
-
       Bhubaneswar: [
-        { role: "DSE", hours: 75 },
-        { role: "TL", hours: 55 },
-        { role: "SM", hours: 50 },
-        { role: "DSC", hours: 35 },
-        { role: "Manager", hours: 40 },
+        { role: "DSE", hours: 275 },
+        { role: "TL", hours: 202 },
+        { role: "RSE", hours: 183 },
+        { role: "DSM", hours: 127 },
+        { role: "GM", hours: 144 },
       ],
-
       Patna: [
-        { role: "DSE", hours: 60 },
-        { role: "TL", hours: 45 },
-        { role: "SM", hours: 40 },
-        { role: "DSC", hours: 30 },
-        { role: "Manager", hours: 35 },
+        { role: "DSE", hours: 220 },
+        { role: "TL", hours: 165 },
+        { role: "RSE", hours: 147 },
+        { role: "DSM", hours: 109 },
+        { role: "GM", hours: 126 },
       ],
-
       Ranchi: [
-        { role: "DSE", hours: 35 },
-        { role: "TL", hours: 25 },
-        { role: "SM", hours: 20 },
-        { role: "DSC", hours: 18 },
-        { role: "Manager", hours: 22 },
+        { role: "DSE", hours: 128 },
+        { role: "TL", hours: 92 },
+        { role: "RSE", hours: 73 },
+        { role: "DSM", hours: 66 },
+        { role: "GM", hours: 79 },
       ],
-
       Guwahati: [
-        { role: "DSE", hours: 20 },
-        { role: "TL", hours: 20 },
-        { role: "SM", hours: 25 },
-        { role: "DSC", hours: 17 },
-        { role: "Manager", hours: 18 },
+        { role: "DSE", hours: 73 },
+        { role: "TL", hours: 73 },
+        { role: "RSE", hours: 92 },
+        { role: "DSM", hours: 62 },
+        { role: "GM", hours: 65 },
       ],
     },
   },
@@ -325,52 +310,48 @@ const roleUsageHierarchy = {
   // ================= CENTRAL REGION =================
   Central: {
     roles: [
-      { role: "DSE", hours: 300 },
-      { role: "TL", hours: 220 },
-      { role: "SM", hours: 210 },
-      { role: "DSC", hours: 160 },
-      { role: "Manager", hours: 190 },
+      { role: "DSE", hours: 1101 },
+      { role: "TL", hours: 806 },
+      { role: "RSE", hours: 770 },
+      { role: "DSM", hours: 582 },
+      { role: "GM", hours: 684 },
     ],
 
     cities: {
       Bhopal: [
-        { role: "DSE", hours: 90 },
-        { role: "TL", hours: 70 },
-        { role: "SM", hours: 60 },
-        { role: "DSC", hours: 45 },
-        { role: "Manager", hours: 50 },
+        { role: "DSE", hours: 330 },
+        { role: "TL", hours: 257 },
+        { role: "RSE", hours: 220 },
+        { role: "DSM", hours: 164 },
+        { role: "GM", hours: 180 },
       ],
-
       Indore: [
-        { role: "DSE", hours: 80 },
-        { role: "TL", hours: 60 },
-        { role: "SM", hours: 55 },
-        { role: "DSC", hours: 40 },
-        { role: "Manager", hours: 45 },
+        { role: "DSE", hours: 294 },
+        { role: "TL", hours: 220 },
+        { role: "RSE", hours: 202 },
+        { role: "DSM", hours: 146 },
+        { role: "GM", hours: 162 },
       ],
-
       Raipur: [
-        { role: "DSE", hours: 55 },
-        { role: "TL", hours: 40 },
-        { role: "SM", hours: 35 },
-        { role: "DSC", hours: 30 },
-        { role: "Manager", hours: 32 },
+        { role: "DSE", hours: 202 },
+        { role: "TL", hours: 147 },
+        { role: "RSE", hours: 128 },
+        { role: "DSM", hours: 109 },
+        { role: "GM", hours: 115 },
       ],
-
       Nagpur: [
-        { role: "DSE", hours: 45 },
-        { role: "TL", hours: 30 },
-        { role: "SM", hours: 35 },
-        { role: "DSC", hours: 25 },
-        { role: "Manager", hours: 28 },
+        { role: "DSE", hours: 165 },
+        { role: "TL", hours: 110 },
+        { role: "RSE", hours: 128 },
+        { role: "DSM", hours: 91 },
+        { role: "GM", hours: 101 },
       ],
-
       Jabalpur: [
-        { role: "DSE", hours: 30 },
-        { role: "TL", hours: 20 },
-        { role: "SM", hours: 25 },
-        { role: "DSC", hours: 20 },
-        { role: "Manager", hours: 25 },
+        { role: "DSE", hours: 110 },
+        { role: "TL", hours: 73 },
+        { role: "RSE", hours: 92 },
+        { role: "DSM", hours: 73 },
+        { role: "GM", hours: 90 },
       ],
     },
   },
@@ -499,11 +480,11 @@ const DonutChart = ({ title, value, total, color = "#f97316" }) => {
 
 // ---------------- ASSESSMENT SCORE TABLE ----------------
 const assessmentData = [
-  { category: "Brand", scores: [80, 85, 90, 75, 95] },
-  { category: "BAT", scores: [70, 80, 75, 85, 90] },
-  { category: "SOP", scores: [90, 92, 88, 85, 91] },
-  { category: "Soft Skills", scores: [85, 87, 90, 92, 88] },
-  { category: "Product", scores: [78, 80, 82, 79, 85] },
+  { category: "Brand", scores: [80,20,30,	20,10	] },
+  { category: "BAT", scores: [70,40,30,40,50] },
+  { category: "SOP", scores: [90,	40,	20,	20,	30] },
+  { category: "Soft Skills", scores: [20,	10,	50,10,	20] },
+  { category: "Product", scores: [50,	30,	30,	10,	50] },
 ];
 
 const AssessmentScoreTable = () => {
@@ -551,8 +532,8 @@ const AssessmentScoreTable = () => {
 
 // ---------------- MAIN DASHBOARD ----------------
 const PerformanceAnalytics = () => {
-  const totalUsers = 1000;
-  const totalCourses = 50;
+  const totalUsers = 530;
+  const totalCourses = 35;
 
   const [selectedRegion, setSelectedRegion] =
     useState("Regions");
@@ -668,11 +649,9 @@ const tabs = [
   const roleData = [
     { name: "DSE", y: 200 },
     { name: "TL", y: 100 },
-    { name: "Manager", y: 150 },
-    { name: "Director", y: 50 },
-    { name: "VP", y: 30 },
-    { name: "SVP", y: 20 },
-    { name: "Executive", y: 450 },
+    { name: "RSE", y: 150 },
+    { name: "DSM", y: 50 },
+    { name: "GM", y: 30 },
   ];
 
   const dealershipData = [
@@ -781,8 +760,6 @@ const courseOptions = {
         ["BAT", 20],
         ["SOP", 2],
         ["VAS", 3],
-        ["HR", 5],
-        ["Tech", 10],
         ["Sales", 7],
       ],
     },
@@ -866,7 +843,82 @@ const indiaRegionOptions = {
   ],
 };
 
-// ---------------- INDIA HEAT MAP ----------------
+// ================= DATA =================
+const tableData = [
+  {
+    code: "in-mh",
+    state: "Maharashtra",
+    ytd: 1850,
+    mtd: 308,
+    week: 154,
+  },
+  {
+    code: "in-ka",
+    state: "Karnataka",
+    ytd: 1750,
+    mtd: 292,
+    week: 146,
+  },
+  {
+    code: "in-tn",
+    state: "Tamil Nadu",
+    ytd: 1630,
+    mtd: 272,
+    week: 136,
+  },
+  {
+    code: "in-up",
+    state: "Uttar Pradesh",
+    ytd: 1600,
+    mtd: 267,
+    week: 134,
+  },
+  {
+    code: "in-gj",
+    state: "Gujarat",
+    ytd: 1400,
+    mtd: 233,
+    week: 117,
+  },
+  {
+    code: "in-wb",
+    state: "West Bengal",
+    ytd: 1100,
+    mtd: 183,
+    week: 92,
+  },
+  {
+    code: "in-rj",
+    state: "Rajasthan",
+    ytd: 850,
+    mtd: 142,
+    week: 71,
+  },
+  {
+    code: "in-mp",
+    state: "Madhya Pradesh",
+    ytd: 700,
+    mtd: 117,
+    week: 59,
+  },
+];
+
+// ================= ACTIVE TAB =================
+const [activeUsageTab, setActiveUsageTab] = useState("ytd");
+
+// ================= MAP DATA =================
+const currentHeatData = tableData.map((item) => [
+  item.code,
+  item[activeUsageTab],
+]);
+
+// ================= TOTAL =================
+const totalUsage = tableData.reduce(
+  (sum, item) => sum + item[activeUsageTab],
+  0
+);
+
+// ================= INDIA HEAT MAP =================
 const indiaHeatMapOptions = {
   chart: {
     map: mapDataIndia,
@@ -877,11 +929,10 @@ const indiaHeatMapOptions = {
       render: function () {
         const chart = this;
 
-        // GET TOP 4 VALUES
-        const top4Values = [...chart.series[0].points]
+        const top3Values = [...chart.series[0].points]
           .map((p) => p.value)
           .sort((a, b) => b - a)
-          .slice(0, 4);
+          .slice(0, 3);
 
         chart.series[0].points.forEach((point) => {
 
@@ -891,8 +942,7 @@ const indiaHeatMapOptions = {
               "highcharts-point-dark-orange"
             );
 
-            // BLINK TOP 4 STATES
-            if (top4Values.includes(point.value)) {
+            if (top3Values.includes(point.value)) {
               point.graphic.element.classList.add(
                 "highcharts-point-dark-orange"
               );
@@ -917,7 +967,13 @@ const indiaHeatMapOptions = {
 
   colorAxis: {
     min: 0,
-    max: 2000,
+
+    max:
+      activeUsageTab === "ytd"
+        ? 2000
+        : activeUsageTab === "mtd"
+        ? 350
+        : 180,
 
     stops: [
       [0, "#fff7ed"],
@@ -935,9 +991,15 @@ const indiaHeatMapOptions = {
       return `
         <div style="padding:4px">
           <b>${this.point.name}</b><br/>
-          Usage Hours:
+          ${
+            activeUsageTab === "ytd"
+              ? "YTD"
+              : activeUsageTab === "mtd"
+              ? "MTD"
+              : "This Week"
+          } :
           <b style="color:#ea580c">
-            ${this.point.value} hrs
+            ${this.point.value}
           </b>
         </div>
       `;
@@ -957,7 +1019,7 @@ const indiaHeatMapOptions = {
 
   series: [
     {
-      name: "Usage Hours",
+      name: "Usage",
 
       joinBy: "hc-key",
 
@@ -978,20 +1040,11 @@ const indiaHeatMapOptions = {
         enabled: false,
       },
 
-      // DELHI REMOVED
-      data: [
-        ["in-mh", 1850], // Maharashtra
-        ["in-ka", 1750], // Karnataka
-        ["in-tn", 1650], // Tamil Nadu
-        ["in-up", 1600], // Uttar Pradesh
-        ["in-gj", 1400], // Gujarat
-        ["in-wb", 1100], // West Bengal
-        ["in-rj", 850],  // Rajasthan
-        ["in-mp", 700],  // Madhya Pradesh
-      ],
+      data: currentHeatData,
     },
   ],
 };
+
 
   return (
     <div className="min-h-screen bg-[#f7f7f7] px-6 py-10">
@@ -1074,7 +1127,7 @@ const indiaHeatMapOptions = {
 </div>
 </div>
 {/* ================= ROW 1 ================= */}
-<div className="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-8 items-stretch">
+<div className="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-4 items-stretch">
 
   {/* ========== LEFT COLUMN ========== */}
   <div className="flex flex-col h-full gap-2">
@@ -1163,6 +1216,11 @@ const indiaHeatMapOptions = {
 </div>
 
 {/* ROW 2 */}
+<div className="mb-4">
+  <h1 className="text-3xl font-bold">
+    Learning Path
+  </h1>
+</div>
 <div className="grid grid-cols-1 xl:grid-cols-3 gap-5 mb-8">
 
   {/* LEFT SIDE - DONUTS */}
@@ -1174,49 +1232,64 @@ const indiaHeatMapOptions = {
     </div>
   </div>
 
-  {/* RIGHT SIDE - IMAGE CAROUSEL */}
-  <div className="bg-white rounded-md shadow-[0_10px_40px_rgba(0,0,0,0.15)] overflow-hidden h-[210px] relative">
+  {/* RIGHT SIDE - ASSESSMENT SCORE BREAKUP */}
+  <div className="bg-white rounded-md shadow-[0_10px_40px_rgba(0,0,0,0.15)] p-4 h-[210px] overflow-auto">
 
-    <img
-      src={carouselImages[currentImage1]}
-      alt="banner"
-      className="w-full h-full object-cover transition-all duration-700"
-    />
+    <h2 className="text-base font-bold text-gray-800 mb-3">
+      Assessment Score Breakup
+    </h2>
 
-    {/* Overlay */}
-    <div className="absolute inset-0 rounded-md flex flex-col justify-end p-6">
-      <h2 className="text-white text-2xl font-bold">
-        Learning Analytics
-      </h2>
+    <table className="w-full table-auto border-collapse text-[10px]">
 
-      <p className="text-white text-sm mt-1">
-        Performance & engagement insights
-      </p>
-    </div>
+      <thead>
+        <tr className="bg-gray-600 text-white uppercase font-semibold">
+          <th className="px-2 py-2">Categories</th>
+          <th className="px-2 py-2">A1</th>
+          <th className="px-2 py-2">A2</th>
+          <th className="px-2 py-2">A3</th>
+          <th className="px-2 py-2">A4</th>
+          <th className="px-2 py-2">A5</th>
+          <th className="px-2 py-2">Avg</th>
+        </tr>
+      </thead>
 
-    {/* Dots */}
-    <div className="absolute bottom-4 right-4 flex gap-2">
-      {carouselImages.map((_, idx) => (
-        <div
-          key={idx}
-          className={`w-3 h-3 rounded-full ${
-            currentImage1 === idx
-              ? "bg-white"
-              : "bg-white/40"
-          }`}
-        />
-      ))}
-    </div>
+      <tbody>
+        {assessmentData.map((row, idx) => {
+          const average = Math.round(
+            row.scores.reduce((a, b) => a + b, 0) / row.scores.length
+          );
+
+          return (
+            <tr key={idx} className={idx % 2 === 0 ? "bg-gray-50" : "bg-white"}>
+              <td className="px-2 py-2 text-center font-semibold whitespace-nowrap">
+                {row.category}
+              </td>
+
+              {row.scores.map((score, i) => (
+                <td key={i} className="px-2 py-2 text-center">
+                  {score}%
+                </td>
+              ))}
+
+              <td className="px-2 py-2 text-center font-bold text-[#f97316]">
+                {average}%
+              </td>
+            </tr>
+          );
+        })}
+      </tbody>
+
+    </table>
   </div>
 </div>
 
 {/* ROW 3 */}
-<div className="grid grid-cols-1 xl:grid-cols-[1.3fr_1.3fr_1fr] gap-5 mb-6">
+<div className="grid grid-cols-1 xl:grid-cols-[1.3fr_1.3fr] gap-5 mb-6">
 
   {/* ================= USER ANALYTICS ================= */}
   <div className="bg-white rounded-md shadow-[0_10px_40px_rgba(0,0,0,0.15)] p-4 flex flex-col">
 
-    <h2 className="text-base font-bold text-gray-800 mb-3">
+    <h2 className="text-base font-bold text-gray-800">
       User Analytics
     </h2>
 
@@ -1232,19 +1305,6 @@ const indiaHeatMapOptions = {
 
           <div className="text-5xl font-black text-[#f97316] leading-none">
             {totalUsers.toLocaleString()}
-          </div>
-
-          <div className="text-[11px] italic text-gray-600 mt-2">
-            Last updated <span className="font-bold">2hr ago</span>
-          </div>
-
-          <div className="mt-3">
-            <Hourglass
-              visible={true}
-              height="30"
-              width="30"
-              colors={["#f97316", "#fdba74"]}
-            />
           </div>
 
         </div>
@@ -1319,7 +1379,7 @@ const indiaHeatMapOptions = {
   {/* ================= COURSE ANALYTICS ================= */}
   <div className="bg-white rounded-md shadow-[0_10px_40px_rgba(0,0,0,0.15)] p-4 flex flex-col">
 
-    <h2 className="text-base font-bold text-gray-800 mb-3">
+    <h2 className="text-base font-bold text-gray-800">
       Course Analytics
     </h2>
 
@@ -1335,19 +1395,6 @@ const indiaHeatMapOptions = {
 
           <div className="text-5xl font-black text-[#f97316] leading-none">
             {courseOptions.series[0].data.reduce((s, i) => s + i[1], 0)}
-          </div>
-
-          <div className="text-[11px] italic text-gray-600 mt-2">
-            Last updated <span className="font-bold">2hr ago</span>
-          </div>
-
-          <div className="mt-3">
-            <Hourglass
-              visible={true}
-              height="30"
-              width="30"
-              colors={["#f97316", "#fdba74"]}
-            />
           </div>
 
         </div>
@@ -1419,63 +1466,6 @@ const indiaHeatMapOptions = {
 
   </div>
 
-  {/* ================= ASSESSMENT SCORE BREAKUP ================= */}
-  <div className="bg-white rounded-md shadow-[0_10px_40px_rgba(0,0,0,0.15)] p-4 flex flex-col">
-
-    <h2 className="text-base font-bold text-gray-800 mb-3">
-      Assessment Score Breakup
-    </h2>
-
-   <div className="overflow-x-auto">
-
-      <table className="w-full table-auto border-collapse text-[10px]">
-
-        <thead>
-          <tr className="bg-gray-600 text-white uppercase font-semibold">
-            <th className="px-2 py-2">Categories</th>
-            <th className="px-2 py-2">A1</th>
-            <th className="px-2 py-2">A2</th>
-            <th className="px-2 py-2">A3</th>
-            <th className="px-2 py-2">A4</th>
-            <th className="px-2 py-2">A5</th>
-            <th className="px-2 py-2">Avg</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {assessmentData.map((row, idx) => {
-            const average = Math.round(
-              row.scores.reduce((a, b) => a + b, 0) / row.scores.length
-            );
-
-            return (
-              <tr key={idx} className={idx % 2 === 0 ? "bg-gray-50" : "bg-white"}>
-
-                <td className="px-2 py-2 text-center font-semibold whitespace-nowrap">
-                  {row.category}
-                </td>
-
-                {row.scores.map((score, i) => (
-                  <td key={i} className="px-2 py-2 text-center">
-                    {score}%
-                  </td>
-                ))}
-
-                <td className="px-2 py-2 text-center font-bold text-[#f97316]">
-                  {average}%
-                </td>
-
-              </tr>
-            );
-          })}
-        </tbody>
-
-      </table>
-
-    </div>
-
-  </div>
-
 </div>
 
 {/* ROW 4 */}
@@ -1489,7 +1479,7 @@ const indiaHeatMapOptions = {
 
   {/* ================= TOTAL HOURS ================= */}
   {/*
-    4090 = overall target / total available hours
+    15000 = overall target / total available hours
     usageData changes dynamically on filter
   */}
   {(() => {
@@ -1500,7 +1490,7 @@ const indiaHeatMapOptions = {
     );
 
     const usagePercentage = (
-      (totalUsageHours / 4090) *
+      (totalUsageHours / 15000) *
       100
     ).toFixed(1);
 
@@ -1510,12 +1500,17 @@ const indiaHeatMapOptions = {
         {/* TITLE + FILTERS */}
         <div className="flex justify-between items-center mb-4">
 
-          <h2 className="text-xl font-bold text-gray-600">
-            Total Usage :
-            <span className="text-xl font-black text-[#10b981]  ml-2">
-              4090 hrs
-            </span>
-          </h2>
+  <h2 className="flex flex-col leading-tight">
+
+  <span className="text-[18px] font-bold text-[#1f2340] tracking-tight">
+    Total Usage
+  </span>
+
+  <span className="text-[22px] font-black text-[#0f8b8d] mt-1">
+    15000 hrs
+  </span>
+
+</h2>
 
           <div className="flex gap-3">
 
@@ -1585,210 +1580,339 @@ const indiaHeatMapOptions = {
 
         </div>
 
-        {/* ================= TOP SECTION ================= */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 items-stretch">
 
-          {/* KPI CARD */}
-          <div className="px-3 py-3 flex flex-col flex-1 min-h-[125px]">
+{/* ================= TOP SECTION ================= */}
+<div
+  className={`grid gap-4 items-stretch ${
+    selectedUsageRegion === "All"
+      ? "grid-cols-1"
+      : "grid-cols-1 md:grid-cols-[1.1fr_1.3fr]"
+  }`}
+>
 
-            <div className="flex-1 flex flex-col justify-center items-center text-center">
+  {/* ================= KPI CARD ================= */}
+  {selectedUsageRegion !== "All" && (
 
-              <div className="text-[16px] font-bold text-gray-700 mt-2">
+    <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
 
-                {selectedUsageRegion === "All"
-                  ? "All India Usage"
-                  : selectedUsageCity === "All"
-                  ? `${selectedUsageRegion} Region Usage`
-                  : `${selectedUsageCity} Usage`}
+      {/* HEADER */}
+      <div className="px-4 pt-3 pb-2">
+        <h2 className="text-[15px] font-bold text-[#1f2340]">
+          All India vs Region Usage
+        </h2>
+      </div>
 
-              </div>
+      {/* ================= ROW 1 ================= */}
+      <div className="flex items-center justify-between px-4 py-2">
 
-             <div className="text-xl font-black leading-none mt-3 flex flex-col items-center">
+        <div className="flex items-center gap-3">
 
-  <span className="text-[#10b981]">
-    {totalUsageHours} / 4090
-  </span>
+          {/* ICON */}
+          <div className="w-[44px] h-[44px] rounded-full border border-gray-200 flex items-center justify-center bg-gray-50 shrink-0">
+            <img
+              src={IndiaMap}
+              alt="Map Icon"
+              className="w-8 object-contain"
+            />
+          </div>
 
-  <span className="text-red-500 mt-2">
-    = {usagePercentage}%
-  </span>
+          {/* CONTENT */}
+          <div>
 
-</div>
+            <div className="text-[12px] font-bold text-[#1f2340]">
+              All India Usage
+            </div>
 
-              {/* ICON */}
-              <div className="mt-4">
+            <div className="flex items-end gap-1 mt-0.5">
 
-                <Hourglass
-                  visible={true}
-                  height="34"
-                  width="34"
-                  colors={["#10b981", "#6ee7b7"]}
-                />
+              <span className="text-[28px] font-black text-[#0f8b8d] leading-none">
+                15000
+              </span>
 
-              </div>
+              <span className="text-[14px] font-bold text-[#0f8b8d] mb-1">
+                hrs
+              </span>
 
             </div>
 
           </div>
 
-          {/* ================= PIE CHART ================= */}
-          <div className="md:col-span-2 h-[320px] flex items-center justify-center overflow-hidden">
+        </div>
 
-            <HighchartsReact
-              highcharts={Highcharts}
-              options={{
-                chart: {
-                  type: "pie",
-                  backgroundColor: "transparent",
-                  height: 320,
+      </div>
 
-                  options3d: {
-                    enabled: true,
-                    alpha: 45,
-                  },
-                },
+      {/* DIVIDER */}
+      <div className="border-t border-gray-200" />
 
-                title: {
-                  text: null,
-                },
+      {/* ================= ROW 2 ================= */}
+      <div className="flex items-center justify-between px-4 py-2">
 
-                credits: {
-                  enabled: false,
-                },
+        <div className="flex items-center gap-3">
 
-                tooltip: {
-                  formatter: function () {
-                    return (
-                      "<b>" +
-                      this.point.name +
-                      "</b><br/>Hours: " +
-                      this.y
-                    );
-                  },
-                },
+          {/* ICON */}
+          <div className="w-[44px] h-[44px] rounded-full border border-gray-200 flex items-center justify-center bg-gray-50 shrink-0">
+            <FaMapMarkerAlt className="text-[#0f8b8d] text-[18px]" />
+          </div>
 
-                plotOptions: {
-                  pie: {
-                    innerSize: 100,
-                    depth: 45,
+          {/* CONTENT */}
+          <div>
 
-                    dataLabels: {
-                      enabled: false,
-                    },
-                  },
-                },
+            <div className="text-[12px] font-bold text-[#1f2340]">
 
-                series: [
-                  {
-                    name: "Usage",
+              {selectedUsageCity === "All"
+                ? `${selectedUsageRegion} Region Usage`
+                : `${selectedUsageCity} Usage`}
 
-                    data: usageData.map((item) => ({
-                      name: item.role,
-                      y: item.hours,
-                    })),
-                  },
-                ],
-              }}
-            />
+            </div>
+
+            <div className="flex items-end gap-1 mt-0.5">
+
+              <span className="text-[28px] font-black text-[#0f8b8d] leading-none">
+                {totalUsageHours}
+              </span>
+
+              <span className="text-[14px] font-bold text-[#0f8b8d] mb-1">
+                hrs
+              </span>
+
+            </div>
 
           </div>
 
         </div>
 
-        {/* ================= TABLE ================= */}
-        <div className="mt-5 overflow-hidden flex-1">
+      </div>
 
-          <table className="w-full text-[11px] border-collapse">
+      {/* DIVIDER */}
+      <div className="border-t border-gray-200" />
 
-            {/* HEADER */}
-            <thead>
+      {/* ================= PROGRESS ================= */}
+      <div className="px-4 py-3">
 
-              <tr className="bg-gray-600 text-white">
+        {/* BAR */}
+        <div className="w-full h-[30px] bg-gray-100 rounded-md overflow-hidden border border-gray-200">
 
-                <th className="p-2 text-center">
-                  S.No
-                </th>
-
-                <th className="p-2 text-center"></th>
-
-                <th className="p-2 text-center">
-                  Role
-                </th>
-
-                <th className="p-2 text-center">
-                  Hours
-                </th>
-
-              </tr>
-
-            </thead>
-
-            {/* BODY */}
-            <tbody>
-
-              {usageData.map((item, i) => {
-
-                const colors = [
-                  "#10b981",
-                  "#06b6d4",
-                  "#f97316",
-                  "#8b5cf6",
-                  "#ef4444",
-                ];
-
-                return (
-
-                  <tr
-                    key={i}
-                    className={
-                      i % 2 === 0
-                        ? "bg-gray-50"
-                        : "bg-white"
-                    }
-                  >
-
-                    {/* SERIAL */}
-                    <td className="p-2 text-center font-medium">
-                      {i + 1}
-                    </td>
-
-                    {/* COLOR DOT */}
-                    <td className="p-2 text-center">
-
-                      <div className="flex justify-center items-center">
-
-                        <span
-                          className="w-3 h-3 rounded-sm"
-                          style={{
-                            backgroundColor:
-                              colors[i % colors.length],
-                          }}
-                        />
-
-                      </div>
-
-                    </td>
-
-                    {/* ROLE */}
-                    <td className="p-2 text-center font-medium">
-                      {item.role}
-                    </td>
-
-                    {/* HOURS */}
-                    <td className="p-2 text-center font-bold">
-                      {item.hours} hrs
-                    </td>
-
-                  </tr>
-
-                );
-              })}
-
-            </tbody>
-
-          </table>
+          <div
+            className="h-full bg-[#0f8b8d] flex items-center justify-center text-white text-[12px] font-bold transition-all duration-500"
+            style={{
+              width: `${Math.min(usagePercentage, 100)}%`,
+            }}
+          >
+            {usagePercentage}%
+          </div>
 
         </div>
+
+        {/* FOOTER */}
+        <div className="flex justify-between items-center mt-2 px-1">
+
+          <span className="text-[12px] font-bold text-[#0f8b8d]">
+            {totalUsageHours} hrs
+          </span>
+
+          <span className="text-[12px] font-bold text-[#1f2340]">
+            15000 hrs
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  )}
+
+  {/* ================= PIE CHART ================= */}
+  <div
+    className={`flex items-center justify-center overflow-hidden ${
+      selectedUsageRegion === "All"
+        ? "h-[320px]"
+        : "h-[250px]"
+    }`}
+  >
+
+    <HighchartsReact
+      highcharts={Highcharts}
+      options={{
+        chart: {
+          type: "pie",
+          backgroundColor: "transparent",
+          height: selectedUsageRegion === "All" ? 250 : 250,
+          spacing: [0, 0, 0, 0],
+
+          options3d: {
+            enabled: true,
+            alpha: 45,
+          },
+        },
+
+        title: {
+          text: null,
+        },
+
+        credits: {
+          enabled: false,
+        },
+
+        tooltip: {
+          formatter: function () {
+            return (
+              "<b>" +
+              this.point.name +
+              "</b><br/>Hours: " +
+              this.y
+            );
+          },
+        },
+
+        plotOptions: {
+          pie: {
+            innerSize: 85,
+            depth: 45,
+            size:
+              selectedUsageRegion === "All"
+                ? "115%"
+                : "98%",
+
+            dataLabels: {
+              enabled: false,
+            },
+          },
+        },
+
+        legend: {
+          enabled: false,
+        },
+
+        series: [
+          {
+            name: "Usage",
+
+            data: usageData.map((item) => ({
+              name: item.role,
+              y: item.hours,
+            })),
+          },
+        ],
+      }}
+    />
+
+  </div>
+
+</div>
+{/* ================= TABLE ================= */}
+<div className="mt-5 overflow-hidden flex-1">
+
+  <table className="w-full text-[11px] border-collapse">
+
+    {/* HEADER */}
+    <thead>
+
+      <tr className="bg-gray-600 text-white">
+
+        <th className="p-2 text-center">
+          S.No
+        </th>
+
+        <th className="p-2 text-center"></th>
+
+        <th className="p-2 text-center">
+          Role
+        </th>
+
+        <th className="p-2 text-center">
+          Hours
+        </th>
+
+        <th className="p-2 text-center">
+         Share %
+        </th>
+
+      </tr>
+
+    </thead>
+
+    {/* BODY */}
+    <tbody>
+
+      {usageData.map((item, i) => {
+
+        const colors = [
+          "#10b981",
+          "#06b6d4",
+          "#f97316",
+          "#8b5cf6",
+          "#ef4444",
+        ];
+
+        // Calculate total hours for percentage
+        const totalHours = usageData.reduce(
+          (sum, curr) => sum + curr.hours,
+          0
+        );
+        
+        const percentage = ((item.hours / totalHours) * 100).toFixed(1);
+
+        return (
+
+          <tr
+            key={i}
+            className={
+              i % 2 === 0
+                ? "bg-gray-50"
+                : "bg-white"
+            }
+          >
+
+            {/* SERIAL */}
+            <td className="p-2 text-center font-medium">
+              {i + 1}
+            </td>
+
+            {/* COLOR DOT */}
+            <td className="p-2 text-center">
+
+              <div className="flex justify-center items-center">
+
+                <span
+                  className="w-3 h-3 rounded-sm"
+                  style={{
+                    backgroundColor:
+                      colors[i % colors.length],
+                  }}
+                />
+
+              </div>
+
+            </td>
+
+            {/* ROLE */}
+            <td className="p-2 text-center font-medium">
+              {item.role}
+            </td>
+
+            {/* HOURS */}
+            <td className="p-2 text-center font-bold">
+              {item.hours} hrs
+            </td>
+
+            {/* PERCENTAGE */}
+            <td className="p-2 text-center font-medium">
+              <span className="text-[#0f8b8d] font-bold">
+                {percentage}%
+              </span>
+            </td>
+
+          </tr>
+
+        );
+      })}
+
+    </tbody>
+
+  </table>
+
+</div>
 
       </>
 
@@ -1800,255 +1924,176 @@ const indiaHeatMapOptions = {
 </div>
 
 {/* ================= INDIA HEAT MAP ================= */}
-<div className="bg-white rounded-md shadow-[0_10px_40px_rgba(0,0,0,0.15)] p-4 h-[640px] overflow-hidden flex flex-col">
+<div className="bg-white rounded-md shadow-[0_10px_40px_rgba(0,0,0,0.15)] p-4 h-[640px] overflow-hidden">
 
   {/* ================= HEADER ================= */}
-  <div className="flex items-center justify-between mb-3">
+  <div className="flex items-center justify-between mb-4">
 
-    {/* LEFT TITLE */}
+    {/* TITLE */}
     <h2 className="text-base font-bold text-gray-800">
       State Wise Usage Heat Map
     </h2>
 
-{/* RIGHT FILTERS */}
-<div className="flex items-center gap-3">
+    {/* TABS */}
+    <div className="flex items-center gap-2">
 
-  {/* YEAR */}
-  <select
-    className="
-      border border-gray-300
-      rounded-md
-      px-3 py-2
-      min-w-[90px]
-      h-[38px]
-      text-[12px]
-      font-semibold
-      text-gray-700
-      outline-none
-      focus:border-[#000]
-      border-2
-    "
-  >
-    <option>2026</option>
-    <option>2025</option>
-    <option>2024</option>
-  </select>
+      <button
+        onClick={() => setActiveUsageTab("ytd")}
+        className={`px-4 py-2 rounded-md text-[12px] font-bold transition-all ${
+          activeUsageTab === "ytd"
+            ? "bg-[#f97316] text-white"
+            : "bg-gray-100 text-gray-700"
+        }`}
+      >
+        YTD
+      </button>
 
-  {/* MONTH */}
-  <select
-    className="
-      border border-gray-300
-      rounded-md
-      px-3 py-2
-      min-w-[130px]
-      h-[38px]
-      text-[12px]
-      font-semibold
-      text-gray-700
-      outline-none
-      focus:border-[#000]
-      border-2
-    "
-  >
-    <option>All Months</option>
-    <option>January</option>
-    <option>February</option>
-    <option>March</option>
-    <option>April</option>
-    <option>May</option>
-    <option>June</option>
-    <option>July</option>
-    <option>August</option>
-    <option>September</option>
-    <option>October</option>
-    <option>November</option>
-    <option>December</option>
-  </select>
+      <button
+        onClick={() => setActiveUsageTab("mtd")}
+        className={`px-4 py-2 rounded-md text-[12px] font-bold transition-all ${
+          activeUsageTab === "mtd"
+            ? "bg-[#f97316] text-white"
+            : "bg-gray-100 text-gray-700"
+        }`}
+      >
+        MTD
+      </button>
 
-  {/* WEEK */}
-  <select
-    className="
-      border border-gray-300
-      rounded-md
-      px-3 py-2
-      min-w-[115px]
-      h-[38px]
-      text-[12px]
-      font-semibold
-      text-gray-700
-      outline-none
-      focus:border-[#000]
-      border-2
-    "
-  >
-    <option>All Weeks</option>
-    <option>Week 1</option>
-    <option>Week 2</option>
-    <option>Week 3</option>
-    <option>Week 4</option>
-  </select>
+      <button
+        onClick={() => setActiveUsageTab("week")}
+        className={`px-4 py-2 rounded-md text-[12px] font-bold transition-all ${
+          activeUsageTab === "week"
+            ? "bg-[#f97316] text-white"
+            : "bg-gray-100 text-gray-700"
+        }`}
+      >
+        THIS WEEK
+      </button>
 
-</div>
+    </div>
 
   </div>
 
-  <div className="flex flex-col lg:flex-row gap-3 flex-1 overflow-hidden">
+  {/* ================= BODY ================= */}
+  <div className="flex flex-col lg:flex-row gap-3 items-start">
 
-    {/* ================= LEFT SIDE ================= */}
-    <div className="lg:w-[32%] flex flex-col gap-3 h-full">
+    {/* ================= TABLE ================= */}
+    <div className="lg:w-[35%] bg-white border border-gray-200 rounded-md overflow-hidden h-fit">
 
-      {/* KPI CARD */}
-      <div className="px-3 py-3 flex flex-col flex-1 min-h-[125px]">
+      {/* TOTAL CARD */}
+      <div className="p-4 border-b border-gray-200 text-center">
 
-        <div className="flex-1 flex flex-col justify-center items-center text-center">
+        <div className="text-[14px] font-bold text-gray-600 mb-1">
+          Total Usage
+        </div>
 
-          {/* LABEL */}
-          <div className="text-[16px] font-bold text-gray-700 mb-2">
-            State Usage
-          </div>
-
-          {/* TOTAL HOURS */}
-          <div className="text-5xl font-black text-[#f97316] leading-none">
-            {indiaHeatMapOptions.series[0].data
-              .reduce((sum, item) => sum + item[1], 0)
-              .toLocaleString()}
-          </div>
-
-          {/* SUBTEXT */}
-          <div className="text-[11px] italic text-gray-600 mt-2">
-            Across <span className="font-bold">8 States Usage</span>
-          </div>
-
-          {/* LOADER */}
-          <div className="mt-3">
-            <Hourglass
-              visible={true}
-              height="30"
-              width="30"
-              colors={["#f97316", "#fdba74"]}
-            />
-          </div>
-
+        <div className="text-4xl font-black text-[#f97316]">
+          {totalUsage.toLocaleString()}
         </div>
 
       </div>
 
-      {/* ================= TOP STATES TABLE ================= */}
-      <div className="overflow-hidden flex-1 bg-white">
+      {/* TABLE */}
+      <div className="overflow-hidden">
 
-        <table className="w-full h-full text-[9px]">
+        <table className="w-full text-[11px]">
 
+          {/* HEADER */}
           <thead>
-            <tr className="bg-[#4a4a4a] text-white uppercase font-semibold">
+            <tr className="bg-[#4a4a4a] text-white">
 
-              <th className="px-2 py-1.5 text-center w-[35px] leading-4">
-                No
+              <th className="px-2 py-2 text-center w-[40px]">
+                NO
               </th>
 
-              <th className="px-2 py-1.5 text-center leading-4">
-                State
+              <th className="px-2 py-2 text-left">
+                STATE
               </th>
 
-              <th className="px-2 py-1.5 text-center w-[65px] leading-4">
-                Hours
+              <th className="px-2 py-2 text-center w-[90px]">
+                {activeUsageTab === "ytd"
+                  ? "YTD"
+                  : activeUsageTab === "mtd"
+                  ? "MTD"
+                  : "THIS WEEK"}
               </th>
 
             </tr>
           </thead>
 
+          {/* BODY */}
           <tbody>
-            {[...indiaHeatMapOptions.series[0].data]
-              .sort((a, b) => b[1] - a[1])
-              .slice(0, 8)
+
+            {[...tableData]
+              .sort((a, b) => b[activeUsageTab] - a[activeUsageTab])
               .map((item, i) => {
 
-                const stateNameMap = {
-                  "in-mh": "Maharashtra",
-                  "in-ka": "Karnataka",
-                  "in-tn": "Tamil Nadu",
-                  "in-up": "Uttar Pradesh",
-                  "in-gj": "Gujarat",
-                  "in-wb": "West Bengal",
-                  "in-rj": "Rajasthan",
-                  "in-mp": "Madhya Pradesh",
-                };
+                const value = item[activeUsageTab];
 
-                const hours = item[1];
+                const top3 = [...tableData]
+                  .sort((a, b) => b[activeUsageTab] - a[activeUsageTab])
+                  .slice(0, 3)
+                  .map((d) => d[activeUsageTab]);
 
-                let stateColor = "#fff7ed";
-
-                if (hours >= 1800) {
-                  stateColor = "#c2410c";
-                } else if (hours >= 1500) {
-                  stateColor = "#ea580c";
-                } else if (hours >= 1200) {
-                  stateColor = "#f97316";
-                } else if (hours >= 900) {
-                  stateColor = "#fdba74";
-                } else if (hours >= 600) {
-                  stateColor = "#fed7aa";
-                } else if (hours >= 300) {
-                  stateColor = "#ffedd5";
-                }
-
-                const allHours = [...indiaHeatMapOptions.series[0].data]
-                  .sort((a, b) => b[1] - a[1])
-                  .map(d => d[1]);
-
-                const top4Hours = allHours.slice(0, 4);
-
-                const isBlinking = top4Hours.includes(hours);
+                const isTop = top3.includes(value);
 
                 return (
                   <tr
                     key={i}
-                    className={`hover:bg-gray-200 transition ${
-                      isBlinking ? "top-state-blink" : ""
+                    className={`border-b border-gray-100 hover:bg-gray-50 ${
+                      isTop ? "top-state-blink" : ""
                     }`}
                   >
 
-                    {/* SERIAL */}
-                    <td className="px-1 py-[3px] text-center font-semibold text-gray-800">
+                    {/* NUMBER */}
+                    <td className="px-2 py-3 text-center font-semibold">
                       {i + 1}
                     </td>
 
                     {/* STATE */}
-                    <td className="px-1 py-[3px]">
+                    <td className="px-2 py-3">
 
-                      <div className="flex items-center gap-1 font-medium text-gray-700">
+                      <div className="flex items-center gap-2">
 
-                        {/* DOT */}
                         <span
-                          className={`w-2 h-2 rounded-full flex-shrink-0 ${
-                            isBlinking ? "top-state-dot-blink" : ""
+                          className={`w-2.5 h-2.5 rounded-full ${
+                            isTop ? "top-state-dot-blink" : ""
                           }`}
                           style={{
-                            backgroundColor: stateColor,
+                            backgroundColor:
+                              i === 0
+                                ? "#c2410c"
+                                : i === 1
+                                ? "#ea580c"
+                                : i === 2
+                                ? "#f97316"
+                                : "#fdba74",
                           }}
                         />
 
-                        <span className="truncate font-semibold">
-                          {stateNameMap[item[0]]}
+                        <span className="font-semibold text-gray-700">
+                          {item.state}
                         </span>
 
                       </div>
 
                     </td>
 
-                    {/* HOURS */}
+                    {/* VALUE */}
                     <td
-                      className={`px-1 py-[3px] text-center font-bold ${
-                        isBlinking
+                      className={`px-2 py-3 text-center font-bold ${
+                        isTop
                           ? "text-[#c2410c]"
-                          : "text-gray-800"
+                          : "text-gray-700"
                       }`}
                     >
-                      {hours} hrs
+                      {value}
                     </td>
 
                   </tr>
                 );
               })}
+
           </tbody>
 
         </table>
@@ -2058,7 +2103,7 @@ const indiaHeatMapOptions = {
     </div>
 
     {/* ================= MAP ================= */}
-    <div className="lg:w-[68%] h-full overflow-hidden rounded-2xl">
+    <div className="lg:w-[65%] w-full rounded-2xl overflow-hidden">
 
       <HighchartsReact
         highcharts={Highcharts}
@@ -2068,7 +2113,7 @@ const indiaHeatMapOptions = {
 
           chart: {
             ...indiaHeatMapOptions.chart,
-            height: 450,
+            height: 500,
             backgroundColor: "transparent",
           },
         }}
@@ -2086,240 +2131,587 @@ const indiaHeatMapOptions = {
 {/* ================= ROW 5 ================= */}
 <div className="grid grid-cols-1 xl:grid-cols-2 gap-5 mb-6 items-stretch auto-rows-fr">
 
-  {/* ================= LEFT: ROLE HOLDER USAGE ================= */}
-  <div className="bg-white rounded-md shadow-[0_10px_40px_rgba(0,0,0,0.15)] p-4 min-h-[420px] flex flex-col">
+{/* ================= LEFT: ROLE HOLDER USAGE ================= */}
+<div className="bg-white rounded-md shadow-[0_10px_40px_rgba(0,0,0,0.15)] p-4 min-h-[420px] flex flex-col">
 
-    <h2 className="text-base font-bold mb-2 text-gray-800">
-      Role Holder Usage (Last 24 Hours)
-    </h2>
+  <h2 className="text-base font-bold mb-2 text-gray-800">
+    Role Holder Usage (Last 24 Hours)
+  </h2>
 
-    <div className="flex-1 min-h-0">
+  <div className="flex-1 min-h-0">
 
-      <HighchartsReact
-        highcharts={Highcharts}
-        options={{
-          chart: {
-            type: "bubble",
-            backgroundColor: "transparent",
-            height: 350,
-            plotBorderWidth: 1,
-            zooming: {
-              type: "xy",
-            },
+    <HighchartsReact
+      highcharts={Highcharts}
+      options={{
+        chart: {
+          type: "bubble",
+          backgroundColor: "transparent",
+          height: 350,
+          plotBorderWidth: 1,
+          zooming: {
+            type: "xy",
           },
+        },
+
+        title: {
+          text: null,
+        },
+
+        credits: {
+          enabled: false,
+        },
+
+        legend: {
+          enabled: false,
+        },
+
+        xAxis: {
+          gridLineWidth: 1,
 
           title: {
-            text: null,
-          },
-
-          credits: {
-            enabled: false,
-          },
-
-          legend: {
-            enabled: false,
-          },
-
-          xAxis: {
-            gridLineWidth: 1,
-            title: {
-              text: "Role Holders",
-              style: {
-                fontSize: "11px",
-                fontWeight: "bold",
-              },
-            },
-            categories: [
-              "DSE",
-              "TL",
-              "SM",
-              "DSC",
-              "VP",
-              "EXE",
-              "MGR",
-            ],
-            labels: {
-              style: {
-                fontSize: "10px",
-                fontWeight: "bold",
-              },
-              rotation: -45,
+            text: "Roles",
+            style: {
+              fontSize: "11px",
+              fontWeight: "bold",
             },
           },
 
-          yAxis: {
-            min: 1,
-            max: 24,
-            tickInterval: 2,
-            gridLineWidth: 1,
-            title: {
-              text: "Hour of Day",
-              style: {
-                fontSize: "11px",
-                fontWeight: "bold",
-              },
+          categories: ["DSE", "TL", "RSE", "DSM", "GM"],
+
+          labels: {
+            style: {
+              fontSize: "10px",
+              fontWeight: "bold",
             },
-            labels: {
-              format: "{value}:00",
+          },
+        },
+
+        yAxis: {
+          min: 1,
+          max: 24,
+          tickInterval: 2,
+          gridLineWidth: 1,
+
+          title: {
+            text: "Hour of Day",
+            style: {
+              fontSize: "11px",
+              fontWeight: "bold",
+            },
+          },
+
+          labels: {
+            format: "{value}:00",
+            style: {
+              fontSize: "9px",
+            },
+          },
+        },
+
+        tooltip: {
+          useHTML: true,
+          formatter: function () {
+            return `
+              <div style="padding:4px">
+                <b>${this.point.role}</b><br/>
+                Total Users: ${this.point.totalCount}<br/>
+                Active Users: ${this.point.activeUsers}<br/>
+                Hour: ${this.point.y}:00<br/>
+                Usage: ${this.point.z}%
+              </div>
+            `;
+          },
+        },
+
+        plotOptions: {
+          bubble: {
+            minSize: 15,
+            maxSize: 70,
+          },
+
+          series: {
+            dataLabels: {
+              enabled: true,
+              format: "{point.z}%",
+
               style: {
                 fontSize: "9px",
+                fontWeight: "bold",
+                color: "#ffffff",
+                textOutline: "none",
               },
             },
           },
+        },
 
-          tooltip: {
-            useHTML: true,
-            pointFormat:
-              "<b>{point.role}</b><br/>" +
-              "Peak Hour: {point.y}:00<br/>" +
-              "Activity Level: {point.z}%",
-          },
+series: [
+  {
+    data: [
 
-          plotOptions: {
-            bubble: {
-              minSize: 15,
-              maxSize: 60,
-            },
-            series: {
-              color: "#f97316",
-              dataLabels: {
-                enabled: true,
-                format: "{point.name}",
-                style: {
-                  fontSize: "9px",
-                  fontWeight: "bold",
-                },
-              },
-            },
-          },
+      // ================= DSE =================
+      {
+        x: 0,
+        y: 9,
+        z: 22, // Monday
+        activeUsers: 44,
+        totalCount: 200,
+        role: "DSE",
+        color: "#3b82f6",
+      },
+      {
+        x: 0,
+        y: 14,
+        z: 50, // Thursday
+        activeUsers: 100,
+        totalCount: 200,
+        role: "DSE",
+        color: "#3b82f6",
+      },
+      {
+        x: 0,
+        y: 19,
+        z: 2, // Saturday (low activity)
+        activeUsers: 4,
+        totalCount: 200,
+        role: "DSE",
+        color: "#3b82f6",
+      },
 
-          series: [
-            {
-              data: [
-                { x: 0, y: 14, z: 92, name: "DSE", role: "Digital Sales Executive" },
-                { x: 1, y: 10, z: 78, name: "TL", role: "Team Leader" },
-                { x: 2, y: 16, z: 85, name: "SM", role: "Sales Manager" },
-                { x: 3, y: 6, z: 45, name: "DSC", role: "Digital Sales Coordinator" },
-                { x: 4, y: 22, z: 35, name: "VP", role: "Vice President" },
-                { x: 5, y: 11, z: 95, name: "EXE", role: "Executive" },
-                { x: 6, y: 19, z: 72, name: "MGR", role: "Manager" },
-              ],
-            },
-          ],
-        }}
-      />
+      // ================= TL =================
+      {
+        x: 1,
+        y: 8,
+        z: 18,
+        activeUsers: 18,
+        totalCount: 100,
+        role: "TL",
+        color: "#22c55e",
+      },
+      {
+        x: 1,
+        y: 13,
+        z: 55,
+        activeUsers: 55,
+        totalCount: 100,
+        role: "TL",
+        color: "#22c55e",
+      },
+      {
+        x: 1,
+        y: 21,
+        z: 7,
+        activeUsers: 7,
+        totalCount: 100,
+        role: "TL",
+        color: "#22c55e",
+      },
 
-    </div>
+      // ================= RSE =================
+      {
+        x: 2,
+        y: 10,
+        z: 33,
+        activeUsers: 49,
+        totalCount: 150,
+        role: "RSE",
+        color: "#f97316",
+      },
+      {
+        x: 2,
+        y: 15,
+        z: 61,
+        activeUsers: 91,
+        totalCount: 150,
+        role: "RSE",
+        color: "#f97316",
+      },
+      {
+        x: 2,
+        y: 20,
+        z: 12,
+        activeUsers: 18,
+        totalCount: 150,
+        role: "RSE",
+        color: "#f97316",
+      },
+
+      // ================= DSM =================
+      {
+        x: 3,
+        y: 11,
+        z: 40,
+        activeUsers: 20,
+        totalCount: 50,
+        role: "DSM",
+        color: "#a855f7",
+      },
+      {
+        x: 3,
+        y: 14,
+        z: 25,
+        activeUsers: 12,
+        totalCount: 50,
+        role: "DSM",
+        color: "#a855f7",
+      },
+      {
+        x: 3,
+        y: 18,
+        z: 8,
+        activeUsers: 4,
+        totalCount: 50,
+        role: "DSM",
+        color: "#a855f7",
+      },
+
+      // ================= GM =================
+      {
+        x: 4,
+        y: 12,
+        z: 60,
+        activeUsers: 18,
+        totalCount: 30,
+        role: "GM",
+        color: "#ef4444",
+      },
+      {
+        x: 4,
+        y: 17,
+        z: 30,
+        activeUsers: 9,
+        totalCount: 30,
+        role: "GM",
+        color: "#ef4444",
+      },
+      {
+        x: 4,
+        y: 22,
+        z: 5,
+        activeUsers: 1,
+        totalCount: 30,
+        role: "GM",
+        color: "#ef4444",
+      },
+    ],
+  },
+],
+      }}
+    />
+
   </div>
+</div>
 
-  {/* ================= RIGHT: WEEKLY USAGE ================= */}
-  <div className="bg-white rounded-md shadow-[0_10px_40px_rgba(0,0,0,0.15)] p-4 min-h-[420px] flex flex-col">
+{/* ================= RIGHT: WEEKLY ROLE USAGE ================= */}
+<div className="bg-white rounded-md shadow-[0_10px_40px_rgba(0,0,0,0.15)] p-4 min-h-[420px] flex flex-col">
 
-    <h2 className="text-base font-bold mb-2 text-gray-800">
-      Weekly Usage (Monday to Sunday)
-    </h2>
+  <h2 className="text-base font-bold mb-2 text-gray-800">
+    Weekly Role Usage
+  </h2>
 
-    <div className="flex-1 min-h-0">
+  <div className="flex-1 min-h-0">
 
-      <HighchartsReact
-        highcharts={Highcharts}
-        options={{
-          chart: {
-            type: "bubble",
-            backgroundColor: "transparent",
-            height: 350,
-            plotBorderWidth: 1,
-            zooming: {
-              type: "xy",
-            },
+    <HighchartsReact
+      highcharts={Highcharts}
+      options={{
+        chart: {
+          type: "bubble",
+          backgroundColor: "transparent",
+          height: 400,
+          plotBorderWidth: 1,
+          zooming: {
+            type: "xy",
           },
+        },
+
+        title: {
+          text: null,
+        },
+
+        credits: {
+          enabled: false,
+        },
+
+        legend: {
+          enabled: false,
+        },
+
+        // ================= X AXIS = ROLE =================
+        xAxis: {
+          categories: ["DSE", "TL", "RSE", "DSM", "GM"],
 
           title: {
-            text: null,
-          },
-
-          credits: {
-            enabled: false,
-          },
-
-          legend: {
-            enabled: false,
-          },
-
-          xAxis: {
-            categories: [
-              "Monday",
-              "Tuesday",
-              "Wednesday",
-              "Thursday",
-              "Friday",
-              "Saturday",
-              "Sunday",
-            ],
-            labels: {
-              rotation: -45,
-              style: {
-                fontSize: "10px",
-                fontWeight: "bold",
-              },
+            text: "Roles",
+            style: {
+              fontSize: "11px",
+              fontWeight: "bold",
             },
           },
 
-          yAxis: {
-            title: {
-              text: "Active Users",
-              style: {
-                fontSize: "11px",
-                fontWeight: "bold",
-              },
-            },
-            gridLineWidth: 1,
-          },
-
-          tooltip: {
-            useHTML: true,
-            pointFormat:
-              "<b>{point.day}</b><br/>" +
-              "Users: {point.y}<br/>" +
-              "Engagement: {point.z}%",
-          },
-
-          plotOptions: {
-            bubble: {
-              minSize: 15,
-              maxSize: 60,
-            },
-            series: {
-              color: "#10b981",
-              dataLabels: {
-                enabled: true,
-                format: "{point.name}",
-                style: {
-                  fontSize: "9px",
-                  fontWeight: "bold",
-                },
-              },
+          labels: {
+            style: {
+              fontSize: "10px",
+              fontWeight: "bold",
             },
           },
 
-          series: [
-            {
-              data: [
-                { x: 0, y: 120, z: 65, name: "Mon", day: "Monday" },
-                { x: 1, y: 150, z: 72, name: "Tue", day: "Tuesday" },
-                { x: 2, y: 180, z: 78, name: "Wed", day: "Wednesday" },
-                { x: 3, y: 200, z: 85, name: "Thu", day: "Thursday" },
-                { x: 4, y: 170, z: 80, name: "Fri", day: "Friday" },
-                { x: 5, y: 90, z: 45, name: "Sat", day: "Saturday" },
-                { x: 6, y: 75, z: 38, name: "Sun", day: "Sunday" },
-              ],
-            },
+          gridLineWidth: 1,
+        },
+
+        // ================= Y AXIS = WEEK DAYS =================
+        yAxis: {
+          categories: [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday",
+            "Sunday",
           ],
-        }}
-      />
 
-    </div>
+          title: {
+            text: "Week Days",
+            style: {
+              fontSize: "11px",
+              fontWeight: "bold",
+            },
+          },
+
+          labels: {
+            style: {
+              fontSize: "10px",
+            },
+          },
+
+          gridLineWidth: 1,
+        },
+
+        tooltip: {
+          useHTML: true,
+
+          formatter: function () {
+            return `
+              <div style="padding:4px">
+                <b>${this.point.role}</b><br/>
+                Day: ${this.point.day}<br/>
+                Active Users: ${this.point.activeUsers}<br/>
+                Total Users: ${this.point.totalUsers}<br/>
+                Usage: ${this.point.z}%
+              </div>
+            `;
+          },
+        },
+
+        plotOptions: {
+          bubble: {
+            minSize: 12,
+            maxSize: 60,
+          },
+
+          series: {
+            dataLabels: {
+              enabled: true,
+              format: "{point.z}%",
+
+              style: {
+                fontSize: "8px",
+                fontWeight: "bold",
+                color: "#ffffff",
+                textOutline: "none",
+              },
+            },
+          },
+        },
+series: [
+  {
+    data: [
+
+      // =====================================================
+      // DSE (Total Users = 200)
+      // Only 3 random days
+      // =====================================================
+
+      {
+        x: 0,
+        y: 0, // Monday
+        z: 35,
+        activeUsers: 70,
+        totalUsers: 200,
+        role: "DSE",
+        day: "Monday",
+        color: "#3b82f6",
+      },
+
+      {
+        x: 0,
+        y: 3, // Thursday
+        z: 60,
+        activeUsers: 120,
+        totalUsers: 200,
+        role: "DSE",
+        day: "Thursday",
+        color: "#3b82f6",
+      },
+
+      {
+        x: 0,
+        y: 5, // Saturday
+        z: 25,
+        activeUsers: 50,
+        totalUsers: 200,
+        role: "DSE",
+        day: "Saturday",
+        color: "#3b82f6",
+      },
+
+      // =====================================================
+      // TL (Total Users = 100)
+      // Only 2 random days
+      // =====================================================
+
+      {
+        x: 1,
+        y: 1, // Tuesday
+        z: 40,
+        activeUsers: 40,
+        totalUsers: 100,
+        role: "TL",
+        day: "Tuesday",
+        color: "#22c55e",
+      },
+
+      {
+        x: 1,
+        y: 4, // Friday
+        z: 65,
+        activeUsers: 65,
+        totalUsers: 100,
+        role: "TL",
+        day: "Friday",
+        color: "#22c55e",
+      },
+
+      // =====================================================
+      // RSE (Total Users = 150)
+      // Only 4 random days
+      // =====================================================
+
+      {
+        x: 2,
+        y: 0, // Monday
+        z: 30,
+        activeUsers: 45,
+        totalUsers: 150,
+        role: "RSE",
+        day: "Monday",
+        color: "#f97316",
+      },
+
+      {
+        x: 2,
+        y: 2, // Wednesday
+        z: 55,
+        activeUsers: 82,
+        totalUsers: 150,
+        role: "RSE",
+        day: "Wednesday",
+        color: "#f97316",
+      },
+
+      {
+        x: 2,
+        y: 3, // Thursday
+        z: 70,
+        activeUsers: 105,
+        totalUsers: 150,
+        role: "RSE",
+        day: "Thursday",
+        color: "#f97316",
+      },
+
+      {
+        x: 2,
+        y: 6, // Sunday
+        z: 20,
+        activeUsers: 30,
+        totalUsers: 150,
+        role: "RSE",
+        day: "Sunday",
+        color: "#f97316",
+      },
+
+      // =====================================================
+      // DSM (Total Users = 50)
+      // Only 3 random days
+      // =====================================================
+
+      {
+        x: 3,
+        y: 1, // Tuesday
+        z: 20,
+        activeUsers: 10,
+        totalUsers: 50,
+        role: "DSM",
+        day: "Tuesday",
+        color: "#a855f7",
+      },
+
+      {
+        x: 3,
+        y: 4, // Friday
+        z: 50,
+        activeUsers: 25,
+        totalUsers: 50,
+        role: "DSM",
+        day: "Friday",
+        color: "#a855f7",
+      },
+
+      {
+        x: 3,
+        y: 5, // Saturday
+        z: 40,
+        activeUsers: 20,
+        totalUsers: 50,
+        role: "DSM",
+        day: "Saturday",
+        color: "#a855f7",
+      },
+
+      // =====================================================
+      // GM (Total Users = 30)
+      // Only 2 random days
+      // =====================================================
+
+      {
+        x: 4,
+        y: 2, // Wednesday
+        z: 35,
+        activeUsers: 10,
+        totalUsers: 30,
+        role: "GM",
+        day: "Wednesday",
+        color: "#ef4444",
+      },
+
+      {
+        x: 4,
+        y: 6, // Sunday
+        z: 15,
+        activeUsers: 5,
+        totalUsers: 30,
+        role: "GM",
+        day: "Sunday",
+        color: "#ef4444",
+      },
+    ],
+  },
+],
+      }}
+    />
+
   </div>
+</div>
 
 </div>
 
