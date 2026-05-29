@@ -16,12 +16,12 @@ import {
   MapPinIcon,
 } from "@animateicons/react/lucide";
 import { FiRefreshCw } from "react-icons/fi";
-import banner1 from "../assets/banner2.png";
-import banner2 from "../assets/banner2.png";
-import image_1 from "../assets/image_1.png";
-import image_2 from "../assets/image_2.png";
-import image_3 from "../assets/image_3.png";
-import image_4 from "../assets/image_4.png";
+import Banner1 from "../assets/Banner2.png";
+import Banner2 from "../assets/Banner2.png";
+import Image_1 from "../assets/Image_1.png";
+import Image_2 from "../assets/Image_2.png";
+import Image_3 from "../assets/Image_3.png";
+import Image_4 from "../assets/Image_4.png";
 import f1 from '../assets/picture40.png'
 import f2 from '../assets/picture28.png'
 import f3 from '../assets/picture29.png'
@@ -58,8 +58,8 @@ const carouselImages = [
 ];
 
 const carouselImages2 = [
-  banner1,
-  banner2,
+  Banner1,
+  Banner2,
 ];
 
 // ---------------- TOP CARDS ----------------
@@ -581,7 +581,7 @@ React.useEffect(() => {
 const tabs = [
   {
     title: "Fast Task Completion",
-    image: image_1,
+    image: Image_1,
     users: [
       { rank: 1, name: "Amit Singh", photo: f1, role: "Service Advisor", dealership: "Delhi Motors" },
       { rank: 2, name: "Ravi Kumar", photo: f2, role: "Sales Manager", dealership: "Mumbai Wheels" },
@@ -597,7 +597,7 @@ const tabs = [
   },
   {
     title: "Highest Scores",
-    image: image_2,
+    image: Image_2,
     users: [
       { rank: 1, name: "Vikas Singh", photo: h1, role: "Team Leader", dealership: "Mumbai Motors" },
       { rank: 2, name: "Akash Kumar", photo: h2, role: "Sales Manager", dealership: "Delhi Autos" },
@@ -613,7 +613,7 @@ const tabs = [
   },
   {
     title: "Maximum Certificates",
-    image: image_3,
+    image: Image_3,
     users: [
       { rank: 1, name: "Rahul Mishra", photo: m1, role: "Team Leader", dealership: "Kolkata Motors" },
       { rank: 2, name: "Rishabh Gupta", photo: m2, role: "Sales Manager", dealership: "Chandigarh Autos" },
@@ -629,7 +629,7 @@ const tabs = [
   },
   {
     title: "Highest Engagement on LMS",
-    image: image_4,
+    image: Image_4,
     users: [
       { rank: 1, name: "Abhishek Kumar", photo: e1, role: "Team Leader", dealership: "Noida Motors" },
       { rank: 2, name: "Varun Verma", photo: e2, role: "Sales Manager", dealership: "Gurugram Autos" },
