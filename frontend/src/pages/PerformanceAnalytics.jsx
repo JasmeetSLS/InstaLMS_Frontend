@@ -16,34 +16,34 @@ import {
   MapPinIcon,
 } from "@animateicons/react/lucide";
 import { FiRefreshCw } from "react-icons/fi";
-import Banner1 from "../assets/banner2.png";
-import Banner2 from "../assets/banner2.png";
+import Banner1 from "../assets/Banner2.png";
+import Banner2 from "../assets/Banner2.png";
 import Image_1 from "../assets/Image_1.png";
 import Image_2 from "../assets/Image_2.png";
 import Image_3 from "../assets/Image_3.png";
 import Image_4 from "../assets/Image_4.png";
-import f1 from '../assets/Picture40.png'
-import f2 from '../assets/Picture28.png'
-import f3 from '../assets/Picture29.png'
-import h1 from '../assets/Picture30.png'
-import h2 from '../assets/Picture31.png'
-import h3 from '../assets/Picture32.png'
-import m1 from '../assets/Picture33.png'
-import m2 from '../assets/Picture34.png'
-import m3 from '../assets/Picture35.png'
-import e1 from '../assets/Picture36.png'
-import e2 from '../assets/Picture37.png'
-import e3 from '../assets/Picture38.png'
-import s1 from '../assets/Picture16.png'
-import s2 from '../assets/Picture17.png'
-import s3 from '../assets/Picture18.png'
-import s4 from '../assets/Picture19.png'
-import s5 from '../assets/Picture20.png'
-import s6 from '../assets/Picture21.png'
-import s7 from '../assets/Picture22.png'
-import s8 from '../assets/Picture23.png'
-import s9 from '../assets/Picture24.png'
-import s10 from '../assets/Picture25.png'
+import f1 from '../assets/picture40.png'
+import f2 from '../assets/picture28.png'
+import f3 from '../assets/picture29.png'
+import h1 from '../assets/picture30.png'
+import h2 from '../assets/picture31.png'
+import h3 from '../assets/picture32.png'
+import m1 from '../assets/picture33.png'
+import m2 from '../assets/picture34.png'
+import m3 from '../assets/picture35.png'
+import e1 from '../assets/picture36.png'
+import e2 from '../assets/picture37.png'
+import e3 from '../assets/picture38.png'
+import s1 from '../assets/picture16.png'
+import s2 from '../assets/picture17.png'
+import s3 from '../assets/picture18.png'
+import s4 from '../assets/picture19.png'
+import s5 from '../assets/picture20.png'
+import s6 from '../assets/picture21.png'
+import s7 from '../assets/picture22.png'
+import s8 from '../assets/picture23.png'
+import s9 from '../assets/picture24.png'
+import s10 from '../assets/picture25.png'
 // HighchartsMap(Highcharts);
 
 
