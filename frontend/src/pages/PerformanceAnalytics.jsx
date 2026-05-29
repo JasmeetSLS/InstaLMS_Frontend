@@ -44,7 +44,7 @@ import s7 from '../assets/Picture22.png'
 import s8 from '../assets/Picture23.png'
 import s9 from '../assets/Picture24.png'
 import s10 from '../assets/Picture25.png'
-// HighchartsMap(Highcharts);
+HighchartsMap(Highcharts);
 
 
 const HighchartsReact =
