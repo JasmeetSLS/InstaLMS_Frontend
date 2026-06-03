@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Highcharts from "highcharts";
 import HighchartsReactOfficial from "highcharts-react-official";
 import HighchartsMap from "highcharts/modules/map";
+import HighchartsAccessibility from "highcharts/modules/accessibility";
 import mapDataIndia from "@highcharts/map-collection/countries/in/in-all.geo.json";
 import './PerformanceAnalytics.css'
 
