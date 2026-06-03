@@ -1,14 +1,18 @@
 import React, { useState } from "react";
 import Highcharts from "highcharts";
 import HighchartsReactOfficial from "highcharts-react-official";
+
+// Import map data
 import mapDataIndia from "@highcharts/map-collection/countries/in/in-all.geo.json";
 import './PerformanceAnalytics.css'
 
-// Import modules - these auto-initialize when imported
+// Import ALL modules as side-effects (they auto-register)
+import "highcharts/modules/map";
 import "highcharts/highcharts-3d";
 import "highcharts/modules/cylinder";
-import "highcharts/modules/map";
+import "highcharts/modules/accessibility";
 
+// Rest of your imports...
 import { FaMapMarkedAlt, FaMapMarkerAlt } from "react-icons/fa";
 import IndiaMap from '../assets/india_green.png'
 
@@ -46,13 +50,11 @@ import s7 from '../assets/Picture22.png'
 import s8 from '../assets/Picture23.png'
 import s9 from '../assets/Picture24.png'
 import s10 from '../assets/Picture25.png'
-// HighchartsMap(Highcharts);
 
-
-const HighchartsReact =
-  HighchartsReactOfficial.default || HighchartsReactOfficial;
+const HighchartsReact = HighchartsReactOfficial.default || HighchartsReactOfficial;
 
 const YELLOW = "#f4ae3d";
+
 
 const carouselImages = [
   "https://images.unsplash.com/photo-1522202176988-66273c2fd55f",
