@@ -1,16 +1,21 @@
 import React, { useState } from "react";
+
+// ✅ Import Highcharts FIRST
 import Highcharts from "highcharts";
-import HighchartsReactOfficial from "highcharts-react-official";
 
-// Import map data
-import mapDataIndia from "@highcharts/map-collection/countries/in/in-all.geo.json";
-import './PerformanceAnalytics.css'
-
-// Import ALL modules as side-effects (they auto-register)
+// ✅ Import ALL modules IMMEDIATELY after Highcharts
 import "highcharts/modules/map";
 import "highcharts/highcharts-3d";
 import "highcharts/modules/cylinder";
 import "highcharts/modules/accessibility";
+
+// ✅ Import map data AFTER modules are registered
+import mapDataIndia from "@highcharts/map-collection/countries/in/in-all.geo.json";
+
+// ✅ Import React component wrapper AFTER Highcharts is ready
+import HighchartsReactOfficial from "highcharts-react-official";
+
+import './PerformanceAnalytics.css'
 
 // Rest of your imports...
 import { FaMapMarkedAlt, FaMapMarkerAlt } from "react-icons/fa";
@@ -51,10 +56,10 @@ import s8 from '../assets/Picture23.png'
 import s9 from '../assets/Picture24.png'
 import s10 from '../assets/Picture25.png'
 
+// ✅ Safe way to get the React component
 const HighchartsReact = HighchartsReactOfficial.default || HighchartsReactOfficial;
 
 const YELLOW = "#f4ae3d";
-
 
 const carouselImages = [
   "https://images.unsplash.com/photo-1522202176988-66273c2fd55f",
