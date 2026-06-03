@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import Highcharts from "highcharts";
 import HighchartsReactOfficial from "highcharts-react-official";
-import HighchartsMap from "highcharts/modules/map";
 import mapDataIndia from "@highcharts/map-collection/countries/in/in-all.geo.json";
 import './PerformanceAnalytics.css'
 
+// Import modules - these auto-initialize when imported
 import "highcharts/highcharts-3d";
-import Cylinder from "highcharts/modules/cylinder";
+import "highcharts/modules/cylinder";
+import "highcharts/modules/map";
+
 import { FaMapMarkedAlt, FaMapMarkerAlt } from "react-icons/fa";
 import IndiaMap from '../assets/india_green.png'
 
@@ -44,7 +46,7 @@ import s7 from '../assets/Picture22.png'
 import s8 from '../assets/Picture23.png'
 import s9 from '../assets/Picture24.png'
 import s10 from '../assets/Picture25.png'
-HighchartsMap(Highcharts);
+// HighchartsMap(Highcharts);
 
 
 const HighchartsReact =
