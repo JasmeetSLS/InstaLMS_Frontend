@@ -1,55 +1,66 @@
 import React, { useState } from "react";
+
 import Highcharts from "highcharts";
 import HighchartsReactOfficial from "highcharts-react-official";
-import HighchartsMap from "highcharts/modules/map";
-import HighchartsAccessibility from "highcharts/modules/accessibility";
-import mapDataIndia from "@highcharts/map-collection/countries/in/in-all.geo.json";
-import './PerformanceAnalytics.css'
 
+const HighchartsReact =
+  HighchartsReactOfficial.default || HighchartsReactOfficial;
+
+// Highcharts modules (v12)
 import "highcharts/highcharts-3d";
-import Cylinder from "highcharts/modules/cylinder";
+import "highcharts/modules/map";
+import "highcharts/modules/accessibility";
+import "highcharts/modules/cylinder";
+
+import mapDataIndia from "@highcharts/map-collection/countries/in/in-all.geo.json";
+
+import "./PerformanceAnalytics.css";
+
 import { FaMapMarkedAlt, FaMapMarkerAlt } from "react-icons/fa";
-import IndiaMap from '../assets/india_green.png'
+import { FiRefreshCw } from "react-icons/fi";
+
+import IndiaMap from "../assets/india_green.png";
 
 import {
   UsersIcon,
   BookOpenIcon,
   MapPinIcon,
 } from "@animateicons/react/lucide";
-import { FiRefreshCw } from "react-icons/fi";
+
 import Banner1 from "../assets/banner2.png";
 import Banner2 from "../assets/banner2.png";
+
 import Image_1 from "../assets/Image_1.png";
 import Image_2 from "../assets/Image_2.png";
 import Image_3 from "../assets/Image_3.png";
 import Image_4 from "../assets/Image_4.png";
-import f1 from '../assets/Picture40.png'
-import f2 from '../assets/Picture28.png'
-import f3 from '../assets/Picture29.png'
-import h1 from '../assets/Picture30.png'
-import h2 from '../assets/Picture31.png'
-import h3 from '../assets/Picture32.png'
-import m1 from '../assets/Picture33.png'
-import m2 from '../assets/Picture34.png'
-import m3 from '../assets/Picture35.png'
-import e1 from '../assets/Picture36.png'
-import e2 from '../assets/Picture37.png'
-import e3 from '../assets/Picture38.png'
-import s1 from '../assets/Picture16.png'
-import s2 from '../assets/Picture17.png'
-import s3 from '../assets/Picture18.png'
-import s4 from '../assets/Picture19.png'
-import s5 from '../assets/Picture20.png'
-import s6 from '../assets/Picture21.png'
-import s7 from '../assets/Picture22.png'
-import s8 from '../assets/Picture23.png'
-import s9 from '../assets/Picture24.png'
-import s10 from '../assets/Picture25.png'
-// HighchartsMap(Highcharts);
 
+import f1 from "../assets/Picture40.png";
+import f2 from "../assets/Picture28.png";
+import f3 from "../assets/Picture29.png";
 
-const HighchartsReact =
-  HighchartsReactOfficial.default || HighchartsReactOfficial;
+import h1 from "../assets/Picture30.png";
+import h2 from "../assets/Picture31.png";
+import h3 from "../assets/Picture32.png";
+
+import m1 from "../assets/Picture33.png";
+import m2 from "../assets/Picture34.png";
+import m3 from "../assets/Picture35.png";
+
+import e1 from "../assets/Picture36.png";
+import e2 from "../assets/Picture37.png";
+import e3 from "../assets/Picture38.png";
+
+import s1 from "../assets/Picture16.png";
+import s2 from "../assets/Picture17.png";
+import s3 from "../assets/Picture18.png";
+import s4 from "../assets/Picture19.png";
+import s5 from "../assets/Picture20.png";
+import s6 from "../assets/Picture21.png";
+import s7 from "../assets/Picture22.png";
+import s8 from "../assets/Picture23.png";
+import s9 from "../assets/Picture24.png";
+import s10 from "../assets/Picture25.png";
 
 const YELLOW = "#f4ae3d";
 
