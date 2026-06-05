@@ -1,16 +1,13 @@
 import React, { useState } from "react";
-
 import Highcharts from "highcharts";
 import HighchartsReactOfficial from "highcharts-react-official";
+import HighchartsMap from "highcharts/modules/map";
+import HighchartsAccessibility from "highcharts/modules/accessibility";
 
-const HighchartsReact =
-  HighchartsReactOfficial.default || HighchartsReactOfficial;
+const HighchartsReact = HighchartsReactOfficial.default || HighchartsReactOfficial;
 
-// Highcharts modules (v12)
-// import "highcharts/highcharts-3d";
-import "highcharts/modules/map";
-import "highcharts/modules/accessibility";
-// import "highcharts/modules/cylinder";
+if (typeof HighchartsMap === "function") HighchartsMap(Highcharts);
+if (typeof HighchartsAccessibility === "function") HighchartsAccessibility(Highcharts);
 
 import mapDataIndia from "@highcharts/map-collection/countries/in/in-all.geo.json";
 
