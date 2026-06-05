@@ -10,7 +10,6 @@ const HighchartsReact =
 import "highcharts/highcharts-3d";
 import "highcharts/modules/map";
 import "highcharts/modules/accessibility";
-import "highcharts/modules/cylinder";
 
 import mapDataIndia from "@highcharts/map-collection/countries/in/in-all.geo.json";
 
