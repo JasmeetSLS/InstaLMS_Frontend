@@ -29,36 +29,8 @@ import {
 
 
 import Image_1 from "../assets/Image_1.png";
-import Image_2 from "../assets/Image_2.png";
-import Image_3 from "../assets/Image_3.png";
-import Image_4 from "../assets/Image_4.png";
 
 import f1 from "../assets/Picture40.png";
-import f2 from "../assets/Picture28.png";
-import f3 from "../assets/Picture29.png";
-
-import h1 from "../assets/Picture30.png";
-import h2 from "../assets/Picture31.png";
-import h3 from "../assets/Picture32.png";
-
-import m1 from "../assets/Picture33.png";
-import m2 from "../assets/Picture34.png";
-import m3 from "../assets/Picture35.png";
-
-import e1 from "../assets/Picture36.png";
-import e2 from "../assets/Picture37.png";
-import e3 from "../assets/Picture38.png";
-
-import s1 from "../assets/Picture16.png";
-import s2 from "../assets/Picture17.png";
-import s3 from "../assets/Picture18.png";
-import s4 from "../assets/Picture19.png";
-import s5 from "../assets/Picture20.png";
-import s6 from "../assets/Picture21.png";
-import s7 from "../assets/Picture22.png";
-import s8 from "../assets/Picture23.png";
-import s9 from "../assets/Picture24.png";
-import s10 from "../assets/Picture25.png";
 
 const YELLOW = "#f4ae3d";
 
@@ -594,63 +566,63 @@ const tabs = [
     image: Image_1,
     users: [
       { rank: 1, name: "Amit Singh", photo: f1, role: "Service Advisor", dealership: "Delhi Motors" },
-      { rank: 2, name: "Ravi Kumar", photo: f2, role: "Sales Manager", dealership: "Mumbai Wheels" },
-      { rank: 3, name: "Sourabh Kumar", photo: f3, role: "Sales Executive", dealership: "Ahmedabad Auto" },
-      { rank: 4, name: "Neha Verma", photo: s1, role: "HR Manager", dealership: "Pune Drive" },
-      { rank: 5, name: "Kabir Singh", photo: s2, role: "Sales Head", dealership: "Chandigarh Cars" },
-      { rank: 6, name: "Meera Nair", photo: s3, role: "Service Advisor", dealership: "Kochi Autos" },
-      { rank: 7, name: "Arjun Rao", photo: s4, role: "Operations Lead", dealership: "Hyderabad Wheels" },
-      { rank: 8, name: "Simran Kaur", photo: s5, role: "Marketing Lead", dealership: "Jaipur Motors" },
-      { rank: 9, name: "Vikram Joshi", photo: s6, role: "Floor Manager", dealership: "Nagpur Drive" },
-      { rank: 10, name: "Ananya Roy", photo: s7, role: "CRM Executive", dealership: "Kolkata Cars" },
+      { rank: 2, name: "Ravi Kumar", photo: f1, role: "Sales Manager", dealership: "Mumbai Wheels" },
+      { rank: 3, name: "Sourabh Kumar", photo: f1, role: "Sales Executive", dealership: "Ahmedabad Auto" },
+      { rank: 4, name: "Neha Verma", photo: f1, role: "HR Manager", dealership: "Pune Drive" },
+      { rank: 5, name: "Kabir Singh", photo: f1, role: "Sales Head", dealership: "Chandigarh Cars" },
+      { rank: 6, name: "Meera Nair", photo: f1, role: "Service Advisor", dealership: "Kochi Autos" },
+      { rank: 7, name: "Arjun Rao", photo: f1, role: "Operations Lead", dealership: "Hyderabad Wheels" },
+      { rank: 8, name: "Simran Kaur", photo: f1, role: "Marketing Lead", dealership: "Jaipur Motors" },
+      { rank: 9, name: "Vikram Joshi", photo: f1, role: "Floor Manager", dealership: "Nagpur Drive" },
+      { rank: 10, name: "Ananya Roy", photo: f1, role: "CRM Executive", dealership: "Kolkata Cars" },
     ]
   },
   {
     title: "Highest Scores",
-    image: Image_2,
+    image: Image_1,
     users: [
-      { rank: 1, name: "Vikas Singh", photo: h1, role: "Team Leader", dealership: "Mumbai Motors" },
-      { rank: 2, name: "Akash Kumar", photo: h2, role: "Sales Manager", dealership: "Delhi Autos" },
-      { rank: 3, name: "Alok Sharma", photo: h3, role: "Sales Executive", dealership: "Bangalore Cars" },
-      { rank: 4, name: "Isha Gupta", photo: s7, role: "HR Manager", dealership: "Pune Drive" },
-      { rank: 5, name: "Rahul Nair", photo: s8, role: "Service Manager", dealership: "Chennai Wheels" },
-      { rank: 6, name: "Anjali Desai", photo: s9, role: "Marketing Lead", dealership: "Ahmedabad Auto" },
-      { rank: 7, name: "Suresh Reddy", photo: s10, role: "Operations Lead", dealership: "Hyderabad Motors" },
-      { rank: 8, name: "Kavita Joshi", photo: s4, role: "CRM Executive", dealership: "Jaipur Cars" },
-      { rank: 9, name: "Manoj Tiwari", photo: s5, role: "Floor Manager", dealership: "Lucknow Autos" },
-      { rank: 10, name: "Swati Mehta", photo: s6, role: "Service Advisor", dealership: "Kochi Wheels" },
+      { rank: 1, name: "Vikas Singh", photo: f1, role: "Team Leader", dealership: "Mumbai Motors" },
+      { rank: 2, name: "Akash Kumar", photo: f1, role: "Sales Manager", dealership: "Delhi Autos" },
+      { rank: 3, name: "Alok Sharma", photo: f1, role: "Sales Executive", dealership: "Bangalore Cars" },
+      { rank: 4, name: "Isha Gupta", photo: f1, role: "HR Manager", dealership: "Pune Drive" },
+      { rank: 5, name: "Rahul Nair", photo: f1, role: "Service Manager", dealership: "Chennai Wheels" },
+      { rank: 6, name: "Anjali Desai", photo: f1, role: "Marketing Lead", dealership: "Ahmedabad Auto" },
+      { rank: 7, name: "Suresh Reddy", photo: f1, role: "Operations Lead", dealership: "Hyderabad Motors" },
+      { rank: 8, name: "Kavita Joshi", photo: f1, role: "CRM Executive", dealership: "Jaipur Cars" },
+      { rank: 9, name: "Manoj Tiwari", photo: f1, role: "Floor Manager", dealership: "Lucknow Autos" },
+      { rank: 10, name: "Swati Mehta", photo: f1, role: "Service Advisor", dealership: "Kochi Wheels" },
     ]
   },
   {
     title: "Maximum Certificates",
-    image: Image_3,
+    image: Image_1,
     users: [
-      { rank: 1, name: "Rahul Mishra", photo: m1, role: "Team Leader", dealership: "Kolkata Motors" },
-      { rank: 2, name: "Rishabh Gupta", photo: m2, role: "Sales Manager", dealership: "Chandigarh Autos" },
-      { rank: 3, name: "Ajay Kumar", photo: m3, role: "Sales Executive", dealership: "Surat Cars" },
-      { rank: 4, name: "Neelam Jain", photo: s10, role: "HR Manager", dealership: "Indore Drive" },
-      { rank: 5, name: "Deepak Saxena", photo: s3, role: "Service Manager", dealership: "Bhopal Wheels" },
-      { rank: 6, name: "Shreya Mishra", photo: s5, role: "Marketing Lead", dealership: "Lucknow Autos" },
-      { rank: 7, name: "Vijay Pawar", photo: s9, role: "Operations Lead", dealership: "Nagpur Motors" },
-      { rank: 8, name: "Ritu Agarwal", photo: s1, role: "CRM Executive", dealership: "Jaipur Cars" },
-      { rank: 9, name: "Sunil Shetty", photo: s7, role: "Floor Manager", dealership: "Goa Autos" },
-      { rank: 10, name: "Manisha Kulkarni", photo: s2, role: "Service Advisor", dealership: "Pune Wheels" },
+      { rank: 1, name: "Rahul Mishra", photo: f1, role: "Team Leader", dealership: "Kolkata Motors" },
+      { rank: 2, name: "Rishabh Gupta", photo: f1, role: "Sales Manager", dealership: "Chandigarh Autos" },
+      { rank: 3, name: "Ajay Kumar", photo: f1, role: "Sales Executive", dealership: "Surat Cars" },
+      { rank: 4, name: "Neelam Jain", photo: f1, role: "HR Manager", dealership: "Indore Drive" },
+      { rank: 5, name: "Deepak Saxena", photo: f1, role: "Service Manager", dealership: "Bhopal Wheels" },
+      { rank: 6, name: "Shreya Mishra", photo: f1, role: "Marketing Lead", dealership: "Lucknow Autos" },
+      { rank: 7, name: "Vijay Pawar", photo: f1, role: "Operations Lead", dealership: "Nagpur Motors" },
+      { rank: 8, name: "Ritu Agarwal", photo: f1, role: "CRM Executive", dealership: "Jaipur Cars" },
+      { rank: 9, name: "Sunil Shetty", photo: f1, role: "Floor Manager", dealership: "Goa Autos" },
+      { rank: 10, name: "Manisha Kulkarni", photo: f1, role: "Service Advisor", dealership: "Pune Wheels" },
     ]
   },
   {
     title: "Highest Engagement on LMS",
-    image: Image_4,
+    image: Image_1,
     users: [
-      { rank: 1, name: "Abhishek Kumar", photo: e1, role: "Team Leader", dealership: "Noida Motors" },
-      { rank: 2, name: "Varun Verma", photo: e2, role: "Sales Manager", dealership: "Gurugram Autos" },
-      { rank: 3, name: "Karthik Kumar", photo: e3, role: "Sales Executive", dealership: "Faridabad Cars" },
-      { rank: 4, name: "Divya Bhatia", photo: s1, role: "HR Manager", dealership: "Agra Drive" },
-      { rank: 5, name: "Alok Nath", photo: s2, role: "Service Manager", dealership: "Meerut Wheels" },
-      { rank: 6, name: "Preeti John", photo: s7, role: "Marketing Lead", dealership: "Varanasi Autos" },
-      { rank: 7, name: "Naveen Kumar", photo:s4, role: "Operations Lead", dealership: "Allahabad Motors" },
-      { rank: 8, name: "Shalini Raj", photo: s3, role: "CRM Executive", dealership: "Kanpur Cars" },
-      { rank: 9, name: "Gaurav Chopra", photo: s9, role: "Floor Manager", dealership: "Dehradun Autos" },
-      { rank: 10, name: "Rashmi Thakur", photo: s10, role: "Service Advisor", dealership: "Shimla Wheels" },
+      { rank: 1, name: "Abhishek Kumar", photo: f1, role: "Team Leader", dealership: "Noida Motors" },
+      { rank: 2, name: "Varun Verma", photo: f1, role: "Sales Manager", dealership: "Gurugram Autos" },
+      { rank: 3, name: "Karthik Kumar", photo: f1, role: "Sales Executive", dealership: "Faridabad Cars" },
+      { rank: 4, name: "Divya Bhatia", photo: f1, role: "HR Manager", dealership: "Agra Drive" },
+      { rank: 5, name: "Alok Nath", photo: f1, role: "Service Manager", dealership: "Meerut Wheels" },
+      { rank: 6, name: "Preeti John", photo: f1, role: "Marketing Lead", dealership: "Varanasi Autos" },
+      { rank: 7, name: "Naveen Kumar", photo:f1, role: "Operations Lead", dealership: "Allahabad Motors" },
+      { rank: 8, name: "Shalini Raj", photo: f1, role: "CRM Executive", dealership: "Kanpur Cars" },
+      { rank: 9, name: "Gaurav Chopra", photo: f1, role: "Floor Manager", dealership: "Dehradun Autos" },
+      { rank: 10, name: "Rashmi Thakur", photo: f1, role: "Service Advisor", dealership: "Shimla Wheels" },
     ]
   },
 ];
