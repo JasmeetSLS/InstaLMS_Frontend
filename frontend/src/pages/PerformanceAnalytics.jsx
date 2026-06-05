@@ -39,10 +39,10 @@ const carouselImages = [
   "https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
 ];
 
-const carouselImages2 = [
-  Banner1,
-  Banner2,
-];
+// const carouselImages2 = [
+//   Banner1,
+//   Banner2,
+// ];
 
 // ---------------- TOP CARDS ----------------
 const cards = [
@@ -550,15 +550,15 @@ React.useEffect(() => {
   return () => clearInterval(interval);
 }, []);
 
-React.useEffect(() => {
-  const interval = setInterval(() => {
-    setCurrentImage2((prev) =>
-      prev === carouselImages2.length - 1 ? 0 : prev + 1
-    );
-  }, 3000);
+// React.useEffect(() => {
+//   const interval = setInterval(() => {
+//     setCurrentImage2((prev) =>
+//       prev === carouselImages2.length - 1 ? 0 : prev + 1
+//     );
+//   }, 3000);
 
-  return () => clearInterval(interval);
-}, []);
+//   return () => clearInterval(interval);
+// }, []);
 
 const tabs = [
   {
