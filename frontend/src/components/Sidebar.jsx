@@ -26,11 +26,11 @@ const Sidebar = ({ isOpen, onClose }) => {
             name: 'CMS', 
             icon: <Layers className="w-5 h-5" />,
         },
-        { 
-            path: '/admin/performanceAnalytics', 
-            name: 'Performance Analytics', 
-            icon: <Layers className="w-5 h-5" />,
-        },
+        // { 
+        //     path: '/admin/performanceAnalytics', 
+        //     name: 'Performance Analytics', 
+        //     icon: <Layers className="w-5 h-5" />,
+        // },
     ];
 
     const handleLogout = () => {
