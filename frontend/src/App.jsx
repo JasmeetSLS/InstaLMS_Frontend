@@ -8,7 +8,7 @@ import Categories from './pages/Categories';
 import Posts from './pages/Posts';
 import Quiz from './pages/Quiz';
 import CMS from './pages/CMS';
-import PerformanceAnalytics from './pages/PerformanceAnalytics';
+// import PerformanceAnalytics from './pages/PerformanceAnalytics';
 
 function App() {
   return (
