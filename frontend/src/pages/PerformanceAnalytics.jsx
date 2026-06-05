@@ -3,14 +3,14 @@ import React, { useState } from "react";
 import Highcharts from "highcharts";
 import HighchartsReactOfficial from "highcharts-react-official";
 
-const HighchartsReact =
-  HighchartsReactOfficial.default || HighchartsReactOfficial;
+// ✅ CORRECT WAY - Import 3D module (no require needed)
+import "highcharts/highcharts-3d";
 
-// Highcharts modules (v12)
-// import "highcharts/highcharts-3d";
+// ✅ Then import other modules
 import "highcharts/modules/map";
 import "highcharts/modules/accessibility";
-// import "highcharts/modules/cylinder";
+
+const HighchartsReact = HighchartsReactOfficial.default || HighchartsReactOfficial;
 
 import mapDataIndia from "@highcharts/map-collection/countries/in/in-all.geo.json";
 
@@ -27,9 +27,7 @@ import {
   MapPinIcon,
 } from "@animateicons/react/lucide";
 
-
 import Image_1 from "../assets/Image_1.png";
-
 import f1 from "../assets/Picture40.png";
 
 const YELLOW = "#f4ae3d";
@@ -39,34 +37,29 @@ const carouselImages = [
   "https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
 ];
 
-// const carouselImages2 = [
-//   Banner1,
-//   Banner2,
-// ];
-
 // ---------------- TOP CARDS ----------------
 const cards = [
   {
     title: "Learning Path",
     subtitle: "Program",
-    value: 20,       // completed
-    total: 50,       // total courses
+    value: 20,
+    total: 50,
   },
   {
     title: "Certificates",
-    value: 20,       // certified
-    total: 60,       // total certificate courses
+    value: 20,
+    total: 60,
   },
   {
     title: "Assessment",
     subtitle: "Attempted",
-    value: 25,       // attempted
-    total: 40,       // total assessments
+    value: 25,
+    total: 40,
   },
   {
     title: "Score",
-    value: 60,       // marks scored
-    total: 100,      // total marks
+    value: 60,
+    total: 100,
   },
 ];
 
@@ -80,9 +73,7 @@ const userData = [
 ];
 
 // ================= ROLE WISE USAGE HIERARCHY =================
-
 const roleUsageHierarchy = {
-  // ================= ALL INDIA =================
   All: {
     roles: [
       { role: "DSE", hours: 4291 },
@@ -92,8 +83,6 @@ const roleUsageHierarchy = {
       { role: "GM", hours: 2568 },
     ],
   },
-
-  // ================= NORTH REGION =================
   North: {
     roles: [
       { role: "DSE", hours: 1540 },
@@ -102,7 +91,6 @@ const roleUsageHierarchy = {
       { role: "DSM", hours: 802 },
       { role: "GM", hours: 936 },
     ],
-
     cities: {
       Delhi: [
         { role: "DSE", hours: 440 },
@@ -141,8 +129,6 @@ const roleUsageHierarchy = {
       ],
     },
   },
-
-  // ================= SOUTH REGION =================
   South: {
     roles: [
       { role: "DSE", hours: 1431 },
@@ -151,7 +137,6 @@ const roleUsageHierarchy = {
       { role: "DSM", hours: 728 },
       { role: "GM", hours: 828 },
     ],
-
     cities: {
       Bangalore: [
         { role: "DSE", hours: 514 },
@@ -190,8 +175,6 @@ const roleUsageHierarchy = {
       ],
     },
   },
-
-  // ================= WEST REGION =================
   West: {
     roles: [
       { role: "DSE", hours: 1321 },
@@ -200,7 +183,6 @@ const roleUsageHierarchy = {
       { role: "DSM", hours: 655 },
       { role: "GM", hours: 756 },
     ],
-
     cities: {
       Mumbai: [
         { role: "DSE", hours: 550 },
@@ -239,8 +221,6 @@ const roleUsageHierarchy = {
       ],
     },
   },
-
-  // ================= EAST REGION =================
   East: {
     roles: [
       { role: "DSE", hours: 1174 },
@@ -249,7 +229,6 @@ const roleUsageHierarchy = {
       { role: "DSM", hours: 619 },
       { role: "GM", hours: 720 },
     ],
-
     cities: {
       Kolkata: [
         { role: "DSE", hours: 477 },
@@ -288,8 +267,6 @@ const roleUsageHierarchy = {
       ],
     },
   },
-
-  // ================= CENTRAL REGION =================
   Central: {
     roles: [
       { role: "DSE", hours: 1101 },
@@ -298,7 +275,6 @@ const roleUsageHierarchy = {
       { role: "DSM", hours: 582 },
       { role: "GM", hours: 684 },
     ],
-
     cities: {
       Bhopal: [
         { role: "DSE", hours: 330 },
@@ -339,8 +315,6 @@ const roleUsageHierarchy = {
   },
 };
 
-
-
 // ---------------- REGION DATA ----------------
 const regionCityData = {
   Regions: [
@@ -350,7 +324,6 @@ const regionCityData = {
     ["East", 1200],
     ["Central", 1000],
   ],
-
   North: [
     ["Delhi", 1200],
     ["Chandigarh", 800],
@@ -362,7 +335,6 @@ const regionCityData = {
     ["Dehradun", 150],
     ["Shimla", 100],
   ],
-
   South: [
     ["Bangalore", 900],
     ["Chennai", 750],
@@ -370,7 +342,6 @@ const regionCityData = {
     ["Kochi", 200],
     ["Coimbatore", 150],
   ],
-
   West: [
     ["Mumbai", 700],
     ["Pune", 500],
@@ -378,14 +349,12 @@ const regionCityData = {
     ["Surat", 200],
     ["Goa", 100],
   ],
-
   East: [
     ["Kolkata", 800],
     ["Bhubaneswar", 500],
     ["Patna", 400],
     ["Ranchi", 200],
   ],
-
   Central: [
     ["Bhopal", 350],
     ["Indore", 300],
@@ -394,7 +363,7 @@ const regionCityData = {
   ],
 };
 
-// ---------------- DONUT ----------------
+// ---------------- DONUT CHART (WITHOUT 3D FOR STABILITY) ----------------
 const DonutChart = ({ title, value, total, color = "#f97316" }) => {
   const percentage = Math.round((value / total) * 100);
 
@@ -404,11 +373,9 @@ const DonutChart = ({ title, value, total, color = "#f97316" }) => {
       backgroundColor: "transparent",
       height: 140,
     },
-
     credits: { enabled: false },
     title: { text: null },
     tooltip: { enabled: false },
-
     plotOptions: {
       pie: {
         innerSize: "72%",
@@ -416,7 +383,6 @@ const DonutChart = ({ title, value, total, color = "#f97316" }) => {
         dataLabels: { enabled: false },
       },
     },
-
     series: [
       {
         data: [
@@ -428,21 +394,14 @@ const DonutChart = ({ title, value, total, color = "#f97316" }) => {
   };
 
   return (
- <div className="bg-white rounded-md p-3 flex flex-col items-center h-[210px] shadow-[0_10px_40px_rgba(0,0,0,0.15)]">
-      <div className="text-sm font-bold text-center mb-1">
-        {title}
-      </div>
-
+    <div className="bg-white rounded-md p-3 flex flex-col items-center h-[210px] shadow-[0_10px_40px_rgba(0,0,0,0.15)]">
+      <div className="text-sm font-bold text-center mb-1">{title}</div>
       <div className="relative w-full">
         <HighchartsReact highcharts={Highcharts} options={options} />
-
         <div className="absolute inset-0 flex items-center justify-center">
-          <span className="text-lg font-bold">
-            {percentage}%
-          </span>
+          <span className="text-lg font-bold">{percentage}%</span>
         </div>
       </div>
-
       <div className="w-3/4 h-2 bg-gray-200 rounded-full overflow-hidden mt-1">
         <div
           className="h-2 rounded-full"
@@ -452,7 +411,6 @@ const DonutChart = ({ title, value, total, color = "#f97316" }) => {
           }}
         />
       </div>
-
       <div className="text-black mb-2 text-sm font-bold text-center ">
         {value} / {total}
       </div>
@@ -462,11 +420,11 @@ const DonutChart = ({ title, value, total, color = "#f97316" }) => {
 
 // ---------------- ASSESSMENT SCORE TABLE ----------------
 const assessmentData = [
-  { category: "Brand", scores: [80,20,30,	20,10	] },
-  { category: "BAT", scores: [70,40,30,40,50] },
-  { category: "SOP", scores: [90,	40,	20,	20,	30] },
-  { category: "Soft Skills", scores: [20,	10,	50,10,	20] },
-  { category: "Product", scores: [50,	30,	30,	10,	50] },
+  { category: "Brand", scores: [80, 20, 30, 20, 10] },
+  { category: "BAT", scores: [70, 40, 30, 40, 50] },
+  { category: "SOP", scores: [90, 40, 20, 20, 30] },
+  { category: "Soft Skills", scores: [20, 10, 50, 10, 20] },
+  { category: "Product", scores: [50, 30, 30, 10, 50] },
 ];
 
 const AssessmentScoreTable = () => {
@@ -483,17 +441,13 @@ const AssessmentScoreTable = () => {
             <th className="px-4 py-3 border">Assessment 4</th>
             <th className="px-4 py-3 border">Assessment 5</th>
             <th className="px-4 py-3 border">Average Score</th>
-          </tr>
+           </tr>
         </thead>
         <tbody>
           {assessmentData.map((row, idx) => {
-            const average =
-              Math.round(row.scores.reduce((a, b) => a + b, 0) / row.scores.length);
+            const average = Math.round(row.scores.reduce((a, b) => a + b, 0) / row.scores.length);
             return (
-              <tr
-                key={idx}
-                className={idx % 2 === 0 ? "bg-gray-50" : "bg-white"}
-              >
+              <tr key={idx} className={idx % 2 === 0 ? "bg-gray-50" : "bg-white"}>
                 <td className="px-4 py-3 border font-medium">{row.category}</td>
                 {row.scores.map((score, i) => (
                   <td key={i} className="px-4 py-3 border text-center">
@@ -517,117 +471,99 @@ const PerformanceAnalytics = () => {
   const totalUsers = 530;
   const totalCourses = 35;
 
-  const [selectedRegion, setSelectedRegion] =
-    useState("Regions");
-    const [selectedRole, setSelectedRole] = useState("All");
-    const [selectedDealership, setSelectedDealership] = useState("All");
-    const [currentImage1, setCurrentImage1] = useState(0);
-const [currentImage2, setCurrentImage2] = useState(0);
-const [selectedUsageRegion, setSelectedUsageRegion] =
-  useState("All");
+  const [selectedRegion, setSelectedRegion] = useState("Regions");
+  const [selectedRole, setSelectedRole] = useState("All");
+  const [selectedDealership, setSelectedDealership] = useState("All");
+  const [currentImage1, setCurrentImage1] = useState(0);
+  const [currentImage2, setCurrentImage2] = useState(0);
+  const [selectedUsageRegion, setSelectedUsageRegion] = useState("All");
+  const [selectedUsageCity, setSelectedUsageCity] = useState("All");
+  const [activeTab, setActiveTab] = useState(0);
 
-const [selectedUsageCity, setSelectedUsageCity] =
-  useState("All");
-const [activeTab, setActiveTab] = useState(0);
+  // Safe navigation with optional chaining
+  const usageData =
+    selectedUsageRegion === "All"
+      ? roleUsageHierarchy.All.roles
+      : selectedUsageCity === "All"
+      ? roleUsageHierarchy[selectedUsageRegion]?.roles || []
+      : roleUsageHierarchy[selectedUsageRegion]?.cities?.[selectedUsageCity] || [];
 
-{/* ================= DYNAMIC DATA ================= */}
-const usageData =
-  selectedUsageRegion === "All"
-    ? roleUsageHierarchy.All.roles
-    : selectedUsageCity === "All"
-    ? roleUsageHierarchy[selectedUsageRegion].roles
-    : roleUsageHierarchy[selectedUsageRegion]
-        .cities[selectedUsageCity];
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImage1((prev) =>
+        prev === carouselImages.length - 1 ? 0 : prev + 1
+      );
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
 
+  const tabs = [
+    {
+      title: "Fast Task Completion",
+      image: Image_1,
+      users: [
+        { rank: 1, name: "Amit Singh", photo: f1, role: "Service Advisor", dealership: "Delhi Motors" },
+        { rank: 2, name: "Ravi Kumar", photo: f1, role: "Sales Manager", dealership: "Mumbai Wheels" },
+        { rank: 3, name: "Sourabh Kumar", photo: f1, role: "Sales Executive", dealership: "Ahmedabad Auto" },
+        { rank: 4, name: "Neha Verma", photo: f1, role: "HR Manager", dealership: "Pune Drive" },
+        { rank: 5, name: "Kabir Singh", photo: f1, role: "Sales Head", dealership: "Chandigarh Cars" },
+        { rank: 6, name: "Meera Nair", photo: f1, role: "Service Advisor", dealership: "Kochi Autos" },
+        { rank: 7, name: "Arjun Rao", photo: f1, role: "Operations Lead", dealership: "Hyderabad Wheels" },
+        { rank: 8, name: "Simran Kaur", photo: f1, role: "Marketing Lead", dealership: "Jaipur Motors" },
+        { rank: 9, name: "Vikram Joshi", photo: f1, role: "Floor Manager", dealership: "Nagpur Drive" },
+        { rank: 10, name: "Ananya Roy", photo: f1, role: "CRM Executive", dealership: "Kolkata Cars" },
+      ]
+    },
+    {
+      title: "Highest Scores",
+      image: Image_1,
+      users: [
+        { rank: 1, name: "Vikas Singh", photo: f1, role: "Team Leader", dealership: "Mumbai Motors" },
+        { rank: 2, name: "Akash Kumar", photo: f1, role: "Sales Manager", dealership: "Delhi Autos" },
+        { rank: 3, name: "Alok Sharma", photo: f1, role: "Sales Executive", dealership: "Bangalore Cars" },
+        { rank: 4, name: "Isha Gupta", photo: f1, role: "HR Manager", dealership: "Pune Drive" },
+        { rank: 5, name: "Rahul Nair", photo: f1, role: "Service Manager", dealership: "Chennai Wheels" },
+        { rank: 6, name: "Anjali Desai", photo: f1, role: "Marketing Lead", dealership: "Ahmedabad Auto" },
+        { rank: 7, name: "Suresh Reddy", photo: f1, role: "Operations Lead", dealership: "Hyderabad Motors" },
+        { rank: 8, name: "Kavita Joshi", photo: f1, role: "CRM Executive", dealership: "Jaipur Cars" },
+        { rank: 9, name: "Manoj Tiwari", photo: f1, role: "Floor Manager", dealership: "Lucknow Autos" },
+        { rank: 10, name: "Swati Mehta", photo: f1, role: "Service Advisor", dealership: "Kochi Wheels" },
+      ]
+    },
+    {
+      title: "Maximum Certificates",
+      image: Image_1,
+      users: [
+        { rank: 1, name: "Rahul Mishra", photo: f1, role: "Team Leader", dealership: "Kolkata Motors" },
+        { rank: 2, name: "Rishabh Gupta", photo: f1, role: "Sales Manager", dealership: "Chandigarh Autos" },
+        { rank: 3, name: "Ajay Kumar", photo: f1, role: "Sales Executive", dealership: "Surat Cars" },
+        { rank: 4, name: "Neelam Jain", photo: f1, role: "HR Manager", dealership: "Indore Drive" },
+        { rank: 5, name: "Deepak Saxena", photo: f1, role: "Service Manager", dealership: "Bhopal Wheels" },
+        { rank: 6, name: "Shreya Mishra", photo: f1, role: "Marketing Lead", dealership: "Lucknow Autos" },
+        { rank: 7, name: "Vijay Pawar", photo: f1, role: "Operations Lead", dealership: "Nagpur Motors" },
+        { rank: 8, name: "Ritu Agarwal", photo: f1, role: "CRM Executive", dealership: "Jaipur Cars" },
+        { rank: 9, name: "Sunil Shetty", photo: f1, role: "Floor Manager", dealership: "Goa Autos" },
+        { rank: 10, name: "Manisha Kulkarni", photo: f1, role: "Service Advisor", dealership: "Pune Wheels" },
+      ]
+    },
+    {
+      title: "Highest Engagement on LMS",
+      image: Image_1,
+      users: [
+        { rank: 1, name: "Abhishek Kumar", photo: f1, role: "Team Leader", dealership: "Noida Motors" },
+        { rank: 2, name: "Varun Verma", photo: f1, role: "Sales Manager", dealership: "Gurugram Autos" },
+        { rank: 3, name: "Karthik Kumar", photo: f1, role: "Sales Executive", dealership: "Faridabad Cars" },
+        { rank: 4, name: "Divya Bhatia", photo: f1, role: "HR Manager", dealership: "Agra Drive" },
+        { rank: 5, name: "Alok Nath", photo: f1, role: "Service Manager", dealership: "Meerut Wheels" },
+        { rank: 6, name: "Preeti John", photo: f1, role: "Marketing Lead", dealership: "Varanasi Autos" },
+        { rank: 7, name: "Naveen Kumar", photo: f1, role: "Operations Lead", dealership: "Allahabad Motors" },
+        { rank: 8, name: "Shalini Raj", photo: f1, role: "CRM Executive", dealership: "Kanpur Cars" },
+        { rank: 9, name: "Gaurav Chopra", photo: f1, role: "Floor Manager", dealership: "Dehradun Autos" },
+        { rank: 10, name: "Rashmi Thakur", photo: f1, role: "Service Advisor", dealership: "Shimla Wheels" },
+      ]
+    },
+  ];
 
-React.useEffect(() => {
-  const interval = setInterval(() => {
-    setCurrentImage1((prev) =>
-      prev === carouselImages.length - 1 ? 0 : prev + 1
-    );
-  }, 3000);
-
-  return () => clearInterval(interval);
-}, []);
-
-// React.useEffect(() => {
-//   const interval = setInterval(() => {
-//     setCurrentImage2((prev) =>
-//       prev === carouselImages2.length - 1 ? 0 : prev + 1
-//     );
-//   }, 3000);
-
-//   return () => clearInterval(interval);
-// }, []);
-
-const tabs = [
-  {
-    title: "Fast Task Completion",
-    image: Image_1,
-    users: [
-      { rank: 1, name: "Amit Singh", photo: f1, role: "Service Advisor", dealership: "Delhi Motors" },
-      { rank: 2, name: "Ravi Kumar", photo: f1, role: "Sales Manager", dealership: "Mumbai Wheels" },
-      { rank: 3, name: "Sourabh Kumar", photo: f1, role: "Sales Executive", dealership: "Ahmedabad Auto" },
-      { rank: 4, name: "Neha Verma", photo: f1, role: "HR Manager", dealership: "Pune Drive" },
-      { rank: 5, name: "Kabir Singh", photo: f1, role: "Sales Head", dealership: "Chandigarh Cars" },
-      { rank: 6, name: "Meera Nair", photo: f1, role: "Service Advisor", dealership: "Kochi Autos" },
-      { rank: 7, name: "Arjun Rao", photo: f1, role: "Operations Lead", dealership: "Hyderabad Wheels" },
-      { rank: 8, name: "Simran Kaur", photo: f1, role: "Marketing Lead", dealership: "Jaipur Motors" },
-      { rank: 9, name: "Vikram Joshi", photo: f1, role: "Floor Manager", dealership: "Nagpur Drive" },
-      { rank: 10, name: "Ananya Roy", photo: f1, role: "CRM Executive", dealership: "Kolkata Cars" },
-    ]
-  },
-  {
-    title: "Highest Scores",
-    image: Image_1,
-    users: [
-      { rank: 1, name: "Vikas Singh", photo: f1, role: "Team Leader", dealership: "Mumbai Motors" },
-      { rank: 2, name: "Akash Kumar", photo: f1, role: "Sales Manager", dealership: "Delhi Autos" },
-      { rank: 3, name: "Alok Sharma", photo: f1, role: "Sales Executive", dealership: "Bangalore Cars" },
-      { rank: 4, name: "Isha Gupta", photo: f1, role: "HR Manager", dealership: "Pune Drive" },
-      { rank: 5, name: "Rahul Nair", photo: f1, role: "Service Manager", dealership: "Chennai Wheels" },
-      { rank: 6, name: "Anjali Desai", photo: f1, role: "Marketing Lead", dealership: "Ahmedabad Auto" },
-      { rank: 7, name: "Suresh Reddy", photo: f1, role: "Operations Lead", dealership: "Hyderabad Motors" },
-      { rank: 8, name: "Kavita Joshi", photo: f1, role: "CRM Executive", dealership: "Jaipur Cars" },
-      { rank: 9, name: "Manoj Tiwari", photo: f1, role: "Floor Manager", dealership: "Lucknow Autos" },
-      { rank: 10, name: "Swati Mehta", photo: f1, role: "Service Advisor", dealership: "Kochi Wheels" },
-    ]
-  },
-  {
-    title: "Maximum Certificates",
-    image: Image_1,
-    users: [
-      { rank: 1, name: "Rahul Mishra", photo: f1, role: "Team Leader", dealership: "Kolkata Motors" },
-      { rank: 2, name: "Rishabh Gupta", photo: f1, role: "Sales Manager", dealership: "Chandigarh Autos" },
-      { rank: 3, name: "Ajay Kumar", photo: f1, role: "Sales Executive", dealership: "Surat Cars" },
-      { rank: 4, name: "Neelam Jain", photo: f1, role: "HR Manager", dealership: "Indore Drive" },
-      { rank: 5, name: "Deepak Saxena", photo: f1, role: "Service Manager", dealership: "Bhopal Wheels" },
-      { rank: 6, name: "Shreya Mishra", photo: f1, role: "Marketing Lead", dealership: "Lucknow Autos" },
-      { rank: 7, name: "Vijay Pawar", photo: f1, role: "Operations Lead", dealership: "Nagpur Motors" },
-      { rank: 8, name: "Ritu Agarwal", photo: f1, role: "CRM Executive", dealership: "Jaipur Cars" },
-      { rank: 9, name: "Sunil Shetty", photo: f1, role: "Floor Manager", dealership: "Goa Autos" },
-      { rank: 10, name: "Manisha Kulkarni", photo: f1, role: "Service Advisor", dealership: "Pune Wheels" },
-    ]
-  },
-  {
-    title: "Highest Engagement on LMS",
-    image: Image_1,
-    users: [
-      { rank: 1, name: "Abhishek Kumar", photo: f1, role: "Team Leader", dealership: "Noida Motors" },
-      { rank: 2, name: "Varun Verma", photo: f1, role: "Sales Manager", dealership: "Gurugram Autos" },
-      { rank: 3, name: "Karthik Kumar", photo: f1, role: "Sales Executive", dealership: "Faridabad Cars" },
-      { rank: 4, name: "Divya Bhatia", photo: f1, role: "HR Manager", dealership: "Agra Drive" },
-      { rank: 5, name: "Alok Nath", photo: f1, role: "Service Manager", dealership: "Meerut Wheels" },
-      { rank: 6, name: "Preeti John", photo: f1, role: "Marketing Lead", dealership: "Varanasi Autos" },
-      { rank: 7, name: "Naveen Kumar", photo:f1, role: "Operations Lead", dealership: "Allahabad Motors" },
-      { rank: 8, name: "Shalini Raj", photo: f1, role: "CRM Executive", dealership: "Kanpur Cars" },
-      { rank: 9, name: "Gaurav Chopra", photo: f1, role: "Floor Manager", dealership: "Dehradun Autos" },
-      { rank: 10, name: "Rashmi Thakur", photo: f1, role: "Service Advisor", dealership: "Shimla Wheels" },
-    ]
-  },
-];
-
-  // ---------------- USER ROLE DATA ----------------
   const roleData = [
     { name: "DSE", y: 200 },
     { name: "TL", y: 100 },
@@ -637,396 +573,245 @@ const tabs = [
   ];
 
   const dealershipData = [
-  "All Dealerships",
-  "Delhi Motors",
-  "Mumbai Auto",
-  "Punjab Wheels",
-  "Chandigarh Cars",
-];
+    "All Dealerships",
+    "Delhi Motors",
+    "Mumbai Auto",
+    "Punjab Wheels",
+    "Chandigarh Cars",
+  ];
 
-  // ---------------- USER PIE ----------------
-const pieOptions = {
-  chart: {
-    type: "pie",
-    backgroundColor: "transparent",
-    height: 420,
-    options3d: {
-      enabled: true,
-      alpha: 45,
-    },
-  },
-  credits: {
-    enabled: false,
-  },
-  title: {
-    text: null,
-  },
-  tooltip: {
-    formatter: function() {
-      return `<b>${this.point.name}</b><br/>${this.y} users`;
-    },
-    followPointer: true,
-  },
-plotOptions: {
-  pie: {
-    innerSize: 100,
-    depth: 45,
-    dataLabels: {
-      enabled: false   // ✅ removes role names and connector lines
-    }
-  }
-},
-  series: [
-    {
-      name: "Users",
-      data: roleData,
-    },
-  ],
-};
-
-  // ---------------- COURSE ANALYTICS ----------------
-const courseOptions = {
-  chart: {
-    type: "column",
-    backgroundColor: "transparent",
-
-    options3d: {
-      enabled: true,
-      alpha: 15,
-      beta: 15,
-      depth: 50,
-    },
-  },
-
-  credits: { enabled: false },
-  title: { text: null },
-
-  xAxis: {
-    type: "category",
-    labels: { enabled: false },
-    gridLineWidth: 0,
-    lineWidth: 0,
-    tickLength: 0,
-  },
-
-  yAxis: {
-    title: { text: null },
-    labels: { enabled: false },
-    gridLineWidth: 0,
-  },
-
-  // ✅ THIS REMOVES 3D BACKGROUND PANES (MAIN FIX)
-  pane: {
-    background: [],
-  },
-
-  plotOptions: {
-    column: {
-      depth: 25,
-      colorByPoint: true,
-      borderWidth: 0,
-    },
-  },
-
-  tooltip: {
-    formatter: function () {
-      return "<b>" + this.key + ":</b> " + this.y + " Courses";
-    },
-  },
-
-  series: [
-    {
-      name: "Courses",
-      data: [
-        ["Brand", 3],
-        ["BAT", 20],
-        ["SOP", 2],
-        ["VAS", 3],
-        ["Sales", 7],
-      ],
-    },
-  ],
-};
-  // ---------------- REGION / CITY PIE ----------------
-const indiaRegionOptions = {
-  chart: {
-    type: "pie",
-    backgroundColor: "transparent",
-    height: 420,
-    options3d: {
-      enabled: true,
-      alpha: 45,
-    },
-  },
-
-  title: {
-    text:
-      selectedRegion === "Regions"
-        ? "India Region Usage Share - 2026"
-        : `${selectedRegion} Cities Usage Share`,
-  },
-
-  subtitle: {
-    text:
-      selectedRegion === "Regions"
-        ? "Click a region to view cities"
-        : "City analytics distribution",
-  },
-
-  credits: {
-    enabled: false,
-  },
-
-  tooltip: {
-    // Fixed tooltip to show name and hours
-    formatter: function() {
-       return '<b>' + this.y + ' hours</b>';
-    },
-    followPointer: true,
-  },
-
-  plotOptions: {
-    pie: {
-      innerSize: 100,
-      depth: 45,
-      allowPointSelect: true,
-      cursor: "pointer",
-
-      dataLabels: {
+  // ✅ FIXED PIE OPTIONS - Proper 3D configuration
+  const pieOptions = {
+    chart: {
+      type: "pie",
+      backgroundColor: "transparent",
+      height: 420,
+      options3d: {
         enabled: true,
-        // SHOW HOURS IN LABEL
-        format: "{point.name}",
-        style: {
-          fontWeight: "bold",
-          color: "#000",
-        },
+        alpha: 45,
+        beta: 0,
+        depth: 50,
       },
+    },
+    credits: { enabled: false },
+    title: { text: null },
+    tooltip: {
+      formatter: function () {
+        return `<b>${this.point.name}</b><br/>${this.y} users`;
+      },
+      followPointer: true,
+    },
+    plotOptions: {
+      pie: {
+        innerSize: 100,
+        depth: 45,
+        dataLabels: { enabled: false },
+      },
+    },
+    series: [{ name: "Users", data: roleData }],
+  };
 
-      point: {
-        events: {
-          click: function () {
-            if (selectedRegion === "Regions") {
-              setSelectedRegion(this.name);
-            }
+  const courseOptions = {
+    chart: {
+      type: "column",
+      backgroundColor: "transparent",
+      options3d: {
+        enabled: true,
+        alpha: 15,
+        beta: 15,
+        depth: 50,
+      },
+    },
+    credits: { enabled: false },
+    title: { text: null },
+    xAxis: {
+      type: "category",
+      labels: { enabled: false },
+      gridLineWidth: 0,
+      lineWidth: 0,
+      tickLength: 0,
+    },
+    yAxis: {
+      title: { text: null },
+      labels: { enabled: false },
+      gridLineWidth: 0,
+    },
+    pane: { background: [] },
+    plotOptions: {
+      column: {
+        depth: 25,
+        colorByPoint: true,
+        borderWidth: 0,
+      },
+    },
+    tooltip: {
+      formatter: function () {
+        return "<b>" + this.key + ":</b> " + this.y + " Courses";
+      },
+    },
+    series: [
+      {
+        name: "Courses",
+        data: [
+          ["Brand", 3],
+          ["BAT", 20],
+          ["SOP", 2],
+          ["VAS", 3],
+          ["Sales", 7],
+        ],
+      },
+    ],
+  };
+
+  const indiaRegionOptions = {
+    chart: {
+      type: "pie",
+      backgroundColor: "transparent",
+      height: 420,
+      options3d: {
+        enabled: true,
+        alpha: 45,
+        beta: 0,
+        depth: 50,
+      },
+    },
+    title: {
+      text:
+        selectedRegion === "Regions"
+          ? "India Region Usage Share - 2026"
+          : `${selectedRegion} Cities Usage Share`,
+    },
+    subtitle: {
+      text:
+        selectedRegion === "Regions"
+          ? "Click a region to view cities"
+          : "City analytics distribution",
+    },
+    credits: { enabled: false },
+    tooltip: {
+      formatter: function () {
+        return '<b>' + this.y + ' hours</b>';
+      },
+      followPointer: true,
+    },
+    plotOptions: {
+      pie: {
+        innerSize: 100,
+        depth: 45,
+        allowPointSelect: true,
+        cursor: "pointer",
+        dataLabels: {
+          enabled: true,
+          format: "{point.name}",
+          style: { fontWeight: "bold", color: "#000" },
+        },
+        point: {
+          events: {
+            click: function () {
+              if (selectedRegion === "Regions") {
+                setSelectedRegion(this.name);
+              }
+            },
           },
         },
       },
     },
-  },
-
-  series: [
-    {
-      name: "Usage",
-      data: regionCityData[selectedRegion].map((item) => ({
-        name: item[0],
-        y: item[1], // hours
-      })),
-    },
-  ],
-};
-
-// ================= DATA =================
-const tableData = [
-  {
-    code: "in-mh",
-    state: "Maharashtra",
-    ytd: 1850,
-    mtd: 308,
-    week: 154,
-  },
-  {
-    code: "in-ka",
-    state: "Karnataka",
-    ytd: 1750,
-    mtd: 292,
-    week: 146,
-  },
-  {
-    code: "in-tn",
-    state: "Tamil Nadu",
-    ytd: 1630,
-    mtd: 272,
-    week: 136,
-  },
-  {
-    code: "in-up",
-    state: "Uttar Pradesh",
-    ytd: 1600,
-    mtd: 267,
-    week: 134,
-  },
-  {
-    code: "in-gj",
-    state: "Gujarat",
-    ytd: 1400,
-    mtd: 233,
-    week: 117,
-  },
-  {
-    code: "in-wb",
-    state: "West Bengal",
-    ytd: 1100,
-    mtd: 183,
-    week: 92,
-  },
-  {
-    code: "in-rj",
-    state: "Rajasthan",
-    ytd: 850,
-    mtd: 142,
-    week: 71,
-  },
-  {
-    code: "in-mp",
-    state: "Madhya Pradesh",
-    ytd: 700,
-    mtd: 117,
-    week: 59,
-  },
-];
-
-// ================= ACTIVE TAB =================
-const [activeUsageTab, setActiveUsageTab] = useState("ytd");
-
-// ================= MAP DATA =================
-const currentHeatData = tableData.map((item) => [
-  item.code,
-  item[activeUsageTab],
-]);
-
-// ================= TOTAL =================
-const totalUsage = tableData.reduce(
-  (sum, item) => sum + item[activeUsageTab],
-  0
-);
-
-// ================= INDIA HEAT MAP =================
-const indiaHeatMapOptions = {
-  chart: {
-    map: mapDataIndia,
-    backgroundColor: "transparent",
-    height: 500,
-
-    events: {
-      render: function () {
-        const chart = this;
-
-        const top3Values = [...chart.series[0].points]
-          .map((p) => p.value)
-          .sort((a, b) => b - a)
-          .slice(0, 3);
-
-        chart.series[0].points.forEach((point) => {
-
-          if (point.graphic && point.graphic.element) {
-
-            point.graphic.element.classList.remove(
-              "highcharts-point-dark-orange"
-            );
-
-            if (top3Values.includes(point.value)) {
-              point.graphic.element.classList.add(
-                "highcharts-point-dark-orange"
-              );
-            }
-          }
-        });
+    series: [
+      {
+        name: "Usage",
+        data: regionCityData[selectedRegion]?.map((item) => ({
+          name: item[0],
+          y: item[1],
+        })) || [],
       },
-    },
-  },
-
-  title: {
-    text: null,
-  },
-
-  credits: {
-    enabled: false,
-  },
-
-  mapNavigation: {
-    enabled: false,
-  },
-
-  colorAxis: {
-    min: 0,
-
-    max:
-      activeUsageTab === "ytd"
-        ? 2000
-        : activeUsageTab === "mtd"
-        ? 350
-        : 180,
-
-    stops: [
-      [0, "#fff7ed"],
-      [0.15, "#ffedd5"],
-      [0.3, "#fed7aa"],
-      [0.5, "#fdba74"],
-      [0.7, "#f97316"],
-      [0.85, "#ea580c"],
-      [1, "#c2410c"],
     ],
-  },
+  };
 
-  tooltip: {
-    formatter: function () {
-      return `
-        <div style="padding:4px">
-          <b>${this.point.name}</b><br/>
-          ${
-            activeUsageTab === "ytd"
-              ? "YTD"
-              : activeUsageTab === "mtd"
-              ? "MTD"
-              : "This Week"
-          } :
-          <b style="color:#ea580c">
-            ${this.point.value}
-          </b>
-        </div>
-      `;
-    },
+  const tableData = [
+    { code: "in-mh", state: "Maharashtra", ytd: 1850, mtd: 308, week: 154 },
+    { code: "in-ka", state: "Karnataka", ytd: 1750, mtd: 292, week: 146 },
+    { code: "in-tn", state: "Tamil Nadu", ytd: 1630, mtd: 272, week: 136 },
+    { code: "in-up", state: "Uttar Pradesh", ytd: 1600, mtd: 267, week: 134 },
+    { code: "in-gj", state: "Gujarat", ytd: 1400, mtd: 233, week: 117 },
+    { code: "in-wb", state: "West Bengal", ytd: 1100, mtd: 183, week: 92 },
+    { code: "in-rj", state: "Rajasthan", ytd: 850, mtd: 142, week: 71 },
+    { code: "in-mp", state: "Madhya Pradesh", ytd: 700, mtd: 117, week: 59 },
+  ];
 
-    borderWidth: 2,
-    borderColor: "#ea580c",
-    borderRadius: 8,
-    padding: 10,
-    shadow: true,
+  const [activeUsageTab, setActiveUsageTab] = useState("ytd");
 
-    style: {
-      fontSize: "12px",
-      fontWeight: "bold",
-    },
-  },
+  const currentHeatData = tableData.map((item) => [item.code, item[activeUsageTab]]);
+  const totalUsage = tableData.reduce((sum, item) => sum + item[activeUsageTab], 0);
 
-  series: [
-    {
-      name: "Usage",
-
-      joinBy: "hc-key",
-
-      borderWidth: 1,
-      borderColor: "#ffffff",
-
-      nullColor: "#f5f5f5",
-
-      states: {
-        hover: {
-          enabled: true,
-          brightness: 0.2,
-          color: "#ff6b6b",
+  const indiaHeatMapOptions = {
+    chart: {
+      map: mapDataIndia,
+      backgroundColor: "transparent",
+      height: 500,
+      events: {
+        render: function () {
+          const chart = this;
+          const top3Values = [...chart.series[0].points]
+            .map((p) => p.value)
+            .sort((a, b) => b - a)
+            .slice(0, 3);
+          chart.series[0].points.forEach((point) => {
+            if (point.graphic && point.graphic.element) {
+              point.graphic.element.classList.remove("highcharts-point-dark-orange");
+              if (top3Values.includes(point.value)) {
+                point.graphic.element.classList.add("highcharts-point-dark-orange");
+              }
+            }
+          });
         },
       },
-
-      dataLabels: {
-        enabled: false,
-      },
-
-      data: currentHeatData,
     },
-  ],
-};
-
+    title: { text: null },
+    credits: { enabled: false },
+    mapNavigation: { enabled: false },
+    colorAxis: {
+      min: 0,
+      max: activeUsageTab === "ytd" ? 2000 : activeUsageTab === "mtd" ? 350 : 180,
+      stops: [
+        [0, "#fff7ed"],
+        [0.15, "#ffedd5"],
+        [0.3, "#fed7aa"],
+        [0.5, "#fdba74"],
+        [0.7, "#f97316"],
+        [0.85, "#ea580c"],
+        [1, "#c2410c"],
+      ],
+    },
+    tooltip: {
+      formatter: function () {
+        return `
+          <div style="padding:4px">
+            <b>${this.point.name}</b><br/>
+            ${activeUsageTab === "ytd" ? "YTD" : activeUsageTab === "mtd" ? "MTD" : "This Week"} :
+            <b style="color:#ea580c">${this.point.value}</b>
+          </div>
+        `;
+      },
+      borderWidth: 2,
+      borderColor: "#ea580c",
+      borderRadius: 8,
+      padding: 10,
+      shadow: true,
+      style: { fontSize: "12px", fontWeight: "bold" },
+    },
+    series: [
+      {
+        name: "Usage",
+        joinBy: "hc-key",
+        borderWidth: 1,
+        borderColor: "#ffffff",
+        nullColor: "#f5f5f5",
+        states: { hover: { enabled: true, brightness: 0.2, color: "#ff6b6b" } },
+        dataLabels: { enabled: false },
+        data: currentHeatData,
+      },
+    ],
+  };
 
   return (
     <div className="min-h-screen bg-[#f7f7f7] px-6 py-10">
