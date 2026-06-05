@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 
 import Highcharts from "highcharts";
-import "highcharts/modules/accessibility";
 import HighchartsReactOfficial from "highcharts-react-official";
 
 const HighchartsReact =
   HighchartsReactOfficial.default || HighchartsReactOfficial;
+
+import "./PerformanceAnalytics.css";
 
 import { FaMapMarkedAlt, FaMapMarkerAlt } from "react-icons/fa";
 import { FiRefreshCw } from "react-icons/fi";
@@ -17,6 +18,7 @@ import {
   BookOpenIcon,
   MapPinIcon,
 } from "@animateicons/react/lucide";
+
 
 import Image_1 from "../assets/Image_1.png";
 import Image_2 from "../assets/Image_2.png";
@@ -1761,11 +1763,7 @@ const totalUsage = tableData.reduce(
 </div>
 
 
-
 </div>
-
-
-
 
 
 
