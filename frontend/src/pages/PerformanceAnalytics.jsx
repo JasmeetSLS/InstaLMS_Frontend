@@ -425,70 +425,70 @@ const regionCityData = {
 };
 
 // ---------------- DONUT ----------------
-// const DonutChart = ({ title, value, total, color = "#f97316" }) => {
-//   const percentage = Math.round((value / total) * 100);
+const DonutChart = ({ title, value, total, color = "#f97316" }) => {
+  const percentage = Math.round((value / total) * 100);
 
-//   const options = {
-//     chart: {
-//       type: "pie",
-//       backgroundColor: "transparent",
-//       height: 140,
-//     },
+  const options = {
+    chart: {
+      type: "pie",
+      backgroundColor: "transparent",
+      height: 140,
+    },
 
-//     credits: { enabled: false },
-//     title: { text: null },
-//     tooltip: { enabled: false },
+    credits: { enabled: false },
+    title: { text: null },
+    tooltip: { enabled: false },
 
-//     plotOptions: {
-//       pie: {
-//         innerSize: "72%",
-//         borderWidth: 0,
-//         dataLabels: { enabled: false },
-//       },
-//     },
+    plotOptions: {
+      pie: {
+        innerSize: "72%",
+        borderWidth: 0,
+        dataLabels: { enabled: false },
+      },
+    },
 
-//     series: [
-//       {
-//         data: [
-//           { y: percentage, color: color },
-//           { y: 100 - percentage, color: "#ececec" },
-//         ],
-//       },
-//     ],
-//   };
+    series: [
+      {
+        data: [
+          { y: percentage, color: color },
+          { y: 100 - percentage, color: "#ececec" },
+        ],
+      },
+    ],
+  };
 
-//   return (
-//  <div className="bg-white rounded-md p-3 flex flex-col items-center h-[210px] shadow-[0_10px_40px_rgba(0,0,0,0.15)]">
-//       <div className="text-sm font-bold text-center mb-1">
-//         {title}
-//       </div>
+  return (
+ <div className="bg-white rounded-md p-3 flex flex-col items-center h-[210px] shadow-[0_10px_40px_rgba(0,0,0,0.15)]">
+      <div className="text-sm font-bold text-center mb-1">
+        {title}
+      </div>
 
-//       <div className="relative w-full">
-//         <HighchartsReact highcharts={Highcharts} options={options} />
+      <div className="relative w-full">
+        <HighchartsReact highcharts={Highcharts} options={options} />
 
-//         <div className="absolute inset-0 flex items-center justify-center">
-//           <span className="text-lg font-bold">
-//             {percentage}%
-//           </span>
-//         </div>
-//       </div>
+        <div className="absolute inset-0 flex items-center justify-center">
+          <span className="text-lg font-bold">
+            {percentage}%
+          </span>
+        </div>
+      </div>
 
-//       <div className="w-3/4 h-2 bg-gray-200 rounded-full overflow-hidden mt-1">
-//         <div
-//           className="h-2 rounded-full"
-//           style={{
-//             width: `${percentage}%`,
-//             backgroundColor: color,
-//           }}
-//         />
-//       </div>
+      <div className="w-3/4 h-2 bg-gray-200 rounded-full overflow-hidden mt-1">
+        <div
+          className="h-2 rounded-full"
+          style={{
+            width: `${percentage}%`,
+            backgroundColor: color,
+          }}
+        />
+      </div>
 
-//       <div className="text-black mb-2 text-sm font-bold text-center ">
-//         {value} / {total}
-//       </div>
-//     </div>
-//   );
-// };
+      <div className="text-black mb-2 text-sm font-bold text-center ">
+        {value} / {total}
+      </div>
+    </div>
+  );
+};
 
 // ---------------- ASSESSMENT SCORE TABLE ----------------
 const assessmentData = [
@@ -1236,13 +1236,13 @@ const indiaHeatMapOptions = {
 <div className="grid grid-cols-1 xl:grid-cols-3 gap-5 mb-8">
 
   {/* LEFT SIDE - DONUTS */}
-  {/* <div className="xl:col-span-2">
+  <div className="xl:col-span-2">
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
       {cards.map((c, i) => (
         <DonutChart key={i} {...c} />
       ))}
     </div>
-  </div> */}
+  </div>
 
   {/* RIGHT SIDE - ASSESSMENT SCORE BREAKUP */}
   <div className="bg-white rounded-md shadow-[0_10px_40px_rgba(0,0,0,0.15)] p-4 h-[210px] overflow-auto">
