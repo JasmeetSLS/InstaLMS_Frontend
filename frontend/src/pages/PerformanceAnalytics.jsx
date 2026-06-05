@@ -1,16 +1,11 @@
 import React, { useState } from "react";
 
 import Highcharts from "highcharts";
+import "highcharts/modules/accessibility";
 import HighchartsReactOfficial from "highcharts-react-official";
 
 const HighchartsReact =
   HighchartsReactOfficial.default || HighchartsReactOfficial;
-
-// Highcharts modules (v12)
-// import "highcharts/highcharts-3d";
-import "highcharts/modules/map";
-import "highcharts/modules/accessibility";
-// import "highcharts/modules/cylinder";
 
 import { FaMapMarkedAlt, FaMapMarkerAlt } from "react-icons/fa";
 import { FiRefreshCw } from "react-icons/fi";
@@ -660,10 +655,6 @@ const pieOptions = {
     type: "pie",
     backgroundColor: "transparent",
     height: 420,
-    options3d: {
-      enabled: true,
-      alpha: 45,
-    },
   },
   credits: {
     enabled: false,
@@ -680,7 +671,6 @@ const pieOptions = {
 plotOptions: {
   pie: {
     innerSize: 100,
-    depth: 45,
     dataLabels: {
       enabled: false   // ✅ removes role names and connector lines
     }
@@ -700,12 +690,6 @@ const courseOptions = {
     type: "column",
     backgroundColor: "transparent",
 
-    options3d: {
-      enabled: true,
-      alpha: 15,
-      beta: 15,
-      depth: 50,
-    },
   },
 
   credits: { enabled: false },
@@ -732,7 +716,6 @@ const courseOptions = {
 
   plotOptions: {
     column: {
-      depth: 25,
       colorByPoint: true,
       borderWidth: 0,
     },
@@ -763,10 +746,6 @@ const indiaRegionOptions = {
     type: "pie",
     backgroundColor: "transparent",
     height: 420,
-    options3d: {
-      enabled: true,
-      alpha: 45,
-    },
   },
 
   title: {
@@ -798,7 +777,6 @@ const indiaRegionOptions = {
   plotOptions: {
     pie: {
       innerSize: 100,
-      depth: 45,
       allowPointSelect: true,
       cursor: "pointer",
 
@@ -1604,11 +1582,6 @@ const totalUsage = tableData.reduce(
           backgroundColor: "transparent",
           height: selectedUsageRegion === "All" ? 250 : 250,
           spacing: [0, 0, 0, 0],
-
-          options3d: {
-            enabled: true,
-            alpha: 45,
-          },
         },
 
         title: {
@@ -1633,7 +1606,6 @@ const totalUsage = tableData.reduce(
         plotOptions: {
           pie: {
             innerSize: 85,
-            depth: 45,
             size:
               selectedUsageRegion === "All"
                 ? "115%"
