@@ -1,18 +1,29 @@
 import React, { useState } from "react";
 
+// ✅ CRITICAL FIX: Import and extend Highcharts with ALL core features first
 import Highcharts from "highcharts";
+
+// ✅ Manually extend Highcharts with required core features
+// This ensures Templating, Color, etc. are available before modules load
+import "highcharts/highcharts-more"; // This includes many core extensions
+import "highcharts/modules/3d-extended"; // Extended 3D features
+
+// ✅ Now import Highcharts React wrapper
 import HighchartsReactOfficial from "highcharts-react-official";
 
 const HighchartsReact =
   HighchartsReactOfficial.default || HighchartsReactOfficial;
 
-// Highcharts modules (v12)
+// ✅ Import modules in specific order
 import "highcharts/highcharts-3d";
 import "highcharts/modules/map";
 
-import mapDataIndia from "@highcharts/map-collection/countries/in/in-all.geo.json";
+// ❌ Don't import accessibility - not needed
 
+// Rest of your imports...
+import mapDataIndia from "@highcharts/map-collection/countries/in/in-all.geo.json";
 import "./PerformanceAnalytics.css";
+// ... rest of your imports
 
 import { FaMapMarkedAlt, FaMapMarkerAlt } from "react-icons/fa";
 import { FiRefreshCw } from "react-icons/fi";
