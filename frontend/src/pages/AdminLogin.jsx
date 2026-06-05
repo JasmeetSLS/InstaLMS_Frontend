@@ -92,8 +92,9 @@ const AdminLogin = () => {
             <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/50 w-5 h-5" />
             <input
               type="text"
+               autoComplete="new-username"
               placeholder="Enter your username"
-              className="w-full pl-10 pr-3 py-3 bg-white/5 border border-white/20 rounded-lg text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-transparent transition-all"
+              className="w-full pl-10 pr-3 py-3  bg-white/5 border border-white/20 rounded-lg text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-transparent transition-all"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               disabled={loading}
@@ -109,6 +110,7 @@ const AdminLogin = () => {
             <input
               type={showPassword ? "text" : "password"}
               placeholder="Enter your password"
+               autoComplete="new-password"
               className="w-full pl-10 pr-10 py-3 bg-white/5 border border-white/20 rounded-lg text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-transparent transition-all"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
