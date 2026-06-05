@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import Highcharts from "highcharts";
 import HighchartsReactOfficial from "highcharts-react-official";
 
-// Import and initialize map module - UNCOMMENT THIS
-import HighchartsMap from "highcharts/modules/map";
+
 
 
 // import indiaMapData from "@highcharts/map-collection/countries/in/in-all.geo.json";
