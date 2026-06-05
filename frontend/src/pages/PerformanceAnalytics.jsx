@@ -1,14 +1,16 @@
+import React, { useState } from "react";
+
 import Highcharts from "highcharts";
 import HighchartsReactOfficial from "highcharts-react-official";
 
-const HighchartsReact = HighchartsReactOfficial.default || HighchartsReactOfficial;
+const HighchartsReact =
+  HighchartsReactOfficial.default || HighchartsReactOfficial;
 
-import HighchartsMap from "highcharts/modules/map";
-import HighchartsAccessibility from "highcharts/modules/accessibility";
-
-// ✅ Initialize after Highcharts is imported
-HighchartsMap(Highcharts);
-HighchartsAccessibility(Highcharts);
+// Highcharts modules (v12)
+// import "highcharts/highcharts-3d";
+import "highcharts/modules/map";
+import "highcharts/modules/accessibility";
+// import "highcharts/modules/cylinder";
 
 import mapDataIndia from "@highcharts/map-collection/countries/in/in-all.geo.json";
 
@@ -64,10 +66,6 @@ const carouselImages = [
   "https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
 ];
 
-// const carouselImages2 = [
-//   Banner1,
-//   Banner2,
-// ];
 
 // ---------------- TOP CARDS ----------------
 const cards = [
@@ -575,15 +573,6 @@ React.useEffect(() => {
   return () => clearInterval(interval);
 }, []);
 
-// React.useEffect(() => {
-//   const interval = setInterval(() => {
-//     setCurrentImage2((prev) =>
-//       prev === carouselImages2.length - 1 ? 0 : prev + 1
-//     );
-//   }, 3000);
-
-//   return () => clearInterval(interval);
-// }, []);
 
 const tabs = [
   {
