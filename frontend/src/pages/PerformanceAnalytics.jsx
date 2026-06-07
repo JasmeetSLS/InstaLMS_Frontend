@@ -772,106 +772,174 @@ const courseOptions = {
 
 // ================= DATA =================
 const tableData = [
-  {
-    code: "in-mh",
-    state: "Maharashtra",
-    ytd: 1850,
-    mtd: 308,
-    week: 154,
-  },
-  {
-    code: "in-ka",
-    state: "Karnataka",
-    ytd: 1750,
-    mtd: 292,
-    week: 146,
-  },
-  {
-    code: "in-tn",
-    state: "Tamil Nadu",
-    ytd: 1630,
-    mtd: 272,
-    week: 136,
-  },
-  {
-    code: "in-up",
-    state: "Uttar Pradesh",
-    ytd: 1600,
-    mtd: 267,
-    week: 134,
-  },
-  {
-    code: "in-gj",
-    state: "Gujarat",
-    ytd: 1400,
-    mtd: 233,
-    week: 117,
-  },
-  {
-    code: "in-wb",
-    state: "West Bengal",
-    ytd: 1100,
-    mtd: 183,
-    week: 92,
-  },
-  {
-    code: "in-rj",
-    state: "Rajasthan",
-    ytd: 850,
-    mtd: 142,
-    week: 71,
-  },
-  {
-    code: "in-mp",
-    state: "Madhya Pradesh",
-    ytd: 700,
-    mtd: 117,
-    week: 59,
-  },
+  // WEST ZONE (6 states)
+  { code: "in-mh", state: "Maharashtra", zone: "West", all: 2500, ytd: 1850, mtd: 308, week: 154 },
+  { code: "in-gj", state: "Gujarat", zone: "West", all: 1900, ytd: 1400, mtd: 233, week: 117 },
+  { code: "in-ga", state: "Goa", zone: "West", all: 800, ytd: 600, mtd: 100, week: 50 },
+  { code: "in-mh2", state: "Mumbai", zone: "West", all: 1200, ytd: 900, mtd: 150, week: 75 },
+  { code: "in-rj2", state: "Rajkot", zone: "West", all: 700, ytd: 520, mtd: 87, week: 44 },
+  { code: "in-mh3", state: "Nagpur", zone: "West", all: 600, ytd: 450, mtd: 75, week: 38 },
+  
+  // SOUTH ZONE (6 states)
+  { code: "in-ka", state: "Karnataka", zone: "South", all: 2350, ytd: 1750, mtd: 292, week: 146 },
+  { code: "in-tn", state: "Tamil Nadu", zone: "South", all: 2200, ytd: 1630, mtd: 272, week: 136 },
+  { code: "in-tg", state: "Telangana", zone: "South", all: 1800, ytd: 1350, mtd: 225, week: 113 },
+  { code: "in-ap", state: "Andhra Pradesh", zone: "South", all: 1400, ytd: 1050, mtd: 175, week: 88 },
+  { code: "in-kl", state: "Kerala", zone: "South", all: 1200, ytd: 900, mtd: 150, week: 75 },
+  { code: "in-py", state: "Puducherry", zone: "South", all: 500, ytd: 380, mtd: 63, week: 32 },
+  
+  // NORTH ZONE (6 states)
+  { code: "in-up", state: "Uttar Pradesh", zone: "North", all: 2150, ytd: 1600, mtd: 267, week: 134 },
+  { code: "in-rj", state: "Rajasthan", zone: "North", all: 1200, ytd: 850, mtd: 142, week: 71 },
+  { code: "in-pb", state: "Punjab", zone: "North", all: 1100, ytd: 800, mtd: 133, week: 67 },
+  { code: "in-hr", state: "Haryana", zone: "North", all: 950, ytd: 700, mtd: 117, week: 59 },
+  { code: "in-hp", state: "Himachal Pradesh", zone: "North", all: 600, ytd: 450, mtd: 75, week: 38 },
+  { code: "in-jk", state: "Jammu & Kashmir", zone: "North", all: 450, ytd: 340, mtd: 57, week: 29 },
+  
+  // EAST ZONE (6 states)
+  { code: "in-wb", state: "West Bengal", zone: "East", all: 1500, ytd: 1100, mtd: 183, week: 92 },
+  { code: "in-br", state: "Bihar", zone: "East", all: 1000, ytd: 750, mtd: 125, week: 63 },
+  { code: "in-or", state: "Odisha", zone: "East", all: 900, ytd: 680, mtd: 113, week: 57 },
+  { code: "in-jh", state: "Jharkhand", zone: "East", all: 800, ytd: 600, mtd: 100, week: 50 },
+  { code: "in-as", state: "Assam", zone: "East", all: 600, ytd: 450, mtd: 75, week: 38 },
+  { code: "in-mn", state: "Manipur", zone: "East", all: 300, ytd: 225, mtd: 38, week: 19 },
+  
+  // CENTRAL ZONE (6 states)
+  { code: "in-mp", state: "Madhya Pradesh", zone: "Central", all: 950, ytd: 700, mtd: 117, week: 59 },
+  { code: "in-ct", state: "Chhattisgarh", zone: "Central", all: 850, ytd: 620, mtd: 103, week: 52 },
+  { code: "in-ut", state: "Uttarakhand", zone: "Central", all: 750, ytd: 550, mtd: 92, week: 46 },
+  { code: "in-uk", state: "Uttarakhand West", zone: "Central", all: 550, ytd: 400, mtd: 67, week: 34 },
+  { code: "in-mp2", state: "Gwalior", zone: "Central", all: 450, ytd: 330, mtd: 55, week: 28 },
+  { code: "in-ct2", state: "Bilaspur", zone: "Central", all: 350, ytd: 260, mtd: 43, week: 22 },
 ];
 
 // ================= ACTIVE TAB =================
-const [activeUsageTab, setActiveUsageTab] = useState("ytd");
+const [activeUsageTab, setActiveUsageTab] = useState("all");
+// Add these with other useState declarations
+const [selectedMapRegion, setSelectedMapRegion] = useState("all");
+const [selectedMapRole, setSelectedMapRole] = useState("all");
 
 // ================= MAP DATA =================
-const currentHeatData = tableData.map((item) => [
-  item.code,
-  item[activeUsageTab],
-]);
+const getFilteredMapData = () => {
+  let filteredData = [...tableData];
+  
+  // Filter by selected region
+  if (selectedMapRegion !== "all") {
+    filteredData = filteredData.filter(item => item.zone === selectedMapRegion);
+  }
+  
+  // Map to format needed for Highcharts
+  return filteredData.map((item) => [
+    item.code,
+    item[activeUsageTab],
+  ]);
+};
+
+const currentHeatData = getFilteredMapData();
 
 // ================= TOTAL =================
-const totalUsage = tableData.reduce(
-  (sum, item) => sum + item[activeUsageTab],
-  0
-);
+const getTotalUsage = () => {
+  let filteredData = [...tableData];
+  
+  if (selectedMapRegion !== "all") {
+    filteredData = filteredData.filter(item => item.zone === selectedMapRegion);
+  }
+  
+  return filteredData.reduce((sum, item) => sum + item[activeUsageTab], 0);
+};
 
+// Helper function to get filtered table data based on region and role
+// Helper function to get filtered table data based on region and role
+// Helper function to get filtered table data based on region and role
+const getFilteredTableData = () => {
+  // First filter by zone (selectedMapRegion)
+  let filteredByZone = [...tableData];
+  if (selectedMapRegion !== "all") {
+    filteredByZone = filteredByZone.filter(item => item.zone === selectedMapRegion);
+  }
+
+  let filteredData = [];
+
+  if (selectedMapRole === "all") {
+    // Show all roles for filtered states
+    const roles = ["DSE", "TL", "RSE", "DSM", "GM"];
+    filteredByZone.forEach(state => {
+      roles.forEach(role => {
+        // Get the actual usage value from tableData based on activeUsageTab
+        const usageValue = state[activeUsageTab];
+        filteredData.push({
+          role: role,
+          state: state.state,
+          usage: usageValue
+        });
+      });
+    });
+  } else {
+    // Show only selected role for filtered states
+    filteredByZone.forEach(state => {
+      // Get the actual usage value from tableData based on activeUsageTab
+      const usageValue = state[activeUsageTab];
+      filteredData.push({
+        role: selectedMapRole,
+        state: state.state,
+        usage: usageValue
+      });
+    });
+  }
+
+  return filteredData;
+};
+
+// Get top 2 states for blinking
+const getTop2States = () => {
+  const filteredData = getFilteredMapData();
+  const sorted = [...filteredData].sort((a, b) => b[1] - a[1]);
+  return sorted.slice(0, 2).map(item => item[0]);
+};
+
+// ================= INDIA HEAT MAP =================
 // ================= INDIA HEAT MAP =================
 const indiaHeatMapOptions = {
   chart: {
-    map: window.Highcharts.maps['countries/in/in-all'], // Use CDN map data
+    map: window.Highcharts.maps['countries/in/in-all'],
     backgroundColor: "transparent",
     height: 500,
-
     events: {
-      render: function () {
+      load: function() {
         const chart = this;
-
-        const top3Values = [...chart.series[0].points]
-          .map((p) => p.value)
-          .sort((a, b) => b - a)
-          .slice(0, 3);
-
+        const top2Codes = getTop2States();
+        
         chart.series[0].points.forEach((point) => {
-
           if (point.graphic && point.graphic.element) {
-
             point.graphic.element.classList.remove(
-              "highcharts-point-dark-orange"
+              "highcharts-point-blink-1",
+              "highcharts-point-blink-2"
             );
-
-            if (top3Values.includes(point.value)) {
+            
+            if (top2Codes.includes(point.code)) {
+              const index = top2Codes.indexOf(point.code);
               point.graphic.element.classList.add(
-                "highcharts-point-dark-orange"
+                index === 0 ? "highcharts-point-blink-1" : "highcharts-point-blink-2"
+              );
+            }
+          }
+        });
+      },
+      redraw: function() {
+        const chart = this;
+        const top2Codes = getTop2States();
+        
+        chart.series[0].points.forEach((point) => {
+          if (point.graphic && point.graphic.element) {
+            point.graphic.element.classList.remove(
+              "highcharts-point-blink-1",
+              "highcharts-point-blink-2"
+            );
+            
+            if (top2Codes.includes(point.code)) {
+              const index = top2Codes.indexOf(point.code);
+              point.graphic.element.classList.add(
+                index === 0 ? "highcharts-point-blink-1" : "highcharts-point-blink-2"
               );
             }
           }
@@ -894,45 +962,49 @@ accessibility: {
     enabled: false,
   },
 
-  colorAxis: {
-    min: 0,
+colorAxis: {
+  min: 0,
+  max: (() => {
+    const filteredData = getFilteredMapData();
+    const values = filteredData.map(item => item[1]);
+    const maxValue = Math.max(...values, 100);
+    
+    if (activeUsageTab === "all") return Math.max(maxValue, 2600);
+    if (activeUsageTab === "ytd") return Math.max(maxValue, 2000);
+    if (activeUsageTab === "mtd") return Math.max(maxValue, 350);
+    return Math.max(maxValue, 180);
+  })(),
+  stops: [
+    [0, "#fff7ed"],
+    [0.15, "#ffedd5"],
+    [0.3, "#fed7aa"],
+    [0.5, "#fdba74"],
+    [0.7, "#f97316"],
+    [0.85, "#ea580c"],
+    [1, "#c2410c"],
+  ],
+},
 
-    max:
-      activeUsageTab === "ytd"
-        ? 2000
-        : activeUsageTab === "mtd"
-        ? 350
-        : 180,
-
-    stops: [
-      [0, "#fff7ed"],
-      [0.15, "#ffedd5"],
-      [0.3, "#fed7aa"],
-      [0.5, "#fdba74"],
-      [0.7, "#f97316"],
-      [0.85, "#ea580c"],
-      [1, "#c2410c"],
-    ],
+tooltip: {
+  formatter: function () {
+    return `
+      <div style="padding:4px">
+        <b>${this.point.name}</b><br/>
+        ${
+          activeUsageTab === "all"
+            ? "ALL TIME"
+            : activeUsageTab === "ytd"
+            ? "YTD"
+            : activeUsageTab === "mtd"
+            ? "MTD"
+            : "THIS WEEK"
+        } :
+        <b style="color:#ea580c">
+          ${this.point.value}
+        </b>
+      </div>
+    `;
   },
-
-  tooltip: {
-    formatter: function () {
-      return `
-        <div style="padding:4px">
-          <b>${this.point.name}</b><br/>
-          ${
-            activeUsageTab === "ytd"
-              ? "YTD"
-              : activeUsageTab === "mtd"
-              ? "MTD"
-              : "This Week"
-          } :
-          <b style="color:#ea580c">
-            ${this.point.value}
-          </b>
-        </div>
-      `;
-    },
 
     borderWidth: 2,
     borderColor: "#ea580c",
@@ -946,32 +1018,26 @@ accessibility: {
     },
   },
 
-  series: [
-    {
-      name: "Usage",
-
-      joinBy: "hc-key",
-
-      borderWidth: 1,
-      borderColor: "#ffffff",
-
-      nullColor: "#f5f5f5",
-
-      states: {
-        hover: {
-          enabled: true,
-          brightness: 0.2,
-          color: "#ff6b6b",
-        },
+series: [
+  {
+    name: "Usage",
+    joinBy: "hc-key",
+    borderWidth: 1,
+    borderColor: "#ffffff",
+    nullColor: "#f5f5f5",
+    states: {
+      hover: {
+        enabled: true,
+        brightness: 0.2,
+        color: "#ff6b6b",
       },
-
-      dataLabels: {
-        enabled: false,
-      },
-
-      data: currentHeatData,
     },
-  ],
+    dataLabels: {
+      enabled: false,
+    },
+    data: currentHeatData, // This now uses filtered data
+  },
+],
 };
 
 
@@ -1416,52 +1482,100 @@ const hours = Array.from({ length: 24 }, (_, i) => i + 1);
   {/* ================= INDIA HEAT MAP ================= */}
   <div className="bg-white rounded-md shadow-[0_10px_40px_rgba(0,0,0,0.15)] p-4 h-[640px] overflow-hidden">
 
-    {/* ================= HEADER ================= */}
-    <div className="flex items-center justify-between mb-4">
+    {/* ================= HEADER WITH FILTERS AND TABS ================= */}
+    <div className="mb-4 pb-2">
+      
+      {/* TOP ROW - Title on left, Region & Role filters on right */}
+      <div className="flex items-center justify-between mb-3">
+        {/* TITLE */}
+        <h2 className="text-base font-bold text-gray-800">
+          State Wise Usage Heat Map
+        </h2>
 
-      {/* TITLE */}
-      <h2 className="text-base font-bold text-gray-800">
-        State Wise Usage Heat Map
-      </h2>
+        {/* REGION & ROLE FILTERS */}
+        <div className="flex items-center gap-4">
+          {/* REGION FILTER */}
+          <div className="flex gap-2">
+            <select
+              value={selectedMapRegion}
+              onChange={(e) => setSelectedMapRegion(e.target.value)}
+              className="px-3 py-1.5 text-[12px] font-medium border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#f97316] focus:border-transparent"
+            >
+              <option value="all">All India</option>
+              <option value="North">North</option>
+              <option value="South">South</option>
+              <option value="East">East</option>
+              <option value="West">West</option>
+              <option value="Central">Central</option>
+            </select>
+          </div>
 
-      {/* TABS */}
-      <div className="flex items-center gap-2">
-
-        <button
-          onClick={() => setActiveUsageTab("ytd")}
-          className={`px-4 py-2 rounded-md text-[12px] font-bold transition-all ${
-            activeUsageTab === "ytd"
-              ? "bg-[#f97316] text-white"
-              : "bg-gray-100 text-gray-700"
-          }`}
-        >
-          YTD
-        </button>
-
-        <button
-          onClick={() => setActiveUsageTab("mtd")}
-          className={`px-4 py-2 rounded-md text-[12px] font-bold transition-all ${
-            activeUsageTab === "mtd"
-              ? "bg-[#f97316] text-white"
-              : "bg-gray-100 text-gray-700"
-          }`}
-        >
-          MTD
-        </button>
-
-        <button
-          onClick={() => setActiveUsageTab("week")}
-          className={`px-4 py-2 rounded-md text-[12px] font-bold transition-all ${
-            activeUsageTab === "week"
-              ? "bg-[#f97316] text-white"
-              : "bg-gray-100 text-gray-700"
-          }`}
-        >
-          THIS WEEK
-        </button>
-
+          {/* ROLE FILTER */}
+          <div className="flex gap-2">
+            <select
+              value={selectedMapRole}
+              onChange={(e) => setSelectedMapRole(e.target.value)}
+              className="px-3 py-1.5 text-[12px] font-medium border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#f97316] focus:border-transparent"
+            >
+              <option value="all">All Role Holders</option>
+              <option value="DSE">DSE</option>
+              <option value="TL">TL</option>
+              <option value="RSE">RSE</option>
+              <option value="DSM">DSM</option>
+              <option value="GM">GM</option>
+            </select>
+          </div>
+        </div>
       </div>
 
+      {/* BOTTOM ROW - TABS on the right side */}
+      <div className="flex justify-end">
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setActiveUsageTab("all")}
+            className={`px-4 py-2 rounded-md text-[12px] font-bold transition-all ${
+              activeUsageTab === "all"
+                ? "bg-[#f97316] text-white"
+                : "bg-gray-100 text-gray-700"
+            }`}
+          >
+            ALL
+          </button>
+
+          <button
+            onClick={() => setActiveUsageTab("ytd")}
+            className={`px-4 py-2 rounded-md text-[12px] font-bold transition-all ${
+              activeUsageTab === "ytd"
+                ? "bg-[#f97316] text-white"
+                : "bg-gray-100 text-gray-700"
+            }`}
+          >
+            YTD
+          </button>
+
+          <button
+            onClick={() => setActiveUsageTab("mtd")}
+            className={`px-4 py-2 rounded-md text-[12px] font-bold transition-all ${
+              activeUsageTab === "mtd"
+                ? "bg-[#f97316] text-white"
+                : "bg-gray-100 text-gray-700"
+            }`}
+          >
+            MTD
+          </button>
+
+          <button
+            onClick={() => setActiveUsageTab("week")}
+            className={`px-4 py-2 rounded-md text-[12px] font-bold transition-all ${
+              activeUsageTab === "week"
+                ? "bg-[#f97316] text-white"
+                : "bg-gray-100 text-gray-700"
+            }`}
+          >
+            THIS WEEK
+          </button>
+        </div>
+      </div>
     </div>
 
     {/* ================= BODY ================= */}
@@ -1469,13 +1583,11 @@ const hours = Array.from({ length: 24 }, (_, i) => i + 1);
 
       {/* ================= MAP (LEFT SIDE) ================= */}
       <div className="w-[55%] rounded-2xl overflow-hidden">
-
         <HighchartsReact
           highcharts={Highcharts}
           constructorType={"mapChart"}
           options={{
             ...indiaHeatMapOptions,
-
             chart: {
               ...indiaHeatMapOptions.chart,
               height: 500,
@@ -1483,68 +1595,56 @@ const hours = Array.from({ length: 24 }, (_, i) => i + 1);
             },
           }}
         />
-
       </div>
 
       {/* ================= TABLE (RIGHT SIDE) ================= */}
       <div className="w-[45%] bg-white border border-gray-200 rounded-md overflow-hidden h-fit">
 
-        {/* TOTAL CARD */}
-        <div className="p-4 border-b border-gray-200 text-center">
-
-          <div className="text-[14px] font-bold text-gray-600 mb-1">
-            Total Usage
-          </div>
-
-          <div className="text-4xl font-black text-[#f97316]">
-            {totalUsage.toLocaleString()}
-          </div>
-
-        </div>
+    {/* TOTAL CARD */}
+<div className="p-4 border-b border-gray-200 text-center">
+  <div className="text-[14px] font-bold text-gray-600 mb-1">
+    Total Usage
+  </div>
+  <div className="text-4xl font-black text-[#f97316]">
+    {(() => {
+      const filteredData = getFilteredTableData();
+      const total = filteredData.reduce((sum, item) => sum + item.usage, 0);
+      return total.toLocaleString();
+    })()}
+  </div>
+</div>
 
         {/* TABLE */}
         <div className="overflow-hidden max-h-[420px] overflow-y-auto">
-
           <table className="w-full text-[11px]">
-
             {/* HEADER */}
             <thead className="sticky top-0">
               <tr className="bg-[#4a4a4a] text-white">
-
-                <th className="px-2 py-2 text-center w-[40px]">
-                  NO
-                </th>
-
-                <th className="px-2 py-2 text-left">
-                  STATE
-                </th>
-
+                <th className="px-2 py-2 text-center w-[40px]">S.No</th>
+                <th className="px-2 py-2 text-left">Role Holder(s)</th>
+                <th className="px-2 py-2 text-left">State</th>
                 <th className="px-2 py-2 text-center w-[90px]">
-                  {activeUsageTab === "ytd"
+                  {activeUsageTab === "all"
+                    ? "ALL TIME"
+                    : activeUsageTab === "ytd"
                     ? "YTD"
                     : activeUsageTab === "mtd"
                     ? "MTD"
                     : "THIS WEEK"}
                 </th>
-
               </tr>
             </thead>
 
             {/* BODY */}
             <tbody>
-
-              {[...tableData]
-                .sort((a, b) => b[activeUsageTab] - a[activeUsageTab])
+              {getFilteredTableData()
+                .sort((a, b) => b.usage - a.usage)
                 .map((item, i) => {
-
-                  const value = item[activeUsageTab];
-
-                  const top3 = [...tableData]
-                    .sort((a, b) => b[activeUsageTab] - a[activeUsageTab])
+                  const top3 = [...getFilteredTableData()]
+                    .sort((a, b) => b.usage - a.usage)
                     .slice(0, 3)
-                    .map((d) => d[activeUsageTab]);
-
-                  const isTop = top3.includes(value);
+                    .map((d) => d.usage);
+                  const isTop = top3.includes(item.usage);
 
                   return (
                     <tr
@@ -1553,17 +1653,11 @@ const hours = Array.from({ length: 24 }, (_, i) => i + 1);
                         isTop ? "top-state-blink" : ""
                       }`}
                     >
-
-                      {/* NUMBER */}
                       <td className="px-2 py-3 text-center font-semibold">
                         {i + 1}
                       </td>
-
-                      {/* STATE */}
                       <td className="px-2 py-3">
-
                         <div className="flex items-center gap-2">
-
                           <span
                             className={`w-2.5 h-2.5 rounded-full ${
                               isTop ? "top-state-dot-blink" : ""
@@ -1579,42 +1673,30 @@ const hours = Array.from({ length: 24 }, (_, i) => i + 1);
                                   : "#fdba74",
                             }}
                           />
-
                           <span className="font-semibold text-gray-700">
-                            {item.state}
+                            {item.role}
                           </span>
-
                         </div>
-
                       </td>
-
-                      {/* VALUE */}
+                      <td className="px-2 py-3 font-semibold text-gray-700">
+                        {item.state}
+                      </td>
                       <td
                         className={`px-2 py-3 text-center font-bold ${
-                          isTop
-                            ? "text-[#c2410c]"
-                            : "text-gray-700"
+                          isTop ? "text-[#c2410c]" : "text-gray-700"
                         }`}
                       >
-                        {value}
+                        {item.usage}
                       </td>
-
                     </tr>
                   );
                 })}
-
             </tbody>
-
           </table>
-
         </div>
-
       </div>
-
     </div>
-
   </div>
-
 </div>
 
 {/* ROW 5 - CONTENT TYPE BIFURCATION & USER CONTENT PREFERENCES */}
@@ -1767,7 +1849,7 @@ const hours = Array.from({ length: 24 }, (_, i) => i + 1);
         onChange={(e) => setSelectedContentRole(e.target.value)}
         className="px-3 py-1.5 rounded-md border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-[#f97316]"
       >
-        <option value="All">All</option>
+        <option value="All">All Role Holders</option>
         <option value="DSE">DSE</option>
         <option value="TL">TL</option>
         <option value="RSE">RSE</option>
@@ -1991,7 +2073,7 @@ const hours = Array.from({ length: 24 }, (_, i) => i + 1);
         // onChange={(e) => setSelectedContentRole(e.target.value)}
         className="px-3 py-1.5 rounded-md border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-[#f97316]"
       >
-        <option value="All">All</option>
+        <option value="All">All India</option>
         <option value="North">North</option>
         <option value="South">South</option>
         <option value="West">West</option>
@@ -2005,7 +2087,7 @@ const hours = Array.from({ length: 24 }, (_, i) => i + 1);
         // onChange={(e) => setSelectedContentRole(e.target.value)}
         className="px-3 py-1.5 rounded-md border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-[#f97316]"
       >
-        <option value="All">All</option>
+        <option value="All">All Role Holders</option>
         <option value="DSE">DSE</option>
         <option value="TL">TL</option>
         <option value="RSE">RSE</option>
