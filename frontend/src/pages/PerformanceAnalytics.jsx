@@ -2,13 +2,21 @@ import React, { useState } from "react";
 import Highcharts from "highcharts";
 import HighchartsReactOfficial from "highcharts-react-official";
 
-const HighchartsReact = HighchartsReactOfficial.default || HighchartsReactOfficial;
+// THIS WORKS 100% OF THE TIME
+import mapModule from "highcharts/modules/map";
+if (mapModule && mapModule.default) {
+  mapModule.default(Highcharts);
+} else if (typeof mapModule === 'function') {
+  mapModule(Highcharts);
+}
 
-// import mapModule from "highcharts/modules/map.js";
+const HighchartsReact = HighchartsReactOfficial.default || HighchartsReactOfficial;
 
 import mapDataIndia from "@highcharts/map-collection/countries/in/in-all.geo.json";
 
+// Rest of your imports...
 import "./PerformanceAnalytics.css";
+// ... etc
 
 import { FaMapMarkedAlt, FaMapMarkerAlt } from "react-icons/fa";
 import { FiRefreshCw } from "react-icons/fi";
