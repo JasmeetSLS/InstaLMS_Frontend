@@ -4,7 +4,7 @@ import HighchartsReactOfficial from "highcharts-react-official";
 
 const HighchartsReact = HighchartsReactOfficial.default || HighchartsReactOfficial;
 
-import mapModule from "highcharts/modules/map.js";
+// import mapModule from "highcharts/modules/map.js";
 
 import mapDataIndia from "@highcharts/map-collection/countries/in/in-all.geo.json";
 
