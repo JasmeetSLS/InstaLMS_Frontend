@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import Highcharts from "highcharts";
 import HighchartsReactOfficial from "highcharts-react-official";
 
-import highchartsMap from "highcharts/modules/map";
+// import highchartsMap from "highcharts/modules/map";
+import highchartsAccessibility from "highcharts/modules/accessibility";
 
 const HighchartsReact = HighchartsReactOfficial.default || HighchartsReactOfficial;
 
-import mapDataIndia from "@highcharts/map-collection/countries/in/in-all.geo.json";
+// import mapDataIndia from "@highcharts/map-collection/countries/in/in-all.geo.json";
 
 import "./PerformanceAnalytics.css";
 
@@ -905,131 +906,135 @@ const totalUsage = tableData.reduce(
 );
 
 // ================= INDIA HEAT MAP =================
-const indiaHeatMapOptions = {
-  chart: {
-    map: mapDataIndia,
-    backgroundColor: "transparent",
-    height: 500,
+// const indiaHeatMapOptions = {
+//   chart: {
+//     map: mapDataIndia,
+//     backgroundColor: "transparent",
+//     height: 500,
+    
+//     events: {
+//       render: function () {
+//         const chart = this;
 
-    events: {
-      render: function () {
-        const chart = this;
+//         const top3Values = [...chart.series[0].points]
+//           .map((p) => p.value)
+//           .sort((a, b) => b - a)
+//           .slice(0, 3);
 
-        const top3Values = [...chart.series[0].points]
-          .map((p) => p.value)
-          .sort((a, b) => b - a)
-          .slice(0, 3);
+//         chart.series[0].points.forEach((point) => {
 
-        chart.series[0].points.forEach((point) => {
+//           if (point.graphic && point.graphic.element) {
 
-          if (point.graphic && point.graphic.element) {
+//             point.graphic.element.classList.remove(
+//               "highcharts-point-dark-orange"
+//             );
 
-            point.graphic.element.classList.remove(
-              "highcharts-point-dark-orange"
-            );
+//             if (top3Values.includes(point.value)) {
+//               point.graphic.element.classList.add(
+//                 "highcharts-point-dark-orange"
+//               );
+//             }
+//           }
+//         });
+//       },
+//     },
+//   },
+  
+//   accessibility: {
+//     enabled: false  // ✅ Moved here - inside the main options object
+//   },
 
-            if (top3Values.includes(point.value)) {
-              point.graphic.element.classList.add(
-                "highcharts-point-dark-orange"
-              );
-            }
-          }
-        });
-      },
-    },
-  },
+//   title: {
+//     text: null,
+//   },
 
-  title: {
-    text: null,
-  },
+//   credits: {
+//     enabled: false,
+//   },
 
-  credits: {
-    enabled: false,
-  },
+//   mapNavigation: {
+//     enabled: false,
+//   },
 
-  mapNavigation: {
-    enabled: false,
-  },
+//   colorAxis: {
+//     min: 0,
 
-  colorAxis: {
-    min: 0,
+//     max:
+//       activeUsageTab === "ytd"
+//         ? 2000
+//         : activeUsageTab === "mtd"
+//         ? 350
+//         : 180,
 
-    max:
-      activeUsageTab === "ytd"
-        ? 2000
-        : activeUsageTab === "mtd"
-        ? 350
-        : 180,
+//     stops: [
+//       [0, "#fff7ed"],
+//       [0.15, "#ffedd5"],
+//       [0.3, "#fed7aa"],
+//       [0.5, "#fdba74"],
+//       [0.7, "#f97316"],
+//       [0.85, "#ea580c"],
+//       [1, "#c2410c"],
+//     ],
+//   },
 
-    stops: [
-      [0, "#fff7ed"],
-      [0.15, "#ffedd5"],
-      [0.3, "#fed7aa"],
-      [0.5, "#fdba74"],
-      [0.7, "#f97316"],
-      [0.85, "#ea580c"],
-      [1, "#c2410c"],
-    ],
-  },
+//   tooltip: {
+//     formatter: function () {
+//       return `
+//         <div style="padding:4px">
+//           <b>${this.point.name}</b><br/>
+//           ${
+//             activeUsageTab === "ytd"
+//               ? "YTD"
+//               : activeUsageTab === "mtd"
+//               ? "MTD"
+//               : "This Week"
+//           } :
+//           <b style="color:#ea580c">
+//             ${this.point.value}
+//           </b>
+//         </div>
+//       `;
+//     },
 
-  tooltip: {
-    formatter: function () {
-      return `
-        <div style="padding:4px">
-          <b>${this.point.name}</b><br/>
-          ${
-            activeUsageTab === "ytd"
-              ? "YTD"
-              : activeUsageTab === "mtd"
-              ? "MTD"
-              : "This Week"
-          } :
-          <b style="color:#ea580c">
-            ${this.point.value}
-          </b>
-        </div>
-      `;
-    },
+//     borderWidth: 2,
+//     borderColor: "#ea580c",
+//     borderRadius: 8,
+//     padding: 10,
+//     shadow: true,
 
-    borderWidth: 2,
-    borderColor: "#ea580c",
-    borderRadius: 8,
-    padding: 10,
-    shadow: true,
+//     style: {
+//       fontSize: "12px",
+//       fontWeight: "bold",
+//     },
+//   },
 
-    style: {
-      fontSize: "12px",
-      fontWeight: "bold",
-    },
-  },
+//   series: [
+//     {
+//       name: "Usage",
 
-  series: [
-    {
-      name: "Usage",
+//       joinBy: "hc-key",
 
-      joinBy: "hc-key",
+//       borderWidth: 1,
+//       borderColor: "#ffffff",
 
-      borderWidth: 1,
-      borderColor: "#ffffff",
+//       nullColor: "#f5f5f5",
 
-      nullColor: "#f5f5f5",
+//       states: {
+//         hover: {
+//           enabled: true,
+//           brightness: 0.2,
+//           color: "#ff6b6b",
+//         },
+//       },
 
-      states: {
-        hover: {
-          enabled: true,
-          brightness: 0.2,
-          color: "#ff6b6b",
-        },
-      },
+//       dataLabels: {
+//         enabled: false,
+//       },
 
-      dataLabels: {
-        enabled: false,
-      },
-
-      data: currentHeatData,
-    },
-  ],
-};
+//       data: currentHeatData,
+//     },
+//   ],
+// };
 
 
 
@@ -1910,207 +1915,6 @@ const indiaHeatMapOptions = {
 
 </div>
 
-{/* ================= INDIA HEAT MAP ================= */}
-<div className="bg-white rounded-md shadow-[0_10px_40px_rgba(0,0,0,0.15)] p-4 h-[640px] overflow-hidden">
-
-  {/* ================= HEADER ================= */}
-  <div className="flex items-center justify-between mb-4">
-
-    {/* TITLE */}
-    <h2 className="text-base font-bold text-gray-800">
-      State Wise Usage Heat Map
-    </h2>
-
-    {/* TABS */}
-    <div className="flex items-center gap-2">
-
-      <button
-        onClick={() => setActiveUsageTab("ytd")}
-        className={`px-4 py-2 rounded-md text-[12px] font-bold transition-all ${
-          activeUsageTab === "ytd"
-            ? "bg-[#f97316] text-white"
-            : "bg-gray-100 text-gray-700"
-        }`}
-      >
-        YTD
-      </button>
-
-      <button
-        onClick={() => setActiveUsageTab("mtd")}
-        className={`px-4 py-2 rounded-md text-[12px] font-bold transition-all ${
-          activeUsageTab === "mtd"
-            ? "bg-[#f97316] text-white"
-            : "bg-gray-100 text-gray-700"
-        }`}
-      >
-        MTD
-      </button>
-
-      <button
-        onClick={() => setActiveUsageTab("week")}
-        className={`px-4 py-2 rounded-md text-[12px] font-bold transition-all ${
-          activeUsageTab === "week"
-            ? "bg-[#f97316] text-white"
-            : "bg-gray-100 text-gray-700"
-        }`}
-      >
-        THIS WEEK
-      </button>
-
-    </div>
-
-  </div>
-
-  {/* ================= BODY ================= */}
-  <div className="flex flex-col lg:flex-row gap-3 items-start">
-
-    {/* ================= TABLE ================= */}
-    <div className="lg:w-[35%] bg-white border border-gray-200 rounded-md overflow-hidden h-fit">
-
-      {/* TOTAL CARD */}
-      <div className="p-4 border-b border-gray-200 text-center">
-
-        <div className="text-[14px] font-bold text-gray-600 mb-1">
-          Total Usage
-        </div>
-
-        <div className="text-4xl font-black text-[#f97316]">
-          {totalUsage.toLocaleString()}
-        </div>
-
-      </div>
-
-      {/* TABLE */}
-      <div className="overflow-hidden">
-
-        <table className="w-full text-[11px]">
-
-          {/* HEADER */}
-          <thead>
-            <tr className="bg-[#4a4a4a] text-white">
-
-              <th className="px-2 py-2 text-center w-[40px]">
-                NO
-              </th>
-
-              <th className="px-2 py-2 text-left">
-                STATE
-              </th>
-
-              <th className="px-2 py-2 text-center w-[90px]">
-                {activeUsageTab === "ytd"
-                  ? "YTD"
-                  : activeUsageTab === "mtd"
-                  ? "MTD"
-                  : "THIS WEEK"}
-              </th>
-
-            </tr>
-          </thead>
-
-          {/* BODY */}
-          <tbody>
-
-            {[...tableData]
-              .sort((a, b) => b[activeUsageTab] - a[activeUsageTab])
-              .map((item, i) => {
-
-                const value = item[activeUsageTab];
-
-                const top3 = [...tableData]
-                  .sort((a, b) => b[activeUsageTab] - a[activeUsageTab])
-                  .slice(0, 3)
-                  .map((d) => d[activeUsageTab]);
-
-                const isTop = top3.includes(value);
-
-                return (
-                  <tr
-                    key={i}
-                    className={`border-b border-gray-100 hover:bg-gray-50 ${
-                      isTop ? "top-state-blink" : ""
-                    }`}
-                  >
-
-                    {/* NUMBER */}
-                    <td className="px-2 py-3 text-center font-semibold">
-                      {i + 1}
-                    </td>
-
-                    {/* STATE */}
-                    <td className="px-2 py-3">
-
-                      <div className="flex items-center gap-2">
-
-                        <span
-                          className={`w-2.5 h-2.5 rounded-full ${
-                            isTop ? "top-state-dot-blink" : ""
-                          }`}
-                          style={{
-                            backgroundColor:
-                              i === 0
-                                ? "#c2410c"
-                                : i === 1
-                                ? "#ea580c"
-                                : i === 2
-                                ? "#f97316"
-                                : "#fdba74",
-                          }}
-                        />
-
-                        <span className="font-semibold text-gray-700">
-                          {item.state}
-                        </span>
-
-                      </div>
-
-                    </td>
-
-                    {/* VALUE */}
-                    <td
-                      className={`px-2 py-3 text-center font-bold ${
-                        isTop
-                          ? "text-[#c2410c]"
-                          : "text-gray-700"
-                      }`}
-                    >
-                      {value}
-                    </td>
-
-                  </tr>
-                );
-              })}
-
-          </tbody>
-
-        </table>
-
-      </div>
-
-    </div>
-
-    {/* ================= MAP ================= */}
-    <div className="lg:w-[65%] w-full rounded-2xl overflow-hidden">
-
-      <HighchartsReact
-        highcharts={Highcharts}
-        constructorType={"mapChart"}
-        options={{
-          ...indiaHeatMapOptions,
-
-          chart: {
-            ...indiaHeatMapOptions.chart,
-            height: 500,
-            backgroundColor: "transparent",
-          },
-        }}
-      />
-
-    </div>
-
-  </div>
-
-</div>
 
 </div>
 
