@@ -6,7 +6,6 @@ const Highcharts = window.Highcharts;
 
 const HighchartsReact = HighchartsReactOfficial.default || HighchartsReactOfficial;
 
-import mapDataIndia from "@highcharts/map-collection/countries/in/in-all.geo.json";
 
 // Rest of your imports...
 import "./PerformanceAnalytics.css";
@@ -909,7 +908,7 @@ const totalUsage = tableData.reduce(
 // ================= INDIA HEAT MAP =================
 const indiaHeatMapOptions = {
   chart: {
-    map: mapDataIndia,
+    map: window.Highcharts.maps['countries/in/in-all'], // Use CDN map data
     backgroundColor: "transparent",
     height: 500,
 
