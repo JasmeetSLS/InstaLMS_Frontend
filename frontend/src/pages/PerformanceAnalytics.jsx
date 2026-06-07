@@ -939,7 +939,9 @@ const indiaHeatMapOptions = {
       },
     },
   },
-
+accessibility: {
+    enabled: false  // ← Add this to remove the warning
+  },
   title: {
     text: null,
   },
