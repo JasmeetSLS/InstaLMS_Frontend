@@ -551,6 +551,7 @@ const [selectedUsageRegion, setSelectedUsageRegion] =
 const [selectedUsageCity, setSelectedUsageCity] =
   useState("All");
 const [activeTab, setActiveTab] = useState(0);
+const [selectedContentRole, setSelectedContentRole] = useState("All");
 
 {/* ================= DYNAMIC DATA ================= */}
 const usageData =
@@ -973,6 +974,18 @@ accessibility: {
   ],
 };
 
+
+const days = [
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+  "Sunday",
+];
+
+const hours = Array.from({ length: 24 }, (_, i) => i + 1);
 
 
   return (
@@ -1604,8 +1617,512 @@ accessibility: {
 
 </div>
 
+{/* ROW 5 - CONTENT TYPE BIFURCATION & USER CONTENT PREFERENCES */}
+<div className="grid grid-cols-1 xl:grid-cols-2 gap-5 mb-6">
 
+  {/* ================= LEFT: CONTENT TYPE BIFURCATION ================= */}
+  <div className="bg-white rounded-md shadow-[0_10px_40px_rgba(0,0,0,0.15)] p-4 flex flex-col">
 
+    <h2 className="text-base font-bold text-gray-800 mb-3">
+      Content Type Bifurcation
+    </h2>
+
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-3 items-stretch">
+
+      {/* KPI - Total Content */}
+      <div className="flex flex-col flex-1 min-h-[125px]">
+        <div className="flex-1 flex flex-col justify-center items-center text-center">
+
+          <div className="text-[16px] font-bold text-gray-700 mb-2">
+            Total Content
+          </div>
+
+          <div className="text-5xl font-black text-[#f97316] leading-none">
+            960
+          </div>
+
+        </div>
+      </div>
+
+      {/* PIE CHART */}
+      <div className="md:col-span-2 h-[240px] flex items-center justify-center overflow-hidden">
+        <HighchartsReact
+          highcharts={Highcharts}
+          options={{
+            chart: {
+              type: "pie",
+              backgroundColor: "transparent",
+              height: 240,
+              options3d: {
+                enabled: true,
+                alpha: 45,
+              },
+            },
+            accessibility: {
+              enabled: false,
+            },
+            credits: {
+              enabled: false,
+            },
+            title: {
+              text: null,
+            },
+            tooltip: {
+              formatter: function () {
+                return `<b>${this.point.name}</b><br/>${this.y} items`;
+              },
+              followPointer: true,
+            },
+            plotOptions: {
+              pie: {
+                innerSize: 80,
+                depth: 45,
+                dataLabels: {
+                  enabled: false,
+                },
+                showInLegend: false,
+              },
+            },
+            series: [
+              {
+                name: "Content",
+                data: [
+                  { name: "Video", y: 540 },
+                  { name: "WBT", y: 230 },
+                  { name: "PDF", y: 100 },
+                  { name: "PPT", y: 90 },
+                ],
+              },
+            ],
+          }}
+        />
+      </div>
+
+    </div>
+
+    {/* TABLE */}
+    <div className="mt-3 overflow-hidden">
+      <table className="w-full text-[11px] border-collapse">
+
+        <thead>
+          <tr className="bg-gray-600 text-white">
+            <th className="p-2 text-center">S.No</th>
+            <th className="p-2 text-center"></th>
+            <th className="p-2 text-center w-[100px]">Content Type</th>
+            <th className="p-2 text-center">Total Numbers</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {[
+            { type: "Video", count: 540 },
+            { type: "WBT", count: 230 },
+            { type: "PDF", count: 100 },
+            { type: "PPT", count: 90 },
+          ].map((item, i) => {
+            const colors = Highcharts.getOptions().colors;
+            return (
+              <tr key={i} className={i % 2 === 0 ? "bg-gray-50" : "bg-white"}>
+
+                <td className="p-2 text-center font-medium">{i + 1}</td>
+
+                <td className="p-2 text-center">
+                  <div className="flex justify-center items-center">
+                    <span
+                      className="w-3 h-3 rounded-sm"
+                      style={{ backgroundColor: colors[i % colors.length] }}
+                    />
+                  </div>
+                </td>
+
+                <td className="p-2 text-center font-medium truncate">
+                  {item.type}
+                </td>
+
+                <td className="p-2 text-center font-bold">
+                  {item.count}
+                </td>
+
+              </tr>
+            );
+          })}
+        </tbody>
+
+      </table>
+    </div>
+
+  </div>
+
+  {/* ================= RIGHT: USER CONTENT PREFERENCES ================= */}
+  <div className="bg-white rounded-md shadow-[0_10px_40px_rgba(0,0,0,0.15)] p-4 flex flex-col">
+
+    <div className="flex justify-between items-center mb-3">
+      <h2 className="text-base font-bold text-gray-800">
+        User Content Preferences
+      </h2>
+
+      {/* ROLE HOLDER FILTER */}
+      <select
+        value={selectedContentRole}
+        onChange={(e) => setSelectedContentRole(e.target.value)}
+        className="px-3 py-1.5 rounded-md border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-[#f97316]"
+      >
+        <option value="All">All</option>
+        <option value="DSE">DSE</option>
+        <option value="TL">TL</option>
+        <option value="RSE">RSE</option>
+        <option value="DSM">DSM</option>
+        <option value="GM">GM</option>
+      </select>
+    </div>
+
+    {/* CONTENT PREFERENCES DATA BASED ON ROLE */}
+    {(() => {
+      // Role-based usage data
+      const roleContentData = {
+        All: {
+          total: 521,
+          data: [
+            { type: "Video", hours: 200 },
+            { type: "WBT", hours: 140 },
+            { type: "PDF", hours: 101 },
+            { type: "PPT", hours: 80 },
+          ],
+        },
+        DSE: {
+          total: 250,
+          data: [
+            { type: "Video", hours: 110 },
+            { type: "WBT", hours: 70 },
+            { type: "PDF", hours: 40 },
+            { type: "PPT", hours: 30 },
+          ],
+        },
+        TL: {
+          total: 120,
+          data: [
+            { type: "Video", hours: 50 },
+            { type: "WBT", hours: 35 },
+            { type: "PDF", hours: 20 },
+            { type: "PPT", hours: 15 },
+          ],
+        },
+        RSE: {
+          total: 80,
+          data: [
+            { type: "Video", hours: 25 },
+            { type: "WBT", hours: 20 },
+            { type: "PDF", hours: 18 },
+            { type: "PPT", hours: 17 },
+          ],
+        },
+        DSM: {
+          total: 45,
+          data: [
+            { type: "Video", hours: 10 },
+            { type: "WBT", hours: 10 },
+            { type: "PDF", hours: 13 },
+            { type: "PPT", hours: 12 },
+          ],
+        },
+        GM: {
+          total: 26,
+          data: [
+            { type: "Video", hours: 5 },
+            { type: "WBT", hours: 5 },
+            { type: "PDF", hours: 10 },
+            { type: "PPT", hours: 6 },
+          ],
+        },
+      };
+
+      const currentData = roleContentData[selectedContentRole] || roleContentData.All;
+      const totalUsage = currentData.total;
+
+      return (
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 items-stretch">
+
+            {/* KPI - Total Usage */}
+            <div className="flex flex-col flex-1 min-h-[125px]">
+              <div className="flex-1 flex flex-col justify-center items-center text-center">
+
+                <div className="text-[16px] font-bold text-gray-700 mb-2">
+                  Total Usage
+                </div>
+
+                <div className="text-5xl font-black text-[#f97316] leading-none">
+                  {totalUsage}
+                </div>
+
+                <div className="text-[11px] text-gray-500 mt-1">
+                  hrs
+                </div>
+
+              </div>
+            </div>
+
+            {/* PIE CHART */}
+            <div className="md:col-span-2 h-[240px] flex items-center justify-center overflow-hidden">
+              <HighchartsReact
+                highcharts={Highcharts}
+                options={{
+                  chart: {
+                    type: "pie",
+                    backgroundColor: "transparent",
+                    height: 240,
+                    options3d: {
+                      enabled: true,
+                      alpha: 45,
+                    },
+                  },
+                  accessibility: {
+                    enabled: false,
+                  },
+                  credits: {
+                    enabled: false,
+                  },
+                  title: {
+                    text: null,
+                  },
+                  tooltip: {
+                    formatter: function () {
+                      return `<b>${this.point.name}</b><br/>${this.y} hrs`;
+                    },
+                    followPointer: true,
+                  },
+                  plotOptions: {
+                    pie: {
+                      innerSize: 80,
+                      depth: 45,
+                      dataLabels: {
+                        enabled: false,
+                      },
+                      showInLegend: false,
+                    },
+                  },
+                  series: [
+                    {
+                      name: "Usage",
+                      data: currentData.data.map(item => ({
+                        name: item.type,
+                        y: item.hours,
+                      })),
+                    },
+                  ],
+                }}
+              />
+            </div>
+
+          </div>
+
+          {/* TABLE */}
+          <div className="mt-3 overflow-hidden">
+            <table className="w-full text-[11px] border-collapse">
+
+              <thead>
+                <tr className="bg-gray-600 text-white">
+                  <th className="p-2 text-center">S.No</th>
+                  <th className="p-2 text-center"></th>
+                  <th className="p-2 text-center w-[80px]">Content Type</th>
+                  <th className="p-2 text-center w-[80px]">Role Holder</th>
+                  <th className="p-2 text-center">Usage (Hrs)</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {currentData.data.map((item, i) => {
+                  const colors = Highcharts.getOptions().colors;
+                  return (
+                    <tr key={i} className={i % 2 === 0 ? "bg-gray-50" : "bg-white"}>
+
+                      <td className="p-2 text-center font-medium">{i + 1}</td>
+
+                      <td className="p-2 text-center">
+                        <div className="flex justify-center items-center">
+                          <span
+                            className="w-3 h-3 rounded-sm"
+                            style={{ backgroundColor: colors[i % colors.length] }}
+                          />
+                        </div>
+                      </td>
+
+                      <td className="p-2 text-center font-medium truncate">
+                        {item.type}
+                      </td>
+
+                      <td className="p-2 text-center font-medium">
+                        {selectedContentRole === "All" ? "All" : selectedContentRole}
+                      </td>
+
+                      <td className="p-2 text-center font-bold text-[#f97316]">
+                        {item.hours} hrs
+                      </td>
+
+                    </tr>
+                  );
+                })}
+              </tbody>
+
+            </table>
+          </div>
+        </>
+      );
+    })()}
+
+  </div>
+
+</div>
+
+{/* ROW 6 - HOURLY USAGE HEAT MAP */}
+<div className="w-full mb-6">
+  <div className="bg-white rounded-md shadow-[0_10px_40px_rgba(0,0,0,0.15)] p-4">
+
+    {/* Header */}
+    <div className="flex justify-between items-center mb-4">
+      <h2 className="text-xl font-bold text-gray-900">
+        Hourly Usage Heat Map
+      </h2>
+
+      <div className="flex gap-2">
+           {/*Region FILTER */}
+      <select
+        value={selectedContentRole}
+        // onChange={(e) => setSelectedContentRole(e.target.value)}
+        className="px-3 py-1.5 rounded-md border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-[#f97316]"
+      >
+        <option value="All">All</option>
+        <option value="North">North</option>
+        <option value="South">South</option>
+        <option value="West">West</option>
+        <option value="East">East</option>
+        <option value="Central">Central</option>
+      </select>
+
+           {/* ROLE HOLDER FILTER */}
+      <select
+        value={selectedContentRole}
+        // onChange={(e) => setSelectedContentRole(e.target.value)}
+        className="px-3 py-1.5 rounded-md border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-[#f97316]"
+      >
+        <option value="All">All</option>
+        <option value="DSE">DSE</option>
+        <option value="TL">TL</option>
+        <option value="RSE">RSE</option>
+        <option value="DSM">DSM</option>
+        <option value="GM">GM</option>
+      </select>
+      </div>
+    </div>
+
+    {/* Heat Map */}
+    <div className="w-full">
+
+      {/* Hours Header */}
+      <div className="flex mb-2">
+        <div className="w-36 bg-black text-white font-bold px-3 py-3 rounded-tl-md text-sm">
+          Total Hours
+        </div>
+
+        <div className="flex flex-1 bg-gray-100 rounded-tr-md p-1 justify-between">
+          {Array.from({ length: 24 }, (_, i) => (
+            <div
+              key={i}
+              className="flex flex-col items-center w-5"
+            >
+              <span className="text-[11px] text-gray-700">
+                {i + 1}
+              </span>
+
+              <span
+                className={`text-[8px] text-white rounded px-1 ${
+                  i < 11 ? "bg-black" : "bg-sky-700"
+                }`}
+              >
+                {i < 11 ? "AM" : "PM"}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Week Rows */}
+      {[
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday",
+      ].map((day, index) => (
+        <div key={day} className="flex mb-2">
+
+          {/* Day Name */}
+          <div className="w-36 bg-gray-100 px-3 py-4 text-sm font-semibold flex items-center">
+            {day}
+          </div>
+
+          {/* Hour Cells */}
+          <div className="flex flex-1 justify-between bg-gray-50 px-2 py-3">
+
+            {Array.from({ length: 24 }, (_, hour) => {
+              let color = "bg-gray-300";
+
+              if (hour >= 7 && hour <= 10)
+                color = "bg-[#efc2a2]";
+
+              if (hour >= 11 && hour <= 17)
+                color = "bg-[#ec8e42]";
+
+              if (hour >= 12 && hour <= 14)
+                color = "bg-[#e96b35]";
+
+              if (hour >= 18 && hour <= 20)
+                color = "bg-[#efc2a2]";
+
+              if (hour <= 6 || hour >= 21)
+                color = "bg-gray-300";
+
+              return (
+                <div
+                  key={hour}
+                  className={`h-6 w-6 rounded border border-white shadow-sm ${color}`}
+                />
+              );
+            })}
+          </div>
+        </div>
+      ))}
+
+      {/* Legend */}
+      <div className="mt-4 border rounded-md p-4 flex flex-wrap gap-8">
+
+        <div className="flex items-center gap-2">
+          <div className="h-6 w-6 rounded bg-gray-300 border" />
+          <span className="text-sm">No Usage</span>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <div className="h-6 w-6 rounded bg-[#efc2a2]" />
+          <span className="text-sm">Light Usage</span>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <div className="h-6 w-6 rounded bg-[#ec8e42]" />
+          <span className="text-sm">Moderate Usage</span>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <div className="h-6 w-6 rounded bg-[#e96b35]" />
+          <span className="text-sm">Heavy Usage</span>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
 
     </div>
   );
