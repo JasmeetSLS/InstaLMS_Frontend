@@ -1,14 +1,8 @@
 import React, { useState } from "react";
-import Highcharts from "highcharts";
 import HighchartsReactOfficial from "highcharts-react-official";
 
-// THIS WORKS 100% OF THE TIME
-import mapModule from "highcharts/modules/map";
-if (mapModule && mapModule.default) {
-  mapModule.default(Highcharts);
-} else if (typeof mapModule === 'function') {
-  mapModule(Highcharts);
-}
+// Use the global Highcharts from CDN
+const Highcharts = window.Highcharts;
 
 const HighchartsReact = HighchartsReactOfficial.default || HighchartsReactOfficial;
 
