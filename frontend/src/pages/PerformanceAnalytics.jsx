@@ -770,47 +770,227 @@ const courseOptions = {
   ],
 };
 
-// ================= DATA =================
+// ================= DATA WITH ROLE-SPECIFIC USAGE AND USER COUNTS =================
 const tableData = [
   // WEST ZONE (6 states)
-  { code: "in-mh", state: "Maharashtra", zone: "West", all: 2500, ytd: 1850, mtd: 308, week: 154 },
-  { code: "in-gj", state: "Gujarat", zone: "West", all: 1900, ytd: 1400, mtd: 233, week: 117 },
-  { code: "in-ga", state: "Goa", zone: "West", all: 800, ytd: 600, mtd: 100, week: 50 },
-  { code: "in-mh2", state: "Mumbai", zone: "West", all: 1200, ytd: 900, mtd: 150, week: 75 },
-  { code: "in-rj2", state: "Rajkot", zone: "West", all: 700, ytd: 520, mtd: 87, week: 44 },
-  { code: "in-mh3", state: "Nagpur", zone: "West", all: 600, ytd: 450, mtd: 75, week: 38 },
+  { 
+    code: "in-mh", state: "Maharashtra", zone: "West", users: 530,
+    all: { DSE: 2500, TL: 1875, RSE: 1625, DSM: 1250, GM: 1125 },
+    ytd: { DSE: 1850, TL: 1388, RSE: 1203, DSM: 925, GM: 833 },
+    mtd: { DSE: 308, TL: 231, RSE: 200, DSM: 154, GM: 139 },
+    week: { DSE: 154, TL: 116, RSE: 100, DSM: 77, GM: 69 }
+  },
+  { 
+    code: "in-gj", state: "Gujarat", zone: "West", users: 420,
+    all: { DSE: 1900, TL: 1425, RSE: 1235, DSM: 950, GM: 855 },
+    ytd: { DSE: 1400, TL: 1050, RSE: 910, DSM: 700, GM: 630 },
+    mtd: { DSE: 233, TL: 175, RSE: 151, DSM: 117, GM: 105 },
+    week: { DSE: 117, TL: 88, RSE: 76, DSM: 59, GM: 53 }
+  },
+  { 
+    code: "in-ga", state: "Goa", zone: "West", users: 180,
+    all: { DSE: 800, TL: 600, RSE: 520, DSM: 400, GM: 360 },
+    ytd: { DSE: 600, TL: 450, RSE: 390, DSM: 300, GM: 270 },
+    mtd: { DSE: 100, TL: 75, RSE: 65, DSM: 50, GM: 45 },
+    week: { DSE: 50, TL: 38, RSE: 33, DSM: 25, GM: 23 }
+  },
+  { 
+    code: "in-mh2", state: "Mumbai", zone: "West", users: 350,
+    all: { DSE: 1200, TL: 900, RSE: 780, DSM: 600, GM: 540 },
+    ytd: { DSE: 900, TL: 675, RSE: 585, DSM: 450, GM: 405 },
+    mtd: { DSE: 150, TL: 113, RSE: 98, DSM: 75, GM: 68 },
+    week: { DSE: 75, TL: 56, RSE: 49, DSM: 38, GM: 34 }
+  },
+  { 
+    code: "in-rj2", state: "Rajkot", zone: "West", users: 200,
+    all: { DSE: 700, TL: 525, RSE: 455, DSM: 350, GM: 315 },
+    ytd: { DSE: 520, TL: 390, RSE: 338, DSM: 260, GM: 234 },
+    mtd: { DSE: 87, TL: 65, RSE: 57, DSM: 44, GM: 39 },
+    week: { DSE: 44, TL: 33, RSE: 29, DSM: 22, GM: 20 }
+  },
+  { 
+    code: "in-mh3", state: "Nagpur", zone: "West", users: 250,
+    all: { DSE: 600, TL: 450, RSE: 390, DSM: 300, GM: 270 },
+    ytd: { DSE: 450, TL: 338, RSE: 293, DSM: 225, GM: 203 },
+    mtd: { DSE: 75, TL: 56, RSE: 49, DSM: 38, GM: 34 },
+    week: { DSE: 38, TL: 29, RSE: 25, DSM: 19, GM: 17 }
+  },
   
   // SOUTH ZONE (6 states)
-  { code: "in-ka", state: "Karnataka", zone: "South", all: 2350, ytd: 1750, mtd: 292, week: 146 },
-  { code: "in-tn", state: "Tamil Nadu", zone: "South", all: 2200, ytd: 1630, mtd: 272, week: 136 },
-  { code: "in-tg", state: "Telangana", zone: "South", all: 1800, ytd: 1350, mtd: 225, week: 113 },
-  { code: "in-ap", state: "Andhra Pradesh", zone: "South", all: 1400, ytd: 1050, mtd: 175, week: 88 },
-  { code: "in-kl", state: "Kerala", zone: "South", all: 1200, ytd: 900, mtd: 150, week: 75 },
-  { code: "in-py", state: "Puducherry", zone: "South", all: 500, ytd: 380, mtd: 63, week: 32 },
+  { 
+    code: "in-ka", state: "Karnataka", zone: "South", users: 500,
+    all: { DSE: 2350, TL: 1763, RSE: 1528, DSM: 1175, GM: 1058 },
+    ytd: { DSE: 1750, TL: 1313, RSE: 1138, DSM: 875, GM: 788 },
+    mtd: { DSE: 292, TL: 219, RSE: 190, DSM: 146, GM: 131 },
+    week: { DSE: 146, TL: 110, RSE: 95, DSM: 73, GM: 66 }
+  },
+  { 
+    code: "in-tn", state: "Tamil Nadu", zone: "South", users: 480,
+    all: { DSE: 2200, TL: 1650, RSE: 1430, DSM: 1100, GM: 990 },
+    ytd: { DSE: 1630, TL: 1223, RSE: 1060, DSM: 815, GM: 734 },
+    mtd: { DSE: 272, TL: 204, RSE: 177, DSM: 136, GM: 122 },
+    week: { DSE: 136, TL: 102, RSE: 88, DSM: 68, GM: 61 }
+  },
+  { 
+    code: "in-tg", state: "Telangana", zone: "South", users: 400,
+    all: { DSE: 1800, TL: 1350, RSE: 1170, DSM: 900, GM: 810 },
+    ytd: { DSE: 1350, TL: 1013, RSE: 878, DSM: 675, GM: 608 },
+    mtd: { DSE: 225, TL: 169, RSE: 146, DSM: 113, GM: 101 },
+    week: { DSE: 113, TL: 85, RSE: 73, DSM: 57, GM: 51 }
+  },
+  { 
+    code: "in-ap", state: "Andhra Pradesh", zone: "South", users: 320,
+    all: { DSE: 1400, TL: 1050, RSE: 910, DSM: 700, GM: 630 },
+    ytd: { DSE: 1050, TL: 788, RSE: 683, DSM: 525, GM: 473 },
+    mtd: { DSE: 175, TL: 131, RSE: 114, DSM: 88, GM: 79 },
+    week: { DSE: 88, TL: 66, RSE: 57, DSM: 44, GM: 40 }
+  },
+  { 
+    code: "in-kl", state: "Kerala", zone: "South", users: 280,
+    all: { DSE: 1200, TL: 900, RSE: 780, DSM: 600, GM: 540 },
+    ytd: { DSE: 900, TL: 675, RSE: 585, DSM: 450, GM: 405 },
+    mtd: { DSE: 150, TL: 113, RSE: 98, DSM: 75, GM: 68 },
+    week: { DSE: 75, TL: 56, RSE: 49, DSM: 38, GM: 34 }
+  },
+  { 
+    code: "in-py", state: "Puducherry", zone: "South", users: 120,
+    all: { DSE: 500, TL: 375, RSE: 325, DSM: 250, GM: 225 },
+    ytd: { DSE: 380, TL: 285, RSE: 247, DSM: 190, GM: 171 },
+    mtd: { DSE: 63, TL: 47, RSE: 41, DSM: 32, GM: 28 },
+    week: { DSE: 32, TL: 24, RSE: 21, DSM: 16, GM: 14 }
+  },
   
   // NORTH ZONE (6 states)
-  { code: "in-up", state: "Uttar Pradesh", zone: "North", all: 2150, ytd: 1600, mtd: 267, week: 134 },
-  { code: "in-rj", state: "Rajasthan", zone: "North", all: 1200, ytd: 850, mtd: 142, week: 71 },
-  { code: "in-pb", state: "Punjab", zone: "North", all: 1100, ytd: 800, mtd: 133, week: 67 },
-  { code: "in-hr", state: "Haryana", zone: "North", all: 950, ytd: 700, mtd: 117, week: 59 },
-  { code: "in-hp", state: "Himachal Pradesh", zone: "North", all: 600, ytd: 450, mtd: 75, week: 38 },
-  { code: "in-jk", state: "Jammu & Kashmir", zone: "North", all: 450, ytd: 340, mtd: 57, week: 29 },
+  { 
+    code: "in-up", state: "Uttar Pradesh", zone: "North", users: 550,
+    all: { DSE: 2150, TL: 1613, RSE: 1398, DSM: 1075, GM: 968 },
+    ytd: { DSE: 1600, TL: 1200, RSE: 1040, DSM: 800, GM: 720 },
+    mtd: { DSE: 267, TL: 200, RSE: 174, DSM: 134, GM: 120 },
+    week: { DSE: 134, TL: 101, RSE: 87, DSM: 67, GM: 60 }
+  },
+  { 
+    code: "in-rj", state: "Rajasthan", zone: "North", users: 300,
+    all: { DSE: 1200, TL: 900, RSE: 780, DSM: 600, GM: 540 },
+    ytd: { DSE: 850, TL: 638, RSE: 553, DSM: 425, GM: 383 },
+    mtd: { DSE: 142, TL: 107, RSE: 92, DSM: 71, GM: 64 },
+    week: { DSE: 71, TL: 53, RSE: 46, DSM: 36, GM: 32 }
+  },
+  { 
+    code: "in-pb", state: "Punjab", zone: "North", users: 280,
+    all: { DSE: 1100, TL: 825, RSE: 715, DSM: 550, GM: 495 },
+    ytd: { DSE: 800, TL: 600, RSE: 520, DSM: 400, GM: 360 },
+    mtd: { DSE: 133, TL: 100, RSE: 86, DSM: 67, GM: 60 },
+    week: { DSE: 67, TL: 50, RSE: 44, DSM: 34, GM: 30 }
+  },
+  { 
+    code: "in-hr", state: "Haryana", zone: "North", users: 240,
+    all: { DSE: 950, TL: 713, RSE: 618, DSM: 475, GM: 428 },
+    ytd: { DSE: 700, TL: 525, RSE: 455, DSM: 350, GM: 315 },
+    mtd: { DSE: 117, TL: 88, RSE: 76, DSM: 59, GM: 53 },
+    week: { DSE: 59, TL: 44, RSE: 38, DSM: 30, GM: 27 }
+  },
+  { 
+    code: "in-hp", state: "Himachal Pradesh", zone: "North", users: 150,
+    all: { DSE: 600, TL: 450, RSE: 390, DSM: 300, GM: 270 },
+    ytd: { DSE: 450, TL: 338, RSE: 293, DSM: 225, GM: 203 },
+    mtd: { DSE: 75, TL: 56, RSE: 49, DSM: 38, GM: 34 },
+    week: { DSE: 38, TL: 29, RSE: 25, DSM: 19, GM: 17 }
+  },
+  { 
+    code: "in-jk", state: "Jammu & Kashmir", zone: "North", users: 120,
+    all: { DSE: 450, TL: 338, RSE: 293, DSM: 225, GM: 203 },
+    ytd: { DSE: 340, TL: 255, RSE: 221, DSM: 170, GM: 153 },
+    mtd: { DSE: 57, TL: 43, RSE: 37, DSM: 29, GM: 26 },
+    week: { DSE: 29, TL: 22, RSE: 19, DSM: 15, GM: 13 }
+  },
   
   // EAST ZONE (6 states)
-  { code: "in-wb", state: "West Bengal", zone: "East", all: 1500, ytd: 1100, mtd: 183, week: 92 },
-  { code: "in-br", state: "Bihar", zone: "East", all: 1000, ytd: 750, mtd: 125, week: 63 },
-  { code: "in-or", state: "Odisha", zone: "East", all: 900, ytd: 680, mtd: 113, week: 57 },
-  { code: "in-jh", state: "Jharkhand", zone: "East", all: 800, ytd: 600, mtd: 100, week: 50 },
-  { code: "in-as", state: "Assam", zone: "East", all: 600, ytd: 450, mtd: 75, week: 38 },
-  { code: "in-mn", state: "Manipur", zone: "East", all: 300, ytd: 225, mtd: 38, week: 19 },
+  { 
+    code: "in-wb", state: "West Bengal", zone: "East", users: 380,
+    all: { DSE: 1500, TL: 1125, RSE: 975, DSM: 750, GM: 675 },
+    ytd: { DSE: 1100, TL: 825, RSE: 715, DSM: 550, GM: 495 },
+    mtd: { DSE: 183, TL: 137, RSE: 119, DSM: 92, GM: 82 },
+    week: { DSE: 92, TL: 69, RSE: 60, DSM: 46, GM: 41 }
+  },
+  { 
+    code: "in-br", state: "Bihar", zone: "East", users: 340,
+    all: { DSE: 1000, TL: 750, RSE: 650, DSM: 500, GM: 450 },
+    ytd: { DSE: 750, TL: 563, RSE: 488, DSM: 375, GM: 338 },
+    mtd: { DSE: 125, TL: 94, RSE: 81, DSM: 63, GM: 56 },
+    week: { DSE: 63, TL: 47, RSE: 41, DSM: 32, GM: 28 }
+  },
+  { 
+    code: "in-or", state: "Odisha", zone: "East", users: 260,
+    all: { DSE: 900, TL: 675, RSE: 585, DSM: 450, GM: 405 },
+    ytd: { DSE: 680, TL: 510, RSE: 442, DSM: 340, GM: 306 },
+    mtd: { DSE: 113, TL: 85, RSE: 73, DSM: 57, GM: 51 },
+    week: { DSE: 57, TL: 43, RSE: 37, DSM: 29, GM: 26 }
+  },
+  { 
+    code: "in-jh", state: "Jharkhand", zone: "East", users: 200,
+    all: { DSE: 800, TL: 600, RSE: 520, DSM: 400, GM: 360 },
+    ytd: { DSE: 600, TL: 450, RSE: 390, DSM: 300, GM: 270 },
+    mtd: { DSE: 100, TL: 75, RSE: 65, DSM: 50, GM: 45 },
+    week: { DSE: 50, TL: 38, RSE: 33, DSM: 25, GM: 23 }
+  },
+  { 
+    code: "in-as", state: "Assam", zone: "East", users: 180,
+    all: { DSE: 600, TL: 450, RSE: 390, DSM: 300, GM: 270 },
+    ytd: { DSE: 450, TL: 338, RSE: 293, DSM: 225, GM: 203 },
+    mtd: { DSE: 75, TL: 56, RSE: 49, DSM: 38, GM: 34 },
+    week: { DSE: 38, TL: 29, RSE: 25, DSM: 19, GM: 17 }
+  },
+  { 
+    code: "in-mn", state: "Manipur", zone: "East", users: 80,
+    all: { DSE: 300, TL: 225, RSE: 195, DSM: 150, GM: 135 },
+    ytd: { DSE: 225, TL: 169, RSE: 146, DSM: 113, GM: 101 },
+    mtd: { DSE: 38, TL: 29, RSE: 25, DSM: 19, GM: 17 },
+    week: { DSE: 19, TL: 14, RSE: 12, DSM: 10, GM: 9 }
+  },
   
   // CENTRAL ZONE (6 states)
-  { code: "in-mp", state: "Madhya Pradesh", zone: "Central", all: 950, ytd: 700, mtd: 117, week: 59 },
-  { code: "in-ct", state: "Chhattisgarh", zone: "Central", all: 850, ytd: 620, mtd: 103, week: 52 },
-  { code: "in-ut", state: "Uttarakhand", zone: "Central", all: 750, ytd: 550, mtd: 92, week: 46 },
-  { code: "in-uk", state: "Uttarakhand West", zone: "Central", all: 550, ytd: 400, mtd: 67, week: 34 },
-  { code: "in-mp2", state: "Gwalior", zone: "Central", all: 450, ytd: 330, mtd: 55, week: 28 },
-  { code: "in-ct2", state: "Bilaspur", zone: "Central", all: 350, ytd: 260, mtd: 43, week: 22 },
+  { 
+    code: "in-mp", state: "Madhya Pradesh", zone: "Central", users: 310,
+    all: { DSE: 950, TL: 713, RSE: 618, DSM: 475, GM: 428 },
+    ytd: { DSE: 700, TL: 525, RSE: 455, DSM: 350, GM: 315 },
+    mtd: { DSE: 117, TL: 88, RSE: 76, DSM: 59, GM: 53 },
+    week: { DSE: 59, TL: 44, RSE: 38, DSM: 30, GM: 27 }
+  },
+  { 
+    code: "in-ct", state: "Chhattisgarh", zone: "Central", users: 220,
+    all: { DSE: 850, TL: 638, RSE: 553, DSM: 425, GM: 383 },
+    ytd: { DSE: 620, TL: 465, RSE: 403, DSM: 310, GM: 279 },
+    mtd: { DSE: 103, TL: 77, RSE: 67, DSM: 52, GM: 46 },
+    week: { DSE: 52, TL: 39, RSE: 34, DSM: 26, GM: 23 }
+  },
+  { 
+    code: "in-ut", state: "Uttarakhand", zone: "Central", users: 190,
+    all: { DSE: 750, TL: 563, RSE: 488, DSM: 375, GM: 338 },
+    ytd: { DSE: 550, TL: 413, RSE: 358, DSM: 275, GM: 248 },
+    mtd: { DSE: 92, TL: 69, RSE: 60, DSM: 46, GM: 41 },
+    week: { DSE: 46, TL: 35, RSE: 30, DSM: 23, GM: 21 }
+  },
+  { 
+    code: "in-uk", state: "Uttarakhand West", zone: "Central", users: 130,
+    all: { DSE: 550, TL: 413, RSE: 358, DSM: 275, GM: 248 },
+    ytd: { DSE: 400, TL: 300, RSE: 260, DSM: 200, GM: 180 },
+    mtd: { DSE: 67, TL: 50, RSE: 44, DSM: 34, GM: 30 },
+    week: { DSE: 34, TL: 26, RSE: 22, DSM: 17, GM: 15 }
+  },
+  { 
+    code: "in-mp2", state: "Gwalior", zone: "Central", users: 100,
+    all: { DSE: 450, TL: 338, RSE: 293, DSM: 225, GM: 203 },
+    ytd: { DSE: 330, TL: 248, RSE: 215, DSM: 165, GM: 149 },
+    mtd: { DSE: 55, TL: 41, RSE: 36, DSM: 28, GM: 25 },
+    week: { DSE: 28, TL: 21, RSE: 18, DSM: 14, GM: 13 }
+  },
+  { 
+    code: "in-ct2", state: "Bilaspur", zone: "Central", users: 90,
+    all: { DSE: 350, TL: 263, RSE: 228, DSM: 175, GM: 158 },
+    ytd: { DSE: 260, TL: 195, RSE: 169, DSM: 130, GM: 117 },
+    mtd: { DSE: 43, TL: 32, RSE: 28, DSM: 22, GM: 19 },
+    week: { DSE: 22, TL: 17, RSE: 14, DSM: 11, GM: 10 }
+  },
 ];
 
 // ================= ACTIVE TAB =================
@@ -828,11 +1008,23 @@ const getFilteredMapData = () => {
     filteredData = filteredData.filter(item => item.zone === selectedMapRegion);
   }
   
-  // Map to format needed for Highcharts
-  return filteredData.map((item) => [
-    item.code,
-    item[activeUsageTab],
-  ]);
+  // Map to format needed for Highcharts - SUM of ALL roles
+  return filteredData.map((item) => {
+    const roles = ["DSE", "TL", "RSE", "DSM", "GM"];
+    let totalUsage = 0;
+    
+    if (selectedMapRole === "all") {
+      // Sum all roles usage
+      roles.forEach(role => {
+        totalUsage += item[activeUsageTab][role];
+      });
+    } else {
+      // Use selected role only
+      totalUsage = item[activeUsageTab][selectedMapRole];
+    }
+    
+    return [item.code, totalUsage];
+  });
 };
 
 const currentHeatData = getFilteredMapData();
@@ -849,8 +1041,6 @@ const getTotalUsage = () => {
 };
 
 // Helper function to get filtered table data based on region and role
-// Helper function to get filtered table data based on region and role
-// Helper function to get filtered table data based on region and role
 const getFilteredTableData = () => {
   // First filter by zone (selectedMapRegion)
   let filteredByZone = [...tableData];
@@ -865,8 +1055,8 @@ const getFilteredTableData = () => {
     const roles = ["DSE", "TL", "RSE", "DSM", "GM"];
     filteredByZone.forEach(state => {
       roles.forEach(role => {
-        // Get the actual usage value from tableData based on activeUsageTab
-        const usageValue = state[activeUsageTab];
+        // Get role-specific usage value from tableData based on activeUsageTab
+        const usageValue = state[activeUsageTab][role];
         filteredData.push({
           role: role,
           state: state.state,
@@ -877,8 +1067,8 @@ const getFilteredTableData = () => {
   } else {
     // Show only selected role for filtered states
     filteredByZone.forEach(state => {
-      // Get the actual usage value from tableData based on activeUsageTab
-      const usageValue = state[activeUsageTab];
+      // Get role-specific usage value from tableData based on activeUsageTab
+      const usageValue = state[activeUsageTab][selectedMapRole];
       filteredData.push({
         role: selectedMapRole,
         state: state.state,
@@ -890,11 +1080,38 @@ const getFilteredTableData = () => {
   return filteredData;
 };
 
-// Get top 2 states for blinking
+// Get top 2 states for blinking based on total/all roles usage
 const getTop2States = () => {
-  const filteredData = getFilteredMapData();
-  const sorted = [...filteredData].sort((a, b) => b[1] - a[1]);
-  return sorted.slice(0, 2).map(item => item[0]);
+  const filteredData = [...tableData];
+  
+  // Filter by selected region
+  let statesToConsider = filteredData;
+  if (selectedMapRegion !== "all") {
+    statesToConsider = filteredData.filter(item => item.zone === selectedMapRegion);
+  }
+  
+  // Calculate total usage for each state (sum of all roles)
+  const stateTotals = statesToConsider.map(state => {
+    const roles = ["DSE", "TL", "RSE", "DSM", "GM"];
+    let total = 0;
+    
+    if (selectedMapRole === "all") {
+      roles.forEach(role => {
+        total += state[activeUsageTab][role];
+      });
+    } else {
+      total = state[activeUsageTab][selectedMapRole];
+    }
+    
+    return {
+      code: state.code,
+      total: total
+    };
+  });
+  
+  // Sort and get top 2
+  const sorted = [...stateTotals].sort((a, b) => b.total - a.total);
+  return sorted.slice(0, 2).map(item => item.code);
 };
 
 // ================= INDIA HEAT MAP =================
@@ -965,14 +1182,31 @@ accessibility: {
 colorAxis: {
   min: 0,
   max: (() => {
-    const filteredData = getFilteredMapData();
-    const values = filteredData.map(item => item[1]);
-    const maxValue = Math.max(...values, 100);
+    const filteredData = [...tableData];
+    let statesToConsider = filteredData;
     
-    if (activeUsageTab === "all") return Math.max(maxValue, 2600);
-    if (activeUsageTab === "ytd") return Math.max(maxValue, 2000);
-    if (activeUsageTab === "mtd") return Math.max(maxValue, 350);
-    return Math.max(maxValue, 180);
+    if (selectedMapRegion !== "all") {
+      statesToConsider = filteredData.filter(item => item.zone === selectedMapRegion);
+    }
+    
+    // Calculate max total usage across all roles
+    let maxValue = 0;
+    statesToConsider.forEach(state => {
+      const roles = ["DSE", "TL", "RSE", "DSM", "GM"];
+      let total = 0;
+      
+      if (selectedMapRole === "all") {
+        roles.forEach(role => {
+          total += state[activeUsageTab][role];
+        });
+      } else {
+        total = state[activeUsageTab][selectedMapRole];
+      }
+      
+      if (total > maxValue) maxValue = total;
+    });
+    
+    return Math.max(maxValue, 100);
   })(),
   stops: [
     [0, "#fff7ed"],
@@ -984,39 +1218,62 @@ colorAxis: {
     [1, "#c2410c"],
   ],
 },
-
 tooltip: {
   formatter: function () {
+    // Try to find state data by matching state name instead of code
+    const pointName = this.point.name;
+    const stateData = tableData.find(s => s.state === pointName);
+    
+    // Fallback: try to find by code if name doesn't match
+    const stateDataByCode = tableData.find(s => s.code === this.point.code);
+    const finalStateData = stateData || stateDataByCode;
+    
+    const userCount = finalStateData?.users || 0;
+    const totalUsage = this.point.value;
+    const averageUsage = userCount > 0 ? Math.round(totalUsage / userCount) : 0;
+    
+    const timePeriod = activeUsageTab === "all"
+      ? "ALL TIME"
+      : activeUsageTab === "ytd"
+      ? "YTD"
+      : activeUsageTab === "mtd"
+      ? "MTD"
+      : "THIS WEEK";
+    
     return `
-      <div style="padding:4px">
-        <b>${this.point.name}</b><br/>
-        ${
-          activeUsageTab === "all"
-            ? "ALL TIME"
-            : activeUsageTab === "ytd"
-            ? "YTD"
-            : activeUsageTab === "mtd"
-            ? "MTD"
-            : "THIS WEEK"
-        } :
-        <b style="color:#ea580c">
-          ${this.point.value}
-        </b>
+      <div style="padding:8px; min-width:180px">
+        <div style="font-size:14px; font-weight:bold; border-bottom:1px solid #ccc; margin-bottom:8px; padding-bottom:4px;">
+          ${this.point.name}
+        </div>
+        <div style="margin-bottom:4px;">
+          <span style="color:#666;">Total Usage:</span>
+          <b style="color:#ea580c; float:right;">${totalUsage.toLocaleString()}</b>
+        </div>
+        <div style="margin-bottom:4px;">
+          <span style="color:#666;">Total Users:</span>
+          <b style="float:right;">${userCount.toLocaleString()}</b>
+        </div>
+        <div style="margin-bottom:4px;">
+          <span style="color:#666;">Average Usage/User:</span>
+          <b style="color:#f97316; float:right;">${averageUsage.toLocaleString()}</b>
+        </div>
+        <div style="border-top:1px solid #eee; margin-top:4px; padding-top:4px; font-size:11px; color:#999; text-align:center;">
+          ${timePeriod}
+        </div>
       </div>
     `;
   },
-
-    borderWidth: 2,
-    borderColor: "#ea580c",
-    borderRadius: 8,
-    padding: 10,
-    shadow: true,
-
-    style: {
-      fontSize: "12px",
-      fontWeight: "bold",
-    },
+  borderWidth: 2,
+  borderColor: "#ea580c",
+  borderRadius: 8,
+  padding: 10,
+  shadow: true,
+  useHTML: true,
+  style: {
+    fontSize: "12px",
+    fontWeight: "normal",
   },
+},
 
 series: [
   {
