@@ -11,7 +11,7 @@ const HighchartsReact = HighchartsReactOfficial.default || HighchartsReactOffici
 import "./PerformanceAnalytics.css";
 // ... etc
 
-import { FaMapMarkedAlt, FaMapMarkerAlt } from "react-icons/fa";
+import { FaMapMarkedAlt, FaMapMarkerAlt ,FaUserPlus, FaUserCheck, FaUserSlash, FaTimesCircle, FaCheckCircle, FaBook} from "react-icons/fa";
 import { FiRefreshCw } from "react-icons/fi";
 
 import IndiaMap from "../assets/india_green.png";
@@ -576,7 +576,7 @@ React.useEffect(() => {
 
 const tabs = [
   {
-    title: "Fast Task Completion",
+    title: "Fastest Task Completion",
     image: Image_1,
     users: [
       { rank: 1, name: "Amit Singh", photo: f1, role: "Service Advisor", dealership: "Delhi Motors" },
@@ -664,10 +664,10 @@ const pieOptions = {
     type: "pie",
     backgroundColor: "transparent",
     height: 420,
-     options3d: {
-      enabled: true,
-      alpha: 45,
-    },
+    //  options3d: {
+    //   enabled: true,
+    //   alpha: 45,
+    // },
 
   },
   accessibility: {
@@ -688,7 +688,7 @@ const pieOptions = {
 plotOptions: {
   pie: {
     innerSize: 100,
-    depth: 45,
+    // depth: 45,
     dataLabels: {
       enabled: false   // ✅ removes role names and connector lines
     }
@@ -707,12 +707,12 @@ const courseOptions = {
   chart: {
     type: "column",
     backgroundColor: "transparent",
-     options3d: {
-      enabled: true,
-      alpha: 15,
-      beta: 15,
-      depth: 50,
-    },
+    //  options3d: {
+    //   enabled: true,
+    //   alpha: 15,
+    //   beta: 15,
+    //   depth: 50,
+    // },
 
 
   },
@@ -744,7 +744,7 @@ const courseOptions = {
 
   plotOptions: {
     column: {
-       depth: 25,
+      //  depth: 25,
       colorByPoint: true,
       borderWidth: 0,
     },
@@ -769,6 +769,15 @@ const courseOptions = {
     },
   ],
 };
+
+// Enrollments data for Course Enrollments pie chart & table
+const enrollmentsData = [
+  { name: "Brand", y: 145 },
+  { name: "BAT", y: 320 },
+  { name: "SOP", y: 88 },
+  { name: "VAS", y: 112 },
+  { name: "Sales", y: 276 },
+];
 
 // ================= DATA WITH ROLE-SPECIFIC USAGE AND USER COUNTS =================
 const tableData = [
@@ -1391,6 +1400,417 @@ const hours = Array.from({ length: 24 }, (_, i) => i + 1);
   </div>
 </div>
 </div>
+
+{/* ================= ROW 7: LEFT (USER STATS) + RIGHT (USER ANALYTICS) ================= */}
+<div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+  
+{/* LEFT COLUMN: 4 Compact User Stat Cards - reduced card padding, increased gap */}
+<div className="grid grid-cols-2 gap-4">
+  {/* Total Users */}
+  <div className="stats-card bg-white/90 backdrop-blur-sm rounded-xl border border-orange-100 border-l-4 border-l-orange-400 p-2 shadow-sm">
+    <div className="flex items-center justify-between mb-1">
+      <div className="h-7 w-7 rounded-lg bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center shadow-sm">
+        <UsersIcon className="h-4 w-4 text-white" />
+      </div>
+      <div className="flex items-center gap-0.5 bg-green-50 px-1.5 py-0.5 rounded-full">
+        <svg className="w-3 h-3 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 10l7-7m0 0l7 7m-7-7v18" />
+        </svg>
+        <span className="text-[12px] font-bold text-green-700">12%</span>
+      </div>
+    </div>
+    <p className="text-[18px] font-medium">Total Users</p>
+    <p className="text-xl font-black leading-tight">1,284</p>
+    <div className="flex items-center gap-1 mt-0.5">
+      <span className="inline-block w-1 h-1 rounded-full bg-green-500"></span>
+      <span className="text-xs">vs last month</span>
+    </div>
+  </div>
+
+  {/* New Users */}
+  <div className="stats-card bg-white/90 backdrop-blur-sm rounded-xl border border-blue-100 border-l-4 border-l-blue-400 p-2 shadow-sm">
+    <div className="flex items-center justify-between mb-1">
+      <div className="h-7 w-7 rounded-lg bg-gradient-to-br from-blue-400 to-cyan-500 flex items-center justify-center shadow-sm">
+        <FaUserPlus className="h-4 w-4 text-white" />
+      </div>
+      <div className="flex items-center gap-0.5 bg-green-50 px-1.5 py-0.5 rounded-full">
+        <svg className="w-3 h-3 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 10l7-7m0 0l7 7m-7-7v18" />
+        </svg>
+        <span className="text-[12px] font-bold text-green-700">8%</span>
+      </div>
+    </div>
+    <p className="text-[18px] font-medium">New Users</p>
+    <p className="text-xl font-black text-gray-800 leading-tight">142</p>
+    <div className="flex items-center gap-1 mt-0.5">
+      <span className="inline-block w-1 h-1 rounded-full bg-green-500"></span>
+      <span className="text-xs">this week</span>
+    </div>
+  </div>
+
+  {/* Active Users */}
+  <div className="stats-card bg-white/90 backdrop-blur-sm rounded-xl border border-emerald-100 border-l-4 border-l-emerald-400 p-2 shadow-sm">
+    <div className="flex items-center justify-between mb-1">
+      <div className="h-7 w-7 rounded-lg bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center shadow-sm">
+        <FaUserCheck className="h-4 w-4 text-white" />
+      </div>
+      <div className="bg-emerald-50 px-1.5 py-0.5 rounded-full">
+        <span className="text-[12px] font-bold text-emerald-700">68%</span>
+      </div>
+    </div>
+    <p className="text-[18px] font-medium">Active Users</p>
+    <p className="text-xl font-black text-gray-800 leading-tight">876</p>
+    <div className="mt-1 w-full bg-gray-100 rounded-full h-1 overflow-hidden">
+      <div className="bg-gradient-to-r from-emerald-400 to-teal-500 h-full rounded-full w-[68%] relative">
+        <div className="absolute inset-0 bg-white/30 animate-pulse"></div>
+      </div>
+    </div>
+  </div>
+
+  {/* Inactive Users */}
+  <div className="stats-card bg-white/90 backdrop-blur-sm rounded-xl border border-red-100 border-l-4 border-l-red-400 p-2 shadow-sm">
+    <div className="flex items-center justify-between mb-1">
+      <div className="h-7 w-7 rounded-lg bg-gradient-to-br from-red-400 to-red-500 flex items-center justify-center shadow-sm">
+        <FaUserSlash className="h-4 w-4 text-white" />
+      </div>
+      <div className="bg-red-50 px-1.5 py-0.5 rounded-full">
+        <span className="text-[12px] font-bold text-red-700">32%</span>
+      </div>
+    </div>
+    <p className="text-[18px] font-medium">Inactive Users</p>
+    <p className="text-xl font-black text-gray-800 leading-tight">408</p>
+    <div className="mt-1 w-full bg-gray-100 rounded-full h-1 overflow-hidden">
+      <div className="bg-gradient-to-r from-red-500 to-red-600 h-full rounded-full w-[32%] relative">
+        <div className="absolute inset-0 bg-white/30 animate-pulse"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  {/* RIGHT COLUMN: User Analytics - REDUCED HEIGHT */}
+  <div className="bg-white rounded-md shadow-[0_10px_40px_rgba(0,0,0,0.15)] p-2 flex flex-col">
+    <h2 className="text-sm font-bold text-gray-800">User Analytics</h2>
+
+    <div className="grid grid-cols-3 gap-1 items-start">
+      {/* KPI - smaller */}
+      <div className="text-center self-center">
+        <div className="text-[16px] font-bold text-gray-500">Total Users</div>
+        <div className="text-3xl font-black text-[#f97316]">{totalUsers.toLocaleString()}</div>
+      </div>
+
+      {/* PIE CHART - reduced height to 120px */}
+      <div className="col-span-2">
+        <HighchartsReact
+          highcharts={Highcharts}
+          options={{
+            ...pieOptions,
+            chart: { ...pieOptions.chart, height: 160, backgroundColor: "transparent" },
+            plotOptions: {
+              pie: {
+                ...pieOptions.plotOptions.pie,
+                innerSize: 50,
+              },
+            },
+          }}
+        />
+      </div>
+    </div>
+
+    {/* TABLE - tighter rows, smaller font */}
+    <div className="mt-1 overflow-hidden">
+      <table className="w-full text-[10px] border-collapse">
+        <thead>
+          <tr className="bg-gray-600 text-white">
+            <th className="p-1 text-center">S.No</th>
+            <th className="p-1 text-center"></th>
+            <th className="p-1 text-center w-[100px]">Role</th>
+            <th className="p-1 text-center">Count</th>
+          </tr>
+        </thead>
+        <tbody>
+          {roleData.map((role, i) => {
+            const colors = ["#f97316","#0f766e","#84cc16","#ea580c","#eab308","#60a5fa","#8b5cf6"];
+            return (
+              <tr key={i} className={i % 2 === 0 ? "bg-gray-50" : "bg-white"}>
+                <td className="p-0.5 text-center font-medium">{i + 1}</td>
+                <td className="p-0.5 text-center">
+                  <div className="flex justify-end items-center">
+                    <span className="w-2 h-2" style={{ backgroundColor: colors[i % colors.length] }} />
+                  </div>
+                </td>
+                <td className="p-0.5 text-center font-medium truncate">{role.name}</td>
+                <td className="p-0.5 text-center font-bold">{role.y}</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+{/* ROW 3 */}
+<div className="grid grid-cols-1 xl:grid-cols-[1.3fr_1.3fr] gap-5 mb-6">
+
+  {/* LEFT COLUMN: Content Type Bifurcation only */}
+  <div className="bg-white rounded-md shadow-[0_10px_40px_rgba(0,0,0,0.15)] p-4 flex flex-col">
+    <h2 className="text-base font-bold text-gray-800 mb-3">
+      Content Type Bifurcation
+    </h2>
+
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-3 items-stretch">
+      {/* KPI - Total Content */}
+      <div className="flex flex-col flex-1 min-h-[125px]">
+        <div className="flex-1 flex flex-col justify-center items-center text-center">
+          <div className="text-[16px] font-bold text-gray-700 mb-2">
+            Total Content
+          </div>
+          <div className="text-5xl font-black text-[#f97316] leading-none">
+            960
+          </div>
+        </div>
+      </div>
+
+      {/* PIE CHART */}
+      <div className="md:col-span-2 h-[240px] flex items-center justify-center overflow-hidden">
+        <HighchartsReact
+          highcharts={Highcharts}
+          options={{
+            chart: {
+              type: "pie",
+              backgroundColor: "transparent",
+              height: 240,
+              options3d: {
+                enabled: true,
+                alpha: 45,
+              },
+            },
+            accessibility: {
+              enabled: false,
+            },
+            credits: {
+              enabled: false,
+            },
+            title: {
+              text: null,
+            },
+            tooltip: {
+              formatter: function () {
+                return `<b>${this.point.name}</b><br/>${this.y} items`;
+              },
+              followPointer: true,
+            },
+            plotOptions: {
+              pie: {
+                innerSize: 80,
+                depth: 45,
+                dataLabels: {
+                  enabled: false,
+                },
+                showInLegend: false,
+              },
+            },
+            series: [
+              {
+                name: "Content",
+                data: [
+                  { name: "Video", y: 540 },
+                  { name: "WBT", y: 230 },
+                  { name: "PDF", y: 100 },
+                  { name: "PPT", y: 90 },
+                ],
+              },
+            ],
+          }}
+        />
+      </div>
+    </div>
+
+    {/* TABLE */}
+    <div className="mt-3 overflow-hidden">
+      <table className="w-full text-[11px] border-collapse">
+        <thead>
+          <tr className="bg-gray-600 text-white">
+            <th className="p-2 text-center">S.No</th>
+            <th className="p-2 text-center"></th>
+            <th className="p-2 text-center w-[100px]">Content Type</th>
+            <th className="p-2 text-center">Total Numbers</th>
+          </tr>
+        </thead>
+        <tbody>
+          {[
+            { type: "Video", count: 540 },
+            { type: "WBT", count: 230 },
+            { type: "PDF", count: 100 },
+            { type: "PPT", count: 90 },
+          ].map((item, i) => {
+            const colors = Highcharts.getOptions().colors;
+            return (
+              <tr key={i} className={i % 2 === 0 ? "bg-gray-50" : "bg-white"}>
+                <td className="p-2 text-center font-medium">{i + 1}</td>
+                <td className="p-2 text-center">
+                  <div className="flex justify-center items-center">
+                    <span
+                      className="w-3 h-3 rounded-sm"
+                      style={{ backgroundColor: colors[i % colors.length] }}
+                    />
+                  </div>
+                </td>
+                <td className="p-2 text-center font-medium truncate">
+                  {item.type}
+                </td>
+                <td className="p-2 text-center font-bold">
+                  {item.count}
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  {/* RIGHT COLUMN: 3 Course Stat Cards + Course Analytics */}
+  <div className="space-y-4">
+    {/* 3 Course Stat Cards (Total, Completed, Incomplete) */}
+    <div className="grid grid-cols-3 gap-5">
+      {/* Total Courses */}
+      <div className="stats-card bg-white/90 backdrop-blur-sm rounded-xl border border-orange-100 border-l-4 border-l-orange-400 p-2.5 shadow-sm">
+        <div className="flex items-center justify-between mb-1">
+          <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center shadow-sm">
+            <FaBook className="h-5 w-5 text-white" />
+          </div>
+          <div className="flex items-center gap-0.5 bg-green-50 px-1.5 py-0.5 rounded-full">
+            <svg className="w-2 h-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 10l7-7m0 0l7 7m-7-7v18" />
+            </svg>
+            <span className="text-[10px] font-bold text-green-700">5%</span>
+          </div>
+        </div>
+        <p className="text-xs font-medium">Total Courses</p>
+        <p className="text-2xl font-black leading-tight">7</p>
+        <div className="flex items-center gap-1 mt-0.5">
+          <span className="inline-block w-1 h-1 rounded-full bg-green-500"></span>
+          <span className="text-xs">vs last month</span>
+        </div>
+      </div>
+
+      {/* Completed Courses */}
+      <div className="stats-card bg-white/90 backdrop-blur-sm rounded-xl border border-emerald-100 border-l-4 border-l-emerald-400 p-2.5 shadow-sm">
+        <div className="flex items-center justify-between mb-1">
+          <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center shadow-sm">
+            <FaCheckCircle className="h-5 w-5 text-white" />
+          </div>
+          <div className="bg-emerald-50 px-1.5 py-0.5 rounded-full">
+            <span className="text-[10px] font-bold text-emerald-700">57%</span>
+          </div>
+        </div>
+        <p className="text-xs font-medium">Completed Courses</p>
+        <p className="text-2xl font-black text-gray-800 leading-tight">4</p>
+        <div className="mt-1 w-full bg-gray-100 rounded-full h-1 overflow-hidden">
+          <div className="bg-gradient-to-r from-emerald-400 to-teal-500 h-full rounded-full w-[57%] relative">
+            <div className="absolute inset-0 bg-white/30 animate-pulse"></div>
+          </div>
+        </div>
+      </div>
+
+      {/* Incomplete Courses */}
+      <div className="stats-card bg-white/90 backdrop-blur-sm rounded-xl border border-red-100 border-l-4 border-l-red-400 p-2.5 shadow-sm">
+        <div className="flex items-center justify-between mb-1">
+          <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-red-400 to-red-500 flex items-center justify-center shadow-sm">
+            <FaTimesCircle className="h-5 w-5 text-white" />
+          </div>
+          <div className="bg-red-50 px-1.5 py-0.5 rounded-full">
+            <span className="text-[10px] font-bold text-red-700">43%</span>
+          </div>
+        </div>
+        <p className="text-xs font-medium">Incomplete Courses</p>
+        <p className="text-2xl font-black text-gray-800 leading-tight">3</p>
+        <div className="mt-1 w-full bg-gray-100 rounded-full h-1 overflow-hidden">
+          <div className="bg-gradient-to-r from-red-500 to-red-600 h-full rounded-full w-[43%] relative">
+            <div className="absolute inset-0 bg-white/30 animate-pulse"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {/* Course Analytics */}
+    <div className="bg-white rounded-md shadow-[0_10px_40px_rgba(0,0,0,0.15)] p-4 flex flex-col">
+      <h2 className="text-base font-bold text-gray-800">
+        Course Analytics
+      </h2>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 items-stretch">
+        {/* KPI */}
+        <div className="flex flex-col flex-1 min-h-[125px]">
+          <div className="flex-1 flex flex-col justify-center items-center text-center">
+            <div className="text-[16px] font-bold text-gray-700 mb-2">
+              Total Courses
+            </div>
+            <div className="text-5xl font-black text-[#f97316] leading-none">
+              {courseOptions.series[0].data.reduce((s, i) => s + i[1], 0)}
+            </div>
+          </div>
+        </div>
+
+        {/* BAR CHART */}
+        <div className="md:col-span-2 h-[240px] flex items-center justify-center overflow-hidden">
+          <HighchartsReact
+            highcharts={Highcharts}
+            options={{
+              ...courseOptions,
+              chart: {
+                ...courseOptions.chart,
+                height: 240,
+                backgroundColor: "transparent",
+              },
+            }}
+          />
+        </div>
+      </div>
+
+      {/* TABLE */}
+      <div className="mt-3 overflow-hidden">
+        <table className="w-full text-[11px] border-collapse">
+          <thead>
+            <tr className="bg-gray-600 text-white">
+              <th className="p-2 text-center">S.No</th>
+              <th className="p-2 text-center"></th>
+              <th className="p-2 text-center w-[100px]">Course</th>
+              <th className="p-2 text-center">Count</th>
+            </tr>
+          </thead>
+          <tbody>
+            {courseOptions.series[0].data.map((c, i) => {
+              const colors = ["#f59e0b","#3b82f6","#10b981","#8b5cf6","#ef4444","#f97316","#ec4899"];
+              return (
+                <tr key={i} className={i % 2 === 0 ? "bg-gray-50" : "bg-white"}>
+                  <td className="p-1 text-center font-medium">{i + 1}</td>
+                  <td className="p-1 text-center">
+                    <div className="flex justify-end items-center">
+                      <span
+                        className="w-3 h-3"
+                        style={{ backgroundColor: colors[i % colors.length] }}
+                      />
+                    </div>
+                  </td>
+                  <td className="p-1 text-center font-medium truncate">
+                    {c[0]}
+                  </td>
+                  <td className="p-1 text-center font-bold">
+                    {c[1]}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 {/* ================= ROW 1 ================= */}
 <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-4 items-stretch">
 
@@ -1483,7 +1903,7 @@ const hours = Array.from({ length: 24 }, (_, i) => i + 1);
 {/* ROW 2 */}
 <div className="mb-4">
   <h1 className="text-3xl font-bold">
-    Learning Path
+    Learning Progress
   </h1>
 </div>
 <div className="grid grid-cols-1 xl:grid-cols-3 gap-5 mb-8">
@@ -1548,413 +1968,6 @@ const hours = Array.from({ length: 24 }, (_, i) => i + 1);
   </div>
 </div>
 
-{/* ROW 3 */}
-<div className="grid grid-cols-1 xl:grid-cols-[1.3fr_1.3fr] gap-5 mb-6">
-
-  {/* ================= USER ANALYTICS ================= */}
-  <div className="bg-white rounded-md shadow-[0_10px_40px_rgba(0,0,0,0.15)] p-4 flex flex-col">
-
-    <h2 className="text-base font-bold text-gray-800">
-      User Analytics
-    </h2>
-
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-3 items-stretch">
-
-      {/* KPI */}
-      <div className="flex flex-col flex-1 min-h-[125px]">
-        <div className="flex-1 flex flex-col justify-center items-center text-center">
-
-          <div className="text-[16px] font-bold text-gray-700 mb-2">
-            Total Users
-          </div>
-
-          <div className="text-5xl font-black text-[#f97316] leading-none">
-            {totalUsers.toLocaleString()}
-          </div>
-
-        </div>
-      </div>
-
-      {/* PIE CHART */}
-      <div className="md:col-span-2 h-[240px] flex items-center justify-center overflow-hidden">
-        <HighchartsReact
-          highcharts={Highcharts}
-          options={{
-            ...pieOptions,
-            chart: {
-              ...pieOptions.chart,
-              height: 240,
-              backgroundColor: "transparent",
-            },
-          }}
-        />
-      </div>
-
-    </div>
-
-    {/* TABLE */}
-    <div className="mt-3 overflow-hidden">
-      <table className="w-full text-[11px] border-collapse">
-
-        <thead>
-          <tr className="bg-gray-600 text-white">
-            <th className="p-2 text-center">S.No</th>
-            <th className="p-2 text-center"></th>
-            <th className="p-2 text-center w-[100px]">Role</th>
-            <th className="p-2 text-center">Count</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {roleData.map((role, i) => {
-            const colors = ["#f97316","#0f766e","#84cc16","#ea580c","#eab308","#60a5fa","#8b5cf6"];
-
-            return (
-              <tr key={i} className={i % 2 === 0 ? "bg-gray-50" : "bg-white"}>
-
-                <td className="p-1 text-center font-medium">{i + 1}</td>
-
-                <td className="p-1 text-center">
-                  <div className="flex justify-end items-center">
-                    <span
-                      className="w-3 h-3"
-                      style={{ backgroundColor: colors[i % colors.length] }}
-                    />
-                  </div>
-                </td>
-
-                <td className="p-1 text-center font-medium truncate">
-                  {role.name}
-                </td>
-
-                <td className="p-1 text-center font-bold">
-                  {role.y}
-                </td>
-
-              </tr>
-            );
-          })}
-        </tbody>
-
-      </table>
-    </div>
-
-  </div>
-
-  {/* ================= COURSE ANALYTICS ================= */}
-  <div className="bg-white rounded-md shadow-[0_10px_40px_rgba(0,0,0,0.15)] p-4 flex flex-col">
-
-    <h2 className="text-base font-bold text-gray-800">
-      Course Analytics
-    </h2>
-
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-3 items-stretch">
-
-      {/* KPI */}
-      <div className="flex flex-col flex-1 min-h-[125px]">
-        <div className="flex-1 flex flex-col justify-center items-center text-center">
-
-          <div className="text-[16px] font-bold text-gray-700 mb-2">
-            Total Courses
-          </div>
-
-          <div className="text-5xl font-black text-[#f97316] leading-none">
-            {courseOptions.series[0].data.reduce((s, i) => s + i[1], 0)}
-          </div>
-
-        </div>
-      </div>
-
-      {/* BAR CHART */}
-      <div className="md:col-span-2 h-[240px] flex items-center justify-center overflow-hidden">
-        <HighchartsReact
-          highcharts={Highcharts}
-          options={{
-            ...courseOptions,
-            chart: {
-              ...courseOptions.chart,
-              height: 240,
-              backgroundColor: "transparent",
-            },
-          }}
-        />
-      </div>
-
-    </div>
-
-    {/* TABLE */}
-    <div className="mt-3 overflow-hidden">
-      <table className="w-full text-[11px] border-collapse">
-
-        <thead>
-          <tr className="bg-gray-600 text-white">
-            <th className="p-2 text-center">S.No</th>
-            <th className="p-2 text-center"></th>
-            <th className="p-2 text-center w-[100px]">Course</th>
-            <th className="p-2 text-center">Count</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {courseOptions.series[0].data.map((c, i) => {
-            const colors = ["#f59e0b","#3b82f6","#10b981","#8b5cf6","#ef4444","#f97316","#ec4899"];
-
-            return (
-              <tr key={i} className={i % 2 === 0 ? "bg-gray-50" : "bg-white"}>
-
-                <td className="p-1 text-center font-medium">{i + 1}</td>
-
-                <td className="p-1 text-center">
-                  <div className="flex justify-end items-center">
-                    <span
-                      className="w-3 h-3"
-                      style={{ backgroundColor: colors[i % colors.length] }}
-                    />
-                  </div>
-                </td>
-
-                <td className="p-1 text-center font-medium truncate">
-                  {c[0]}
-                </td>
-
-                <td className="p-1 text-center font-bold">
-                  {c[1]}
-                </td>
-
-              </tr>
-            );
-          })}
-        </tbody>
-
-      </table>
-    </div>
-
-  </div>
-
-</div>
-
-{/* ROW 4 - INDIA HEAT MAP WITH TABLE (LEFT MAP, RIGHT TABLE) */}
-<div className="w-full mb-6">
-
-  {/* ================= INDIA HEAT MAP ================= */}
-  <div className="bg-white rounded-md shadow-[0_10px_40px_rgba(0,0,0,0.15)] p-4 h-[640px] overflow-hidden">
-
-    {/* ================= HEADER WITH FILTERS AND TABS ================= */}
-    <div className="mb-4 pb-2">
-      
-      {/* TOP ROW - Title on left, Region & Role filters on right */}
-      <div className="flex items-center justify-between mb-3">
-        {/* TITLE */}
-        <h2 className="text-base font-bold text-gray-800">
-          State Wise Usage Heat Map
-        </h2>
-
-        {/* REGION & ROLE FILTERS */}
-        <div className="flex items-center gap-4">
-          {/* REGION FILTER */}
-          <div className="flex gap-2">
-            <select
-              value={selectedMapRegion}
-              onChange={(e) => setSelectedMapRegion(e.target.value)}
-              className="px-3 py-1.5 text-[12px] font-medium border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#f97316] focus:border-transparent"
-            >
-              <option value="all">All India</option>
-              <option value="North">North</option>
-              <option value="South">South</option>
-              <option value="East">East</option>
-              <option value="West">West</option>
-              <option value="Central">Central</option>
-            </select>
-          </div>
-
-          {/* ROLE FILTER */}
-          <div className="flex gap-2">
-            <select
-              value={selectedMapRole}
-              onChange={(e) => setSelectedMapRole(e.target.value)}
-              className="px-3 py-1.5 text-[12px] font-medium border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#f97316] focus:border-transparent"
-            >
-              <option value="all">All Role Holders</option>
-              <option value="DSE">DSE</option>
-              <option value="TL">TL</option>
-              <option value="RSE">RSE</option>
-              <option value="DSM">DSM</option>
-              <option value="GM">GM</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      {/* BOTTOM ROW - TABS on the right side */}
-      <div className="flex justify-end">
-        <div className="flex items-center gap-2">
-          <button
-            onClick={() => setActiveUsageTab("all")}
-            className={`px-4 py-2 rounded-md text-[12px] font-bold transition-all ${
-              activeUsageTab === "all"
-                ? "bg-[#f97316] text-white"
-                : "bg-gray-100 text-gray-700"
-            }`}
-          >
-            ALL
-          </button>
-
-          <button
-            onClick={() => setActiveUsageTab("ytd")}
-            className={`px-4 py-2 rounded-md text-[12px] font-bold transition-all ${
-              activeUsageTab === "ytd"
-                ? "bg-[#f97316] text-white"
-                : "bg-gray-100 text-gray-700"
-            }`}
-          >
-            YTD
-          </button>
-
-          <button
-            onClick={() => setActiveUsageTab("mtd")}
-            className={`px-4 py-2 rounded-md text-[12px] font-bold transition-all ${
-              activeUsageTab === "mtd"
-                ? "bg-[#f97316] text-white"
-                : "bg-gray-100 text-gray-700"
-            }`}
-          >
-            MTD
-          </button>
-
-          <button
-            onClick={() => setActiveUsageTab("week")}
-            className={`px-4 py-2 rounded-md text-[12px] font-bold transition-all ${
-              activeUsageTab === "week"
-                ? "bg-[#f97316] text-white"
-                : "bg-gray-100 text-gray-700"
-            }`}
-          >
-            THIS WEEK
-          </button>
-        </div>
-      </div>
-    </div>
-
-    {/* ================= BODY ================= */}
-    <div className="flex flex-row gap-3 items-start">
-
-      {/* ================= MAP (LEFT SIDE) ================= */}
-      <div className="w-[55%] rounded-2xl overflow-hidden">
-        <HighchartsReact
-          highcharts={Highcharts}
-          constructorType={"mapChart"}
-          options={{
-            ...indiaHeatMapOptions,
-            chart: {
-              ...indiaHeatMapOptions.chart,
-              height: 500,
-              backgroundColor: "transparent",
-            },
-          }}
-        />
-      </div>
-
-      {/* ================= TABLE (RIGHT SIDE) ================= */}
-      <div className="w-[45%] bg-white border border-gray-200 rounded-md overflow-hidden h-fit">
-
-    {/* TOTAL CARD */}
-<div className="p-4 border-b border-gray-200 text-center">
-  <div className="text-[14px] font-bold text-gray-600 mb-1">
-    Total Usage
-  </div>
-  <div className="text-4xl font-black text-[#f97316]">
-    {(() => {
-      const filteredData = getFilteredTableData();
-      const total = filteredData.reduce((sum, item) => sum + item.usage, 0);
-      return total.toLocaleString();
-    })()}
-  </div>
-</div>
-
-        {/* TABLE */}
-        <div className="overflow-hidden max-h-[420px] overflow-y-auto">
-          <table className="w-full text-[11px]">
-            {/* HEADER */}
-            <thead className="sticky top-0">
-              <tr className="bg-[#4a4a4a] text-white">
-                <th className="px-2 py-2 text-center w-[40px]">S.No</th>
-                <th className="px-2 py-2 text-left">Role Holder(s)</th>
-                <th className="px-2 py-2 text-left">State</th>
-                <th className="px-2 py-2 text-center w-[90px]">
-                  {activeUsageTab === "all"
-                    ? "ALL TIME"
-                    : activeUsageTab === "ytd"
-                    ? "YTD"
-                    : activeUsageTab === "mtd"
-                    ? "MTD"
-                    : "THIS WEEK"}
-                </th>
-              </tr>
-            </thead>
-
-            {/* BODY */}
-            <tbody>
-              {getFilteredTableData()
-                .sort((a, b) => b.usage - a.usage)
-                .map((item, i) => {
-                  const top3 = [...getFilteredTableData()]
-                    .sort((a, b) => b.usage - a.usage)
-                    .slice(0, 3)
-                    .map((d) => d.usage);
-                  const isTop = top3.includes(item.usage);
-
-                  return (
-                    <tr
-                      key={i}
-                      className={`border-b border-gray-100 hover:bg-gray-50 ${
-                        isTop ? "top-state-blink" : ""
-                      }`}
-                    >
-                      <td className="px-2 py-3 text-center font-semibold">
-                        {i + 1}
-                      </td>
-                      <td className="px-2 py-3">
-                        <div className="flex items-center gap-2">
-                          <span
-                            className={`w-2.5 h-2.5 rounded-full ${
-                              isTop ? "top-state-dot-blink" : ""
-                            }`}
-                            style={{
-                              backgroundColor:
-                                i === 0
-                                  ? "#c2410c"
-                                  : i === 1
-                                  ? "#ea580c"
-                                  : i === 2
-                                  ? "#f97316"
-                                  : "#fdba74",
-                            }}
-                          />
-                          <span className="font-semibold text-gray-700">
-                            {item.role}
-                          </span>
-                        </div>
-                      </td>
-                      <td className="px-2 py-3 font-semibold text-gray-700">
-                        {item.state}
-                      </td>
-                      <td
-                        className={`px-2 py-3 text-center font-bold ${
-                          isTop ? "text-[#c2410c]" : "text-gray-700"
-                        }`}
-                      >
-                        {item.usage}
-                      </td>
-                    </tr>
-                  );
-                })}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
 
 {/* ROW 5 - CONTENT TYPE BIFURCATION & USER CONTENT PREFERENCES */}
 <div className="grid grid-cols-1 xl:grid-cols-2 gap-5 mb-6">
@@ -2313,154 +2326,256 @@ const hours = Array.from({ length: 24 }, (_, i) => i + 1);
 
 </div>
 
-{/* ROW 6 - HOURLY USAGE HEAT MAP */}
-<div className="w-full mb-6">
-  <div className="bg-white rounded-md shadow-[0_10px_40px_rgba(0,0,0,0.15)] p-4">
+{/* ================= COMBINED ROW: STATE WISE USAGE HEAT MAP (LEFT) + HOURLY USAGE HEAT MAP (RIGHT) ================= */}
+<div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
 
-    {/* Header */}
-    <div className="flex justify-between items-center mb-4">
-      <h2 className="text-xl font-bold text-gray-900">
-        Hourly Usage Heat Map
-      </h2>
-
-      <div className="flex gap-2">
-           {/*Region FILTER */}
-      <select
-        value={selectedContentRole}
-        // onChange={(e) => setSelectedContentRole(e.target.value)}
-        className="px-3 py-1.5 rounded-md border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-[#f97316]"
-      >
-        <option value="All">All India</option>
-        <option value="North">North</option>
-        <option value="South">South</option>
-        <option value="West">West</option>
-        <option value="East">East</option>
-        <option value="Central">Central</option>
-      </select>
-
-           {/* ROLE HOLDER FILTER */}
-      <select
-        value={selectedContentRole}
-        // onChange={(e) => setSelectedContentRole(e.target.value)}
-        className="px-3 py-1.5 rounded-md border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-[#f97316]"
-      >
-        <option value="All">All Role Holders</option>
-        <option value="DSE">DSE</option>
-        <option value="TL">TL</option>
-        <option value="RSE">RSE</option>
-        <option value="DSM">DSM</option>
-        <option value="GM">GM</option>
-      </select>
+{/* LEFT COLUMN: State Wise Usage Heat Map */}
+<div className="bg-white rounded-md shadow-[0_10px_40px_rgba(0,0,0,0.15)] p-4 overflow-hidden">
+  {/* ================= HEADER ================= */}
+  <div className="mb-4 pb-2">
+    {/* TOP ROW - Title on left, Region & Role filters on right */}
+    <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
+      <h2 className="text-base font-bold text-gray-800">State Wise Usage Heat Map</h2>
+      <div className="flex items-center gap-4 flex-wrap">
+        <select
+          value={selectedMapRegion}
+          onChange={(e) => setSelectedMapRegion(e.target.value)}
+          className="px-3 py-1.5 text-[12px] font-medium border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#f97316]"
+        >
+          <option value="all">All India</option>
+          <option value="North">North</option>
+          <option value="South">South</option>
+          <option value="East">East</option>
+          <option value="West">West</option>
+          <option value="Central">Central</option>
+        </select>
+        <select
+          value={selectedMapRole}
+          onChange={(e) => setSelectedMapRole(e.target.value)}
+          className="px-3 py-1.5 text-[12px] font-medium border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#f97316]"
+        >
+          <option value="all">All Role Holders</option>
+          <option value="DSE">DSE</option>
+          <option value="TL">TL</option>
+          <option value="RSE">RSE</option>
+          <option value="DSM">DSM</option>
+          <option value="GM">GM</option>
+        </select>
       </div>
     </div>
 
-    {/* Heat Map */}
-    <div className="w-full">
-
-      {/* Hours Header */}
-      <div className="flex mb-2">
-        <div className="w-36 bg-black text-white font-bold px-3 py-3 rounded-tl-md text-sm">
-          Total Hours
-        </div>
-
-        <div className="flex flex-1 bg-gray-100 rounded-tr-md p-1 justify-between">
-          {Array.from({ length: 24 }, (_, i) => (
-            <div
-              key={i}
-              className="flex flex-col items-center w-5"
-            >
-              <span className="text-[11px] text-gray-700">
-                {i + 1}
-              </span>
-
-              <span
-                className={`text-[8px] text-white rounded px-1 ${
-                  i < 11 ? "bg-black" : "bg-sky-700"
-                }`}
-              >
-                {i < 11 ? "AM" : "PM"}
-              </span>
-            </div>
-          ))}
+    {/* BOTTOM ROW - Total Usage Card on LEFT, Tabs on RIGHT */}
+    <div className="flex items-center justify-between flex-wrap gap-3">
+      {/* LEFT SIDE: Total Usage Card */}
+      <div className="bg-white border border-gray-200 rounded-md overflow-hidden shadow-sm">
+        <div className="px-4 py-2 text-left">
+          <div className="text-[12px] font-bold text-gray-500 mb-0.5">Total Usage</div>
+          <div className="text-2xl font-black text-[#f97316]">
+            {(() => {
+              const filteredData = getFilteredTableData();
+              const total = filteredData.reduce((sum, item) => sum + item.usage, 0);
+              return total.toLocaleString();
+            })()}
+          </div>
         </div>
       </div>
 
-      {/* Week Rows */}
-      {[
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday",
-        "Sunday",
-      ].map((day, index) => (
-        <div key={day} className="flex mb-2">
-
-          {/* Day Name */}
-          <div className="w-36 bg-gray-100 px-3 py-4 text-sm font-semibold flex items-center">
-            {day}
-          </div>
-
-          {/* Hour Cells */}
-          <div className="flex flex-1 justify-between bg-gray-50 px-2 py-3">
-
-            {Array.from({ length: 24 }, (_, hour) => {
-              let color = "bg-gray-300";
-
-              if (hour >= 7 && hour <= 10)
-                color = "bg-[#efc2a2]";
-
-              if (hour >= 11 && hour <= 17)
-                color = "bg-[#ec8e42]";
-
-              if (hour >= 12 && hour <= 14)
-                color = "bg-[#e96b35]";
-
-              if (hour >= 18 && hour <= 20)
-                color = "bg-[#efc2a2]";
-
-              if (hour <= 6 || hour >= 21)
-                color = "bg-gray-300";
-
-              return (
-                <div
-                  key={hour}
-                  className={`h-6 w-6 rounded border border-white shadow-sm ${color}`}
-                />
-              );
-            })}
-          </div>
-        </div>
-      ))}
-
-      {/* Legend */}
-      <div className="mt-4 border rounded-md p-4 flex flex-wrap gap-8">
-
-        <div className="flex items-center gap-2">
-          <div className="h-6 w-6 rounded bg-gray-300 border" />
-          <span className="text-sm">No Usage</span>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <div className="h-6 w-6 rounded bg-[#efc2a2]" />
-          <span className="text-sm">Light Usage</span>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <div className="h-6 w-6 rounded bg-[#ec8e42]" />
-          <span className="text-sm">Moderate Usage</span>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <div className="h-6 w-6 rounded bg-[#e96b35]" />
-          <span className="text-sm">Heavy Usage</span>
-        </div>
-
+      {/* RIGHT SIDE: Tabs */}
+      <div className="flex items-center gap-2 flex-wrap">
+        <button
+          onClick={() => setActiveUsageTab("all")}
+          className={`px-4 py-2 rounded-md text-[12px] font-bold transition-all ${
+            activeUsageTab === "all" ? "bg-[#f97316] text-white" : "bg-gray-100 text-gray-700"
+          }`}
+        >
+          ALL
+        </button>
+        <button
+          onClick={() => setActiveUsageTab("ytd")}
+          className={`px-4 py-2 rounded-md text-[12px] font-bold transition-all ${
+            activeUsageTab === "ytd" ? "bg-[#f97316] text-white" : "bg-gray-100 text-gray-700"
+          }`}
+        >
+          YTD
+        </button>
+        <button
+          onClick={() => setActiveUsageTab("mtd")}
+          className={`px-4 py-2 rounded-md text-[12px] font-bold transition-all ${
+            activeUsageTab === "mtd" ? "bg-[#f97316] text-white" : "bg-gray-100 text-gray-700"
+          }`}
+        >
+          MTD
+        </button>
+        <button
+          onClick={() => setActiveUsageTab("week")}
+          className={`px-4 py-2 rounded-md text-[12px] font-bold transition-all ${
+            activeUsageTab === "week" ? "bg-[#f97316] text-white" : "bg-gray-100 text-gray-700"
+          }`}
+        >
+          THIS WEEK
+        </button>
       </div>
     </div>
-
   </div>
+
+  {/* ================= BODY: MAP + TABLE (no Total Usage card inside) ================= */}
+  <div className="flex flex-col gap-4">
+    {/* MAP + TABLE ROW - Map on left, Table on right */}
+    <div className="flex flex-col lg:flex-row gap-3 items-start">
+      {/* MAP (LEFT SIDE) */}
+      <div className="w-full lg:w-[55%] rounded-2xl overflow-hidden">
+        <HighchartsReact
+          highcharts={Highcharts}
+          constructorType={"mapChart"}
+          options={{
+            ...indiaHeatMapOptions,
+            chart: {
+              ...indiaHeatMapOptions.chart,
+              height: 450,
+              backgroundColor: "transparent",
+            },
+          }}
+        />
+      </div>
+
+      {/* TABLE (RIGHT SIDE) */}
+      <div className="w-full lg:w-[45%] bg-white border border-gray-200 rounded-md overflow-hidden h-fit">
+        <div className="overflow-hidden max-h-[400px] overflow-y-auto">
+          <table className="w-full text-[11px]">
+            <thead className="sticky top-0">
+              <tr className="bg-[#4a4a4a] text-white">
+                <th className="px-2 py-2 text-center w-[40px]">S.No</th>
+                <th className="px-2 py-2 text-left">Role Holder(s)</th>
+                <th className="px-2 py-2 text-left">State</th>
+                <th className="px-2 py-2 text-center w-[90px]">
+                  {activeUsageTab === "all"
+                    ? "ALL TIME"
+                    : activeUsageTab === "ytd"
+                    ? "YTD"
+                    : activeUsageTab === "mtd"
+                    ? "MTD"
+                    : "THIS WEEK"}
+                </th>
+               </tr>
+            </thead>
+            <tbody>
+              {getFilteredTableData()
+                .sort((a, b) => b.usage - a.usage)
+                .map((item, i) => {
+                  const top3 = [...getFilteredTableData()]
+                    .sort((a, b) => b.usage - a.usage)
+                    .slice(0, 3)
+                    .map((d) => d.usage);
+                  const isTop = top3.includes(item.usage);
+                  return (
+                    <tr key={i} className={`border-b border-gray-100 hover:bg-gray-50 ${isTop ? "top-state-blink" : ""}`}>
+                      <td className="px-2 py-3 text-center font-semibold">{i + 1}</td>
+                      <td className="px-2 py-3">
+                        <div className="flex items-center gap-2">
+                          <span
+                            className={`w-2.5 h-2.5 rounded-full ${isTop ? "top-state-dot-blink" : ""}`}
+                            style={{
+                              backgroundColor:
+                                i === 0 ? "#c2410c" : i === 1 ? "#ea580c" : i === 2 ? "#f97316" : "#fdba74",
+                            }}
+                          />
+                          <span className="font-semibold text-gray-700">{item.role}</span>
+                        </div>
+                       </td>
+                      <td className="px-2 py-3 font-semibold text-gray-700">{item.state}</td>
+                      <td className={`px-2 py-3 text-center font-bold ${isTop ? "text-[#c2410c]" : "text-gray-700"}`}>
+                        {item.usage}
+                      </td>
+                    </tr>
+                  );
+                })}
+            </tbody>
+           </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{/* RIGHT COLUMN: Hourly Usage Heat Map (Smaller left column, larger hour boxes) */}
+<div className="bg-white rounded-md shadow-[0_10px_40px_rgba(0,0,0,0.15)] p-4">
+  {/* Header */}
+  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-15">
+    <h2 className="text-xl font-bold text-gray-900">Hourly Usage Heat Map</h2>
+    <div className="flex gap-2 flex-wrap">
+      <select className="px-3 py-1.5 rounded-md border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-[#f97316]">
+        <option>All India</option>
+        <option>North</option>
+        <option>South</option>
+        <option>West</option>
+        <option>East</option>
+        <option>Central</option>
+      </select>
+      <select className="px-3 py-1.5 rounded-md border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-[#f97316]">
+        <option>All Role Holders</option>
+        <option>DSE</option>
+        <option>TL</option>
+        <option>RSE</option>
+        <option>DSM</option>
+        <option>GM</option>
+      </select>
+    </div>
+  </div>
+
+  {/* Heat Map - No scroll, all 24 hours fit */}
+  <div className="w-full">
+    {/* Hours Header */}
+    <div className="flex">
+      <div className="w-16 sm:w-20 bg-black text-white font-bold px-1 py-2 rounded-tl-md text-xs sm:text-sm flex-shrink-0 text-center">
+        Hours
+      </div>
+      <div className="flex flex-1 bg-gray-100 rounded-tr-md">
+        {Array.from({ length: 24 }, (_, i) => (
+          <div key={i} className="flex-1 text-center py-2">
+            <div className="text-[10px] sm:text-xs font-medium text-gray-700">{i + 1}</div>
+            <div className="text-[8px] sm:text-[9px] text-white rounded-sm px-0.5 inline-block mt-0.5 bg-black">
+              {i < 11 ? "AM" : "PM"}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    {/* Week Rows */}
+    {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map((day) => (
+      <div key={day} className="flex">
+        <div className="w-16 sm:w-20 bg-gray-100 px-1 py-3 text-xs sm:text-sm font-semibold flex items-center justify-center flex-shrink-0">
+          {day.slice(0,3)}
+        </div>
+        <div className="flex flex-1 bg-gray-50">
+          {Array.from({ length: 24 }, (_, hour) => {
+            let color = "bg-gray-300";
+            if (hour >= 7 && hour <= 10) color = "bg-[#efc2a2]";
+            if (hour >= 11 && hour <= 17) color = "bg-[#ec8e42]";
+            if (hour >= 12 && hour <= 14) color = "bg-[#e96b35]";
+            if (hour >= 18 && hour <= 20) color = "bg-[#efc2a2]";
+            if (hour <= 6 || hour >= 21) color = "bg-gray-300";
+            return (
+              <div
+                key={hour}
+                className={`flex-1 h-5 sm:h-7 m-0.5 rounded border border-white shadow-sm ${color}`}
+                title={`${day} ${hour+1}:00`}
+              />
+            );
+          })}
+        </div>
+      </div>
+    ))}
+
+    {/* Legend */}
+    <div className="mt-4 border rounded-md p-3 flex flex-wrap gap-4 justify-center">
+      <div className="flex items-center gap-2"><div className="h-5 w-5 rounded bg-gray-300 border" /><span className="text-xs">No Usage</span></div>
+      <div className="flex items-center gap-2"><div className="h-5 w-5 rounded bg-[#efc2a2]" /><span className="text-xs">Light Usage</span></div>
+      <div className="flex items-center gap-2"><div className="h-5 w-5 rounded bg-[#ec8e42]" /><span className="text-xs">Moderate Usage</span></div>
+      <div className="flex items-center gap-2"><div className="h-5 w-5 rounded bg-[#e96b35]" /><span className="text-xs">Heavy Usage</span></div>
+    </div>
+  </div>
+</div>
 </div>
 
     </div>
