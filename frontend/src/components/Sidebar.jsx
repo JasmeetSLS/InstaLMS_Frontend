@@ -6,7 +6,8 @@ import {
   LayoutGrid,
   Newspaper,
   Brain,
-  Layers
+  Layers,
+  BarChart3
 } from 'lucide-react';
 
 const Sidebar = ({ isOpen, onClose }) => {
@@ -36,7 +37,7 @@ const Sidebar = ({ isOpen, onClose }) => {
     {
       path: '/admin/performanceAnalytics',
       name: 'Performance Analytics',
-      icon: <Layers className="w-5 h-5" />,
+      icon: <BarChart3 className="w-5 h-5" />,
     },
   ];
 

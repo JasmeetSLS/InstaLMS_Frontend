@@ -73,3 +73,7 @@
   animation: heatBlink 0.7s infinite ease-in-out;
   transform-origin: center;
 }
+
+ ::-webkit-scrollbar { height: 7px; width: 7px; }
+        ::-webkit-scrollbar-track { background: #ebebeb; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #f97316; border-radius: 10px; }

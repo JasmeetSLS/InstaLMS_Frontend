@@ -63,6 +63,66 @@ const carouselImages = [
 ];
 
 
+// Static role-wise data for each metric
+const roleDataStatic = {
+  total: [
+    { name: "DSE", y: 484 },
+    { name: "TL", y: 242 },
+    { name: "RSE", y: 363 },
+    { name: "DSM", y: 121 },
+    { name: "GM", y: 73 },
+  ],
+  active: [
+    { name: "DSE", y: 330 },
+    { name: "TL", y: 165 },
+    { name: "RSE", y: 248 },
+    { name: "DSM", y: 83 },
+    { name: "GM", y: 50 },
+  ],
+  inactive: [
+    { name: "DSE", y: 154 },
+    { name: "TL", y: 77 },
+    { name: "RSE", y: 115 },
+    { name: "DSM", y: 38 },
+    { name: "GM", y: 23 },
+  ],
+  new: [
+    { name: "DSE", y: 54 },
+    { name: "TL", y: 27 },
+    { name: "RSE", y: 40 },
+    { name: "DSM", y: 13 },
+    { name: "GM", y: 8 },
+  ],
+};
+
+// Static course-wise data for each metric
+const courseDataStatic = {
+  total: [
+    { name: "Brand", y: 3 },
+    { name: "BAT", y: 20 },
+    { name: "SOP", y: 2 },
+    { name: "VAS", y: 3 },
+    { name: "Sales", y: 7 },
+  ],
+  completed: [
+    { name: "Brand", y: 2 },
+    { name: "BAT", y: 15 },
+    { name: "SOP", y: 1 },
+    { name: "VAS", y: 2 },
+    { name: "Sales", y: 5 },
+  ],
+  pending: [
+    { name: "Brand", y: 1 },
+    { name: "BAT", y: 5 },
+    { name: "SOP", y: 1 },
+    { name: "VAS", y: 1 },
+    { name: "Sales", y: 2 },
+  ],
+};
+
+
+
+
 // ---------------- TOP CARDS ----------------
 const cards = [
   {
@@ -542,6 +602,8 @@ const PerformanceAnalytics = () => {
   const [selectedRegion, setSelectedRegion] =
     useState("Regions");
     const [selectedRole, setSelectedRole] = useState("All");
+    const [selectedMetric, setSelectedMetric] = useState("total");
+    const [selectedCourseMetric, setSelectedCourseMetric] = useState("total");
     const [selectedDealership, setSelectedDealership] = useState("All");
     const [currentImage1, setCurrentImage1] = useState(0);
 const [currentImage2, setCurrentImage2] = useState(0);
@@ -552,6 +614,9 @@ const [selectedUsageCity, setSelectedUsageCity] =
   useState("All");
 const [activeTab, setActiveTab] = useState(0);
 const [selectedContentRole, setSelectedContentRole] = useState("All");
+
+ const getCurrentRoleData = () => roleDataStatic[selectedMetric];
+ const getCurrentCourseData = () => courseDataStatic[selectedCourseMetric];
 
 {/* ================= DYNAMIC DATA ================= */}
 const usageData =
@@ -1323,7 +1388,7 @@ const hours = Array.from({ length: 24 }, (_, i) => i + 1);
   return (
     <div className="min-h-screen bg-[#f7f7f7] px-6 py-10">
 <div className="flex justify-between items-center mb-5">
-  <h2 className="text-3xl font-bold">Leaderboards</h2>
+  <h2 className="text-2xl font-bold">Dashboard</h2>
 
 <div className="flex gap-4">
   {/* Filter 1: Region / India */}
@@ -1401,11 +1466,8 @@ const hours = Array.from({ length: 24 }, (_, i) => i + 1);
 </div>
 </div>
 
-{/* ================= ROW 7: LEFT (USER STATS) + RIGHT (USER ANALYTICS) ================= */}
-<div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-  
-{/* LEFT COLUMN: 4 Compact User Stat Cards - reduced card padding, increased gap */}
-<div className="grid grid-cols-2 gap-4">
+{/* ================= ROW 1: USER STAT CARDS - SINGLE ROW ================= */}
+<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
   {/* Total Users */}
   <div className="stats-card bg-white/90 backdrop-blur-sm rounded-xl border border-orange-100 border-l-4 border-l-orange-400 p-2 shadow-sm">
     <div className="flex items-center justify-between mb-1">
@@ -1487,319 +1549,76 @@ const hours = Array.from({ length: 24 }, (_, i) => i + 1);
   </div>
 </div>
 
-  {/* RIGHT COLUMN: User Analytics - REDUCED HEIGHT */}
-  <div className="bg-white rounded-md shadow-[0_10px_40px_rgba(0,0,0,0.15)] p-2 flex flex-col">
-    <h2 className="text-sm font-bold text-gray-800">User Analytics</h2>
+{/* ================= ROW 2: THREE ANALYTICS GRAPHS (REDUCED HEIGHT) ================= */}
+<div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+  
+  {/* 1️⃣ USER ANALYTICS */}
+  <div className="bg-white rounded-md shadow-[0_10px_40px_rgba(0,0,0,0.15)] p-3">
+    <h2 className="text-sm font-bold text-gray-800 mb-2">User Analytics</h2>
 
-    <div className="grid grid-cols-3 gap-1 items-start">
-      {/* KPI - smaller */}
-      <div className="text-center self-center">
-        <div className="text-[16px] font-bold text-gray-500">Total Users</div>
-        <div className="text-3xl font-black text-[#f97316]">{totalUsers.toLocaleString()}</div>
-      </div>
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-1 mb-3">
+      {[
+        { key: "total", label: "Total Users", value: 1284, icon: "UsersIcon", bgFrom: "from-orange-400", bgTo: "to-orange-600" },
+        { key: "active", label: "Active Users", value: 876, icon: "FaUserCheck", bgFrom: "from-emerald-400", bgTo: "to-teal-500" },
+        { key: "new", label: "New Users", value: 142, icon: "FaUserPlus", bgFrom: "from-blue-400", bgTo: "to-cyan-500" },
+        { key: "inactive", label: "Inactive Users", value: 408, icon: "FaUserSlash", bgFrom: "from-red-400", bgTo: "to-red-500" },
+      ].map((card) => {
+        const isActive = selectedMetric === card.key;
+        let IconComponent;
+        if (card.icon === "UsersIcon") IconComponent = UsersIcon;
+        if (card.icon === "FaUserCheck") IconComponent = FaUserCheck;
+        if (card.icon === "FaUserPlus") IconComponent = FaUserPlus;
+        if (card.icon === "FaUserSlash") IconComponent = FaUserSlash;
 
-      {/* PIE CHART - reduced height to 120px */}
-      <div className="col-span-2">
+        return (
+          <div
+            key={card.key}
+            onClick={() => setSelectedMetric(card.key)}
+            className={`flex flex-col items-center justify-center p-1 rounded border shadow-sm cursor-pointer transition-all hover:scale-[1.01] text-center ${
+              isActive ? "border-blue-500 ring-1 ring-blue-200" : "border-black"
+            }`}
+          >
+            <div className={`h-5 w-5 rounded-md bg-gradient-to-br ${card.bgFrom} ${card.bgTo} flex items-center justify-center shadow-sm mb-0.5`}>
+              <IconComponent className="h-2.5 w-2.5 text-white" />
+            </div>
+            <div className="text-[9px] font-medium text-gray-600">{card.label}</div>
+            <div className="text-sm font-black text-gray-800">{card.value.toLocaleString()}</div>
+          </div>
+        );
+      })}
+    </div>
+
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 items-center">
+      <div>
         <HighchartsReact
           highcharts={Highcharts}
           options={{
             ...pieOptions,
-            chart: { ...pieOptions.chart, height: 160, backgroundColor: "transparent" },
-            plotOptions: {
-              pie: {
-                ...pieOptions.plotOptions.pie,
-                innerSize: 50,
-              },
-            },
+            chart: { ...pieOptions.chart, height: 250, backgroundColor: "transparent" },
+            plotOptions: { pie: { ...pieOptions.plotOptions.pie, innerSize: 70, dataLabels: { enabled: false } } },
+            series: [{ name: "Users", data: getCurrentRoleData() }],
           }}
         />
       </div>
-    </div>
-
-    {/* TABLE - tighter rows, smaller font */}
-    <div className="mt-1 overflow-hidden">
-      <table className="w-full text-[10px] border-collapse">
-        <thead>
-          <tr className="bg-gray-600 text-white">
-            <th className="p-1 text-center">S.No</th>
-            <th className="p-1 text-center"></th>
-            <th className="p-1 text-center w-[100px]">Role</th>
-            <th className="p-1 text-center">Count</th>
-          </tr>
-        </thead>
-        <tbody>
-          {roleData.map((role, i) => {
-            const colors = ["#f97316","#0f766e","#84cc16","#ea580c","#eab308","#60a5fa","#8b5cf6"];
-            return (
-              <tr key={i} className={i % 2 === 0 ? "bg-gray-50" : "bg-white"}>
-                <td className="p-0.5 text-center font-medium">{i + 1}</td>
-                <td className="p-0.5 text-center">
-                  <div className="flex justify-end items-center">
-                    <span className="w-2 h-2" style={{ backgroundColor: colors[i % colors.length] }} />
-                  </div>
-                </td>
-                <td className="p-0.5 text-center font-medium truncate">{role.name}</td>
-                <td className="p-0.5 text-center font-bold">{role.y}</td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div>
-
-{/* ROW 3 */}
-<div className="grid grid-cols-1 xl:grid-cols-[1.3fr_1.3fr] gap-5 mb-6">
-
-  {/* LEFT COLUMN: Content Type Bifurcation only */}
-  <div className="bg-white rounded-md shadow-[0_10px_40px_rgba(0,0,0,0.15)] p-4 flex flex-col">
-    <h2 className="text-base font-bold text-gray-800 mb-3">
-      Content Type Bifurcation
-    </h2>
-
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-3 items-stretch">
-      {/* KPI - Total Content */}
-      <div className="flex flex-col flex-1 min-h-[125px]">
-        <div className="flex-1 flex flex-col justify-center items-center text-center">
-          <div className="text-[16px] font-bold text-gray-700 mb-2">
-            Total Content
-          </div>
-          <div className="text-5xl font-black text-[#f97316] leading-none">
-            960
-          </div>
-        </div>
-      </div>
-
-      {/* PIE CHART */}
-      <div className="md:col-span-2 h-[240px] flex items-center justify-center overflow-hidden">
-        <HighchartsReact
-          highcharts={Highcharts}
-          options={{
-            chart: {
-              type: "pie",
-              backgroundColor: "transparent",
-              height: 240,
-              options3d: {
-                enabled: true,
-                alpha: 45,
-              },
-            },
-            accessibility: {
-              enabled: false,
-            },
-            credits: {
-              enabled: false,
-            },
-            title: {
-              text: null,
-            },
-            tooltip: {
-              formatter: function () {
-                return `<b>${this.point.name}</b><br/>${this.y} items`;
-              },
-              followPointer: true,
-            },
-            plotOptions: {
-              pie: {
-                innerSize: 80,
-                depth: 45,
-                dataLabels: {
-                  enabled: false,
-                },
-                showInLegend: false,
-              },
-            },
-            series: [
-              {
-                name: "Content",
-                data: [
-                  { name: "Video", y: 540 },
-                  { name: "WBT", y: 230 },
-                  { name: "PDF", y: 100 },
-                  { name: "PPT", y: 90 },
-                ],
-              },
-            ],
-          }}
-        />
-      </div>
-    </div>
-
-    {/* TABLE */}
-    <div className="mt-3 overflow-hidden">
-      <table className="w-full text-[11px] border-collapse">
-        <thead>
-          <tr className="bg-gray-600 text-white">
-            <th className="p-2 text-center">S.No</th>
-            <th className="p-2 text-center"></th>
-            <th className="p-2 text-center w-[100px]">Content Type</th>
-            <th className="p-2 text-center">Total Numbers</th>
-          </tr>
-        </thead>
-        <tbody>
-          {[
-            { type: "Video", count: 540 },
-            { type: "WBT", count: 230 },
-            { type: "PDF", count: 100 },
-            { type: "PPT", count: 90 },
-          ].map((item, i) => {
-            const colors = Highcharts.getOptions().colors;
-            return (
-              <tr key={i} className={i % 2 === 0 ? "bg-gray-50" : "bg-white"}>
-                <td className="p-2 text-center font-medium">{i + 1}</td>
-                <td className="p-2 text-center">
-                  <div className="flex justify-center items-center">
-                    <span
-                      className="w-3 h-3 rounded-sm"
-                      style={{ backgroundColor: colors[i % colors.length] }}
-                    />
-                  </div>
-                </td>
-                <td className="p-2 text-center font-medium truncate">
-                  {item.type}
-                </td>
-                <td className="p-2 text-center font-bold">
-                  {item.count}
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  {/* RIGHT COLUMN: 3 Course Stat Cards + Course Analytics */}
-  <div className="space-y-4">
-    {/* 3 Course Stat Cards (Total, Completed, Incomplete) */}
-    <div className="grid grid-cols-3 gap-5">
-      {/* Total Courses */}
-      <div className="stats-card bg-white/90 backdrop-blur-sm rounded-xl border border-orange-100 border-l-4 border-l-orange-400 p-2.5 shadow-sm">
-        <div className="flex items-center justify-between mb-1">
-          <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center shadow-sm">
-            <FaBook className="h-5 w-5 text-white" />
-          </div>
-          <div className="flex items-center gap-0.5 bg-green-50 px-1.5 py-0.5 rounded-full">
-            <svg className="w-2 h-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 10l7-7m0 0l7 7m-7-7v18" />
-            </svg>
-            <span className="text-[10px] font-bold text-green-700">5%</span>
-          </div>
-        </div>
-        <p className="text-xs font-medium">Total Courses</p>
-        <p className="text-2xl font-black leading-tight">7</p>
-        <div className="flex items-center gap-1 mt-0.5">
-          <span className="inline-block w-1 h-1 rounded-full bg-green-500"></span>
-          <span className="text-xs">vs last month</span>
-        </div>
-      </div>
-
-      {/* Completed Courses */}
-      <div className="stats-card bg-white/90 backdrop-blur-sm rounded-xl border border-emerald-100 border-l-4 border-l-emerald-400 p-2.5 shadow-sm">
-        <div className="flex items-center justify-between mb-1">
-          <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center shadow-sm">
-            <FaCheckCircle className="h-5 w-5 text-white" />
-          </div>
-          <div className="bg-emerald-50 px-1.5 py-0.5 rounded-full">
-            <span className="text-[10px] font-bold text-emerald-700">57%</span>
-          </div>
-        </div>
-        <p className="text-xs font-medium">Completed Courses</p>
-        <p className="text-2xl font-black text-gray-800 leading-tight">4</p>
-        <div className="mt-1 w-full bg-gray-100 rounded-full h-1 overflow-hidden">
-          <div className="bg-gradient-to-r from-emerald-400 to-teal-500 h-full rounded-full w-[57%] relative">
-            <div className="absolute inset-0 bg-white/30 animate-pulse"></div>
-          </div>
-        </div>
-      </div>
-
-      {/* Incomplete Courses */}
-      <div className="stats-card bg-white/90 backdrop-blur-sm rounded-xl border border-red-100 border-l-4 border-l-red-400 p-2.5 shadow-sm">
-        <div className="flex items-center justify-between mb-1">
-          <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-red-400 to-red-500 flex items-center justify-center shadow-sm">
-            <FaTimesCircle className="h-5 w-5 text-white" />
-          </div>
-          <div className="bg-red-50 px-1.5 py-0.5 rounded-full">
-            <span className="text-[10px] font-bold text-red-700">43%</span>
-          </div>
-        </div>
-        <p className="text-xs font-medium">Incomplete Courses</p>
-        <p className="text-2xl font-black text-gray-800 leading-tight">3</p>
-        <div className="mt-1 w-full bg-gray-100 rounded-full h-1 overflow-hidden">
-          <div className="bg-gradient-to-r from-red-500 to-red-600 h-full rounded-full w-[43%] relative">
-            <div className="absolute inset-0 bg-white/30 animate-pulse"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    {/* Course Analytics */}
-    <div className="bg-white rounded-md shadow-[0_10px_40px_rgba(0,0,0,0.15)] p-4 flex flex-col">
-      <h2 className="text-base font-bold text-gray-800">
-        Course Analytics
-      </h2>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 items-stretch">
-        {/* KPI */}
-        <div className="flex flex-col flex-1 min-h-[125px]">
-          <div className="flex-1 flex flex-col justify-center items-center text-center">
-            <div className="text-[16px] font-bold text-gray-700 mb-2">
-              Total Courses
-            </div>
-            <div className="text-5xl font-black text-[#f97316] leading-none">
-              {courseOptions.series[0].data.reduce((s, i) => s + i[1], 0)}
-            </div>
-          </div>
-        </div>
-
-        {/* BAR CHART */}
-        <div className="md:col-span-2 h-[240px] flex items-center justify-center overflow-hidden">
-          <HighchartsReact
-            highcharts={Highcharts}
-            options={{
-              ...courseOptions,
-              chart: {
-                ...courseOptions.chart,
-                height: 240,
-                backgroundColor: "transparent",
-              },
-            }}
-          />
-        </div>
-      </div>
-
-      {/* TABLE */}
-      <div className="mt-3 overflow-hidden">
-        <table className="w-full text-[11px] border-collapse">
+      <div className="overflow-hidden">
+        <table className="w-full text-[10px] border-collapse">
           <thead>
             <tr className="bg-gray-600 text-white">
-              <th className="p-2 text-center">S.No</th>
-              <th className="p-2 text-center"></th>
-              <th className="p-2 text-center w-[100px]">Course</th>
-              <th className="p-2 text-center">Count</th>
+              <th className="p-1 text-center">S.No</th>
+              <th className="p-1 text-center"></th>
+              <th className="p-1 text-left">Role</th>
+              <th className="p-1 text-center">Count</th>
             </tr>
           </thead>
           <tbody>
-            {courseOptions.series[0].data.map((c, i) => {
-              const colors = ["#f59e0b","#3b82f6","#10b981","#8b5cf6","#ef4444","#f97316","#ec4899"];
+            {getCurrentRoleData().map((role, i) => {
+              const colors = ["#f97316","#0f766e","#84cc16","#ea580c","#eab308"];
               return (
                 <tr key={i} className={i % 2 === 0 ? "bg-gray-50" : "bg-white"}>
                   <td className="p-1 text-center font-medium">{i + 1}</td>
-                  <td className="p-1 text-center">
-                    <div className="flex justify-end items-center">
-                      <span
-                        className="w-3 h-3"
-                        style={{ backgroundColor: colors[i % colors.length] }}
-                      />
-                    </div>
-                  </td>
-                  <td className="p-1 text-center font-medium truncate">
-                    {c[0]}
-                  </td>
-                  <td className="p-1 text-center font-bold">
-                    {c[1]}
-                  </td>
+                  <td className="p-1 text-center"><span className="w-2 h-2 inline-block" style={{ backgroundColor: colors[i % colors.length] }} /></td>
+                  <td className="p-1 font-medium">{role.name}</td>
+                  <td className="p-1 text-center font-bold">{role.y.toLocaleString()}</td>
                 </tr>
               );
             })}
@@ -1808,11 +1627,168 @@ const hours = Array.from({ length: 24 }, (_, i) => i + 1);
       </div>
     </div>
   </div>
+
+  {/* 2️⃣ COURSE ANALYTICS */}
+  <div className="bg-white rounded-md shadow-[0_10px_40px_rgba(0,0,0,0.15)] p-3">
+    <h2 className="text-sm font-bold text-gray-800 mb-2">Course Analytics</h2>
+
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-1 mb-3">
+      {[
+        { key: "total", label: "Total Courses", value: 35, icon: "FaBook", bgFrom: "from-orange-400", bgTo: "to-orange-600" },
+        { key: "completed", label: "Completed Courses", value: 25, icon: "FaCheckCircle", bgFrom: "from-emerald-400", bgTo: "to-teal-500" },
+        { key: "pending", label: "Pending Courses", value: 10, icon: "FaTimesCircle", bgFrom: "from-red-400", bgTo: "to-red-500" },
+      ].map((card) => {
+        const isActive = selectedCourseMetric === card.key;
+        let IconComponent;
+        if (card.icon === "FaBook") IconComponent = FaBook;
+        if (card.icon === "FaCheckCircle") IconComponent = FaCheckCircle;
+        if (card.icon === "FaTimesCircle") IconComponent = FaTimesCircle;
+
+        return (
+          <div
+            key={card.key}
+            onClick={() => setSelectedCourseMetric(card.key)}
+            className={`flex flex-col items-center justify-center p-1 rounded border shadow-sm cursor-pointer transition-all hover:scale-[1.01] text-center ${
+              isActive ? "border-blue-500 ring-1 ring-blue-200" : "border-black"
+            }`}
+          >
+            <div className={`h-5 w-5 rounded-md bg-gradient-to-br ${card.bgFrom} ${card.bgTo} flex items-center justify-center shadow-sm mb-0.5`}>
+              <IconComponent className="h-2.5 w-2.5 text-white" />
+            </div>
+            <div className="text-[9px] font-medium text-gray-600">{card.label}</div>
+            <div className="text-sm font-black text-gray-800">{card.value}</div>
+          </div>
+        );
+      })}
+    </div>
+
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 items-center">
+      <div>
+        <HighchartsReact
+          highcharts={Highcharts}
+          options={{
+            chart: { type: "pie", backgroundColor: "transparent", height: 250 },
+            accessibility: { enabled: false },
+            credits: { enabled: false },
+            title: { text: null },
+            tooltip: { formatter: function() { return `<b>${this.point.name}</b><br/>${this.y} Courses`; } },
+            plotOptions: { pie: { innerSize: 70, dataLabels: { enabled: false }, showInLegend: false } },
+            series: [{ name: "Courses", data: getCurrentCourseData() }],
+          }}
+        />
+      </div>
+      <div className="overflow-hidden">
+        <table className="w-full text-[10px] border-collapse">
+          <thead>
+            <tr className="bg-gray-600 text-white">
+              <th className="p-1 text-center">S.No</th>
+              <th className="p-1 text-center"></th>
+              <th className="p-1 text-left">Course</th>
+              <th className="p-1 text-center">Count</th>
+            </tr>
+          </thead>
+          <tbody>
+            {getCurrentCourseData().map((course, i) => {
+              const colors = ["#f59e0b", "#3b82f6", "#10b981", "#8b5cf6", "#ef4444"];
+              return (
+                <tr key={i} className={i % 2 === 0 ? "bg-gray-50" : "bg-white"}>
+                  <td className="p-1 text-center font-medium">{i + 1}</td>
+                  <td className="p-1 text-center"><span className="w-2 h-2 inline-block" style={{ backgroundColor: colors[i % colors.length] }} /></td>
+                  <td className="p-1 font-medium">{course.name}</td>
+                  <td className="p-1 text-center font-bold">{course.y}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+{/* 3️⃣ CONTENT TYPE - NEW LAYOUT (like User Content Preferences) */}
+<div className="bg-white rounded-md shadow-[0_10px_40px_rgba(0,0,0,0.15)] p-3">
+  <h2 className="text-sm font-bold text-gray-800 mb-2">Content Type</h2>
+
+  {/* Data for content types */}
+  {(() => {
+    const contentData = [
+      { type: "Video", count: 540 },
+      { type: "WBT", count: 230 },
+      { type: "PDF", count: 100 },
+      { type: "PPT", count: 90 },
+    ];
+    const totalContent = contentData.reduce((sum, item) => sum + item.count, 0);
+
+    return (
+      <>
+        {/* LEFT: Total count | RIGHT: Pie chart */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-2 items-stretch">
+          <div className="flex flex-col justify-center items-center text-center py-2">
+            <div className="text-[12px] font-bold text-gray-700">Total Content</div>
+            <div className="text-2xl font-black text-[#f97316]">{totalContent}</div>
+          </div>
+          <div className="md:col-span-2 h-[180px] flex items-center justify-center">
+            <HighchartsReact
+              highcharts={Highcharts}
+              options={{
+                chart: { type: "pie", backgroundColor: "transparent", height: 180, options3d: { enabled: true, alpha: 45 } },
+                accessibility: { enabled: false },
+                credits: { enabled: false },
+                title: { text: null },
+                tooltip: { formatter: function () { return `<b>${this.point.name}</b><br/>${this.y} items`; } },
+                plotOptions: { pie: { innerSize: 70, depth: 45, dataLabels: { enabled: false }, showInLegend: false } },
+                series: [{ name: "Content", data: contentData.map(item => ({ name: item.type, y: item.count })) }],
+              }}
+            />
+          </div>
+        </div>
+
+        {/* BOTTOM: Table listing */}
+        <div className="mt-2 overflow-hidden">
+          <table className="w-full text-[10px] border-collapse">
+            <thead>
+              <tr className="bg-gray-600 text-white">
+                <th className="p-1 text-center">S.No</th>
+                <th className="p-1 text-center"></th>
+                <th className="p-1 text-left">Content Type</th>
+                <th className="p-1 text-center">Count</th>
+              </tr>
+            </thead>
+            <tbody>
+              {contentData.map((item, i) => {
+                const colors = Highcharts.getOptions().colors;
+                return (
+                  <tr key={i} className={i % 2 === 0 ? "bg-gray-50" : "bg-white"}>
+                    <td className="p-1 text-center">{i + 1}</td>
+                    <td className="p-1 text-center">
+                      <span className="w-2 h-2 inline-block" style={{ backgroundColor: colors[i % colors.length] }} />
+                    </td>
+                    <td className="p-1 font-medium">{item.type}</td>
+                    <td className="p-1 text-center font-bold text-[#f97316]">{item.count}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </>
+    );
+  })()}
+</div>
+</div>
+
+{/* ================= LEADERBOARD HEADING ================= */}
+
+<div className="mb-3">
+   <h2 className="text-2xl font-bold">
+    LeaderBoard
+  </h2>
 </div>
 
 
-{/* ================= ROW 1 ================= */}
+{/* ================= ROW 3 ================= */}
 <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-4 items-stretch">
+  
 
   {/* ========== LEFT COLUMN ========== */}
   <div className="flex flex-col h-full gap-2">
@@ -1900,12 +1876,15 @@ const hours = Array.from({ length: 24 }, (_, i) => i + 1);
 
 </div>
 
-{/* ROW 2 */}
-<div className="mb-4">
-  <h1 className="text-3xl font-bold">
+{/* ================= LEARNING PROGRESS HEADING ================= */}
+
+<div className="mb-3">
+   <h2 className="text-2xl font-bold">
     Learning Progress
-  </h1>
+  </h2>
 </div>
+
+{/* ROW 4 */}
 <div className="grid grid-cols-1 xl:grid-cols-3 gap-5 mb-8">
 
   {/* LEFT SIDE - DONUTS */}
@@ -1968,614 +1947,303 @@ const hours = Array.from({ length: 24 }, (_, i) => i + 1);
   </div>
 </div>
 
+{/* ================= USAGE ANALYTICS HEADING ================= */}
 
-{/* ROW 5 - CONTENT TYPE BIFURCATION & USER CONTENT PREFERENCES */}
-<div className="grid grid-cols-1 xl:grid-cols-2 gap-5 mb-6">
+<div className="mb-3">
+   <h2 className="text-2xl font-bold">
+    Usage Analytics
+  </h2>
+</div>
 
-  {/* ================= LEFT: CONTENT TYPE BIFURCATION ================= */}
-  <div className="bg-white rounded-md shadow-[0_10px_40px_rgba(0,0,0,0.15)] p-4 flex flex-col">
+{/* ================= ROW 5: THREE COLUMNS (BALANCED HEIGHTS) ================= */}
+<div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
 
-    <h2 className="text-base font-bold text-gray-800 mb-3">
-      Content Type Bifurcation
-    </h2>
-
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-3 items-stretch">
-
-      {/* KPI - Total Content */}
-      <div className="flex flex-col flex-1 min-h-[125px]">
-        <div className="flex-1 flex flex-col justify-center items-center text-center">
-
-          <div className="text-[16px] font-bold text-gray-700 mb-2">
-            Total Content
-          </div>
-
-          <div className="text-5xl font-black text-[#f97316] leading-none">
-            960
-          </div>
-
-        </div>
-      </div>
-
-      {/* PIE CHART */}
-      <div className="md:col-span-2 h-[240px] flex items-center justify-center overflow-hidden">
-        <HighchartsReact
-          highcharts={Highcharts}
-          options={{
-            chart: {
-              type: "pie",
-              backgroundColor: "transparent",
-              height: 240,
-              options3d: {
-                enabled: true,
-                alpha: 45,
-              },
-            },
-            accessibility: {
-              enabled: false,
-            },
-            credits: {
-              enabled: false,
-            },
-            title: {
-              text: null,
-            },
-            tooltip: {
-              formatter: function () {
-                return `<b>${this.point.name}</b><br/>${this.y} items`;
-              },
-              followPointer: true,
-            },
-            plotOptions: {
-              pie: {
-                innerSize: 80,
-                depth: 45,
-                dataLabels: {
-                  enabled: false,
-                },
-                showInLegend: false,
-              },
-            },
-            series: [
-              {
-                name: "Content",
-                data: [
-                  { name: "Video", y: 540 },
-                  { name: "WBT", y: 230 },
-                  { name: "PDF", y: 100 },
-                  { name: "PPT", y: 90 },
-                ],
-              },
-            ],
-          }}
-        />
-      </div>
-
-    </div>
-
-    {/* TABLE */}
-    <div className="mt-3 overflow-hidden">
-      <table className="w-full text-[11px] border-collapse">
-
-        <thead>
-          <tr className="bg-gray-600 text-white">
-            <th className="p-2 text-center">S.No</th>
-            <th className="p-2 text-center"></th>
-            <th className="p-2 text-center w-[100px]">Content Type</th>
-            <th className="p-2 text-center">Total Numbers</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {[
-            { type: "Video", count: 540 },
-            { type: "WBT", count: 230 },
-            { type: "PDF", count: 100 },
-            { type: "PPT", count: 90 },
-          ].map((item, i) => {
-            const colors = Highcharts.getOptions().colors;
-            return (
-              <tr key={i} className={i % 2 === 0 ? "bg-gray-50" : "bg-white"}>
-
-                <td className="p-2 text-center font-medium">{i + 1}</td>
-
-                <td className="p-2 text-center">
-                  <div className="flex justify-center items-center">
-                    <span
-                      className="w-3 h-3 rounded-sm"
-                      style={{ backgroundColor: colors[i % colors.length] }}
-                    />
-                  </div>
-                </td>
-
-                <td className="p-2 text-center font-medium truncate">
-                  {item.type}
-                </td>
-
-                <td className="p-2 text-center font-bold">
-                  {item.count}
-                </td>
-
-              </tr>
-            );
-          })}
-        </tbody>
-
-      </table>
-    </div>
-
+  {/* ========== COLUMN 1: USER CONTENT PREFERENCES (Only Engagement Rate) ========== */}
+<div className="bg-white rounded-md shadow-[0_10px_40px_rgba(0,0,0,0.15)] p-3">
+  <div className="flex justify-between items-center mb-2">
+    <h2 className="text-sm font-bold text-gray-800">User Content Preferences</h2>
+    <select
+      value={selectedContentRole}
+      onChange={(e) => setSelectedContentRole(e.target.value)}
+      className="px-2 py-1 text-[10px] border rounded-md"
+    >
+      <option value="All">All Role Holders</option>
+      <option value="DSE">DSE</option>
+      <option value="TL">TL</option>
+      <option value="RSE">RSE</option>
+      <option value="DSM">DSM</option>
+      <option value="GM">GM</option>
+    </select>
   </div>
 
-  {/* ================= RIGHT: USER CONTENT PREFERENCES ================= */}
-  <div className="bg-white rounded-md shadow-[0_10px_40px_rgba(0,0,0,0.15)] p-4 flex flex-col">
+  {(() => {
+    // User view counts per content type (used for pie chart and % calculation)
+    const roleContentData = {
+      All: { totalUsers: 1284, data: [
+        { type: "Video", users: 1100 },
+        { type: "WBT", users: 860 },
+        { type: "PDF", users: 450 },
+        { type: "PPT", users: 380 },
+      ]},
+      DSE: { totalUsers: 484, data: [
+        { type: "Video", users: 420 },
+        { type: "WBT", users: 330 },
+        { type: "PDF", users: 180 },
+        { type: "PPT", users: 150 },
+      ]},
+      TL: { totalUsers: 242, data: [
+        { type: "Video", users: 210 },
+        { type: "WBT", users: 170 },
+        { type: "PDF", users: 90 },
+        { type: "PPT", users: 75 },
+      ]},
+      RSE: { totalUsers: 363, data: [
+        { type: "Video", users: 310 },
+        { type: "WBT", users: 250 },
+        { type: "PDF", users: 130 },
+        { type: "PPT", users: 110 },
+      ]},
+      DSM: { totalUsers: 121, data: [
+        { type: "Video", users: 100 },
+        { type: "WBT", users: 80 },
+        { type: "PDF", users: 45 },
+        { type: "PPT", users: 35 },
+      ]},
+      GM: { totalUsers: 73, data: [
+        { type: "Video", users: 60 },
+        { type: "WBT", users: 48 },
+        { type: "PDF", users: 28 },
+        { type: "PPT", users: 22 },
+      ]},
+    };
 
-    <div className="flex justify-between items-center mb-3">
-      <h2 className="text-base font-bold text-gray-800">
-        User Content Preferences
-      </h2>
+    // Total content items available (from Content Type)
+    const totalContentItems = {
+      Video: 540,
+      WBT: 230,
+      PDF: 100,
+      PPT: 90,
+    };
 
-      {/* ROLE HOLDER FILTER */}
-      <select
-        value={selectedContentRole}
-        onChange={(e) => setSelectedContentRole(e.target.value)}
-        className="px-3 py-1.5 rounded-md border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-[#f97316]"
-      >
-        <option value="All">All Role Holders</option>
-        <option value="DSE">DSE</option>
-        <option value="TL">TL</option>
-        <option value="RSE">RSE</option>
-        <option value="DSM">DSM</option>
-        <option value="GM">GM</option>
-      </select>
-    </div>
+    const currentData = roleContentData[selectedContentRole] || roleContentData.All;
+    const totalUsers = currentData.totalUsers;
+    const activeUsers = Math.max(...currentData.data.map(d => d.users));
+    const engagementRate = (activeUsers / totalUsers) * 100;
 
-    {/* CONTENT PREFERENCES DATA BASED ON ROLE */}
-    {(() => {
-      // Role-based usage data
-      const roleContentData = {
-        All: {
-          total: 521,
-          data: [
-            { type: "Video", hours: 200 },
-            { type: "WBT", hours: 140 },
-            { type: "PDF", hours: 101 },
-            { type: "PPT", hours: 80 },
-          ],
-        },
-        DSE: {
-          total: 250,
-          data: [
-            { type: "Video", hours: 110 },
-            { type: "WBT", hours: 70 },
-            { type: "PDF", hours: 40 },
-            { type: "PPT", hours: 30 },
-          ],
-        },
-        TL: {
-          total: 120,
-          data: [
-            { type: "Video", hours: 50 },
-            { type: "WBT", hours: 35 },
-            { type: "PDF", hours: 20 },
-            { type: "PPT", hours: 15 },
-          ],
-        },
-        RSE: {
-          total: 80,
-          data: [
-            { type: "Video", hours: 25 },
-            { type: "WBT", hours: 20 },
-            { type: "PDF", hours: 18 },
-            { type: "PPT", hours: 17 },
-          ],
-        },
-        DSM: {
-          total: 45,
-          data: [
-            { type: "Video", hours: 10 },
-            { type: "WBT", hours: 10 },
-            { type: "PDF", hours: 13 },
-            { type: "PPT", hours: 12 },
-          ],
-        },
-        GM: {
-          total: 26,
-          data: [
-            { type: "Video", hours: 5 },
-            { type: "WBT", hours: 5 },
-            { type: "PDF", hours: 10 },
-            { type: "PPT", hours: 6 },
-          ],
-        },
-      };
-
-      const currentData = roleContentData[selectedContentRole] || roleContentData.All;
-      const totalUsage = currentData.total;
-
-      return (
-        <>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 items-stretch">
-
-            {/* KPI - Total Usage */}
-            <div className="flex flex-col flex-1 min-h-[125px]">
-              <div className="flex-1 flex flex-col justify-center items-center text-center">
-
-                <div className="text-[16px] font-bold text-gray-700 mb-2">
-                  Total Usage
-                </div>
-
-                <div className="text-5xl font-black text-[#f97316] leading-none">
-                  {totalUsage}
-                </div>
-
-                <div className="text-[11px] text-gray-500 mt-1">
-                  hrs
-                </div>
-
-              </div>
-            </div>
-
-            {/* PIE CHART */}
-            <div className="md:col-span-2 h-[240px] flex items-center justify-center overflow-hidden">
-              <HighchartsReact
-                highcharts={Highcharts}
-                options={{
-                  chart: {
-                    type: "pie",
-                    backgroundColor: "transparent",
-                    height: 240,
-                    options3d: {
-                      enabled: true,
-                      alpha: 45,
-                    },
-                  },
-                  accessibility: {
-                    enabled: false,
-                  },
-                  credits: {
-                    enabled: false,
-                  },
-                  title: {
-                    text: null,
-                  },
-                  tooltip: {
-                    formatter: function () {
-                      return `<b>${this.point.name}</b><br/>${this.y} hrs`;
-                    },
-                    followPointer: true,
-                  },
-                  plotOptions: {
-                    pie: {
-                      innerSize: 80,
-                      depth: 45,
-                      dataLabels: {
-                        enabled: false,
-                      },
-                      showInLegend: false,
-                    },
-                  },
-                  series: [
-                    {
-                      name: "Usage",
-                      data: currentData.data.map(item => ({
-                        name: item.type,
-                        y: item.hours,
-                      })),
-                    },
-                  ],
-                }}
-              />
-            </div>
-
+    return (
+      <>
+        {/* LEFT: Only Engagement Rate | RIGHT: Pie chart */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-2 items-stretch">
+          <div className="flex flex-col justify-center items-center text-center py-2">
+            <div className="text-[12px] font-bold text-gray-700">Engagement Rate</div>
+            <div className="text-3xl font-black text-[#f97316]">{engagementRate.toFixed(1)}%</div>
           </div>
 
-          {/* TABLE */}
-          <div className="mt-3 overflow-hidden">
-            <table className="w-full text-[11px] border-collapse">
+          <div className="md:col-span-2 h-[180px] flex items-center justify-center">
+            <HighchartsReact
+              highcharts={Highcharts}
+              options={{
+                chart: { type: "pie", backgroundColor: "transparent", height: 180, options3d: { enabled: true, alpha: 45 } },
+                accessibility: { enabled: false },
+                credits: { enabled: false },
+                title: { text: null },
+                tooltip: {
+                  formatter: function () {
+                    const percent = ((this.y / totalUsers) * 100).toFixed(1);
+                    const contentTotal = totalContentItems[this.point.name] || 0;
+                    return `<b>${this.point.name}</b><br/>${percent}% of users viewed<br/>${contentTotal} content items available`;
+                  },
+                },
+                plotOptions: {
+                  pie: { innerSize: 70, depth: 45, dataLabels: { enabled: false }, showInLegend: false },
+                },
+                series: [{ name: "Users", data: currentData.data.map((item) => ({ name: item.type, y: item.users })) }],
+              }}
+            />
+          </div>
+        </div>
 
-              <thead>
-                <tr className="bg-gray-600 text-white">
-                  <th className="p-2 text-center">S.No</th>
-                  <th className="p-2 text-center"></th>
-                  <th className="p-2 text-center w-[80px]">Content Type</th>
-                  <th className="p-2 text-center w-[80px]">Role Holder</th>
-                  <th className="p-2 text-center">Usage (Hrs)</th>
+        {/* BOTTOM: Table with Total Items and % of Users only */}
+        <div className="mt-2 overflow-hidden">
+          <table className="w-full text-[9px] border-collapse">
+            <thead>
+              <tr className="bg-gray-600 text-white">
+                <th className="p-1 text-center">S.No</th>
+                <th className="p-1 text-center"></th>
+                <th className="p-1 text-left">Content Type</th>
+                <th className="p-1 text-left">Role</th>
+                <th className="p-1 text-center">Total Items</th>
+                <th className="p-1 text-center">% of Users</th>
+              </tr>
+            </thead>
+            <tbody>
+              {currentData.data.map((item, i) => {
+                const colors = Highcharts.getOptions().colors;
+                const percentage = ((item.users / totalUsers) * 100).toFixed(1);
+                const contentTotal = totalContentItems[item.type] || 0;
+                return (
+                  <tr key={i} className={i % 2 === 0 ? "bg-gray-50" : "bg-white"}>
+                    <td className="p-1 text-center">{i + 1}</td>
+                    <td className="p-1 text-center">
+                      <span className="w-2 h-2 inline-block" style={{ backgroundColor: colors[i % colors.length] }} />
+                    </td>
+                    <td className="p-1 font-medium">{item.type}</td>
+                    <td className="p-1">{selectedContentRole === "All" ? "All" : selectedContentRole}</td>
+                    <td className="p-1 text-center font-bold text-[#f97316]">{contentTotal.toLocaleString()}</td>
+                    <td className="p-1 text-center text-gray-700">{percentage}%</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </>
+    );
+  })()}
+</div>
+
+  {/* ========== COLUMN 2: STATE WISE USAGE HEAT MAP (reduced height) ========== */}
+  <div className="bg-white rounded-md shadow-[0_10px_40px_rgba(0,0,0,0.15)] p-3 overflow-hidden">
+    <div className="mb-3 pb-1">
+      <div className="flex items-center justify-between mb-2 flex-wrap gap-2">
+        <h2 className="text-sm font-bold text-gray-800">State Wise Usage Heat Map</h2>
+        <div className="flex items-center gap-2 flex-wrap">
+          <select value={selectedMapRegion} onChange={(e) => setSelectedMapRegion(e.target.value)}
+            className="px-2 py-1 text-[10px] font-medium border border-gray-300 rounded-md">
+            <option value="all">All India</option><option value="North">North</option><option value="South">South</option>
+            <option value="East">East</option><option value="West">West</option><option value="Central">Central</option>
+          </select>
+          <select value={selectedMapRole} onChange={(e) => setSelectedMapRole(e.target.value)}
+            className="px-2 py-1 text-[10px] font-medium border border-gray-300 rounded-md">
+            <option value="all">All Role Holders</option><option value="DSE">DSE</option><option value="TL">TL</option>
+            <option value="RSE">RSE</option><option value="DSM">DSM</option><option value="GM">GM</option>
+          </select>
+        </div>
+      </div>
+      <div className="flex items-center justify-between flex-wrap gap-2">
+        <div className="bg-white border border-gray-200 rounded-md shadow-sm px-3 py-1">
+          <div className="text-[10px] font-bold text-gray-500">Total Usage</div>
+          <div className="text-xl font-black text-[#f97316]">
+            {(() => { const filteredData = getFilteredTableData(); return filteredData.reduce((s, i) => s + i.usage, 0).toLocaleString(); })()}
+          </div>
+        </div>
+        <div className="flex items-center gap-1">
+          {["all","ytd","mtd","week"].map((tab) => (
+            <button key={tab} onClick={() => setActiveUsageTab(tab)}
+              className={`px-2 py-1 rounded text-[10px] font-bold ${activeUsageTab === tab ? "bg-[#f97316] text-white" : "bg-gray-100 text-gray-700"}`}>
+              {tab === "all" ? "ALL" : tab === "ytd" ? "YTD" : tab === "mtd" ? "MTD" : "WEEK"}
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <div className="flex flex-col gap-2">
+      <div className="flex flex-col lg:flex-row gap-2 items-start">
+        <div className="w-full lg:w-[55%] rounded-xl overflow-hidden">
+          <HighchartsReact highcharts={Highcharts} constructorType={"mapChart"} options={{
+            ...indiaHeatMapOptions,
+            chart: { ...indiaHeatMapOptions.chart, height: 280, backgroundColor: "transparent" },
+          }} />
+        </div>
+        <div className="w-full lg:w-[45%] bg-white border border-gray-200 rounded-md overflow-hidden h-fit">
+          <div className="overflow-y-auto max-h-[260px]">
+            <table className="w-full text-[10px]">
+              <thead className="sticky top-0">
+                <tr className="bg-[#4a4a4a] text-white">
+                  <th className="px-1 py-1 text-center w-[30px]">S.No</th>
+                  <th className="px-1 py-1 text-left">Role</th>
+                  <th className="px-1 py-1 text-left">State</th>
+                  <th className="px-1 py-1 text-center w-[60px]">
+                    {activeUsageTab === "all" ? "ALL" : activeUsageTab === "ytd" ? "YTD" : activeUsageTab === "mtd" ? "MTD" : "WEEK"}
+                  </th>
                 </tr>
               </thead>
-
               <tbody>
-                {currentData.data.map((item, i) => {
-                  const colors = Highcharts.getOptions().colors;
+                {getFilteredTableData().sort((a,b)=>b.usage-a.usage).map((item,i)=>{
+                  const top3 = [...getFilteredTableData()].sort((a,b)=>b.usage-a.usage).slice(0,3).map(d=>d.usage);
+                  const isTop = top3.includes(item.usage);
                   return (
-                    <tr key={i} className={i % 2 === 0 ? "bg-gray-50" : "bg-white"}>
-
-                      <td className="p-2 text-center font-medium">{i + 1}</td>
-
-                      <td className="p-2 text-center">
-                        <div className="flex justify-center items-center">
-                          <span
-                            className="w-3 h-3 rounded-sm"
-                            style={{ backgroundColor: colors[i % colors.length] }}
-                          />
-                        </div>
-                      </td>
-
-                      <td className="p-2 text-center font-medium truncate">
-                        {item.type}
-                      </td>
-
-                      <td className="p-2 text-center font-medium">
-                        {selectedContentRole === "All" ? "All" : selectedContentRole}
-                      </td>
-
-                      <td className="p-2 text-center font-bold text-[#f97316]">
-                        {item.hours} hrs
-                      </td>
-
+                    <tr key={i} className={`border-b border-gray-100 ${isTop ? "top-state-blink" : ""}`}>
+                      <td className="px-1 py-2 text-center font-semibold">{i+1}</td>
+                      <td className="px-1 py-2"><div className="flex items-center gap-1"><span className={`w-2 h-2 rounded-full ${isTop ? "top-state-dot-blink" : ""}`} style={{backgroundColor: i===0?"#c2410c":i===1?"#ea580c":i===2?"#f97316":"#fdba74"}} /><span className="font-semibold text-gray-700">{item.role}</span></div></td>
+                      <td className="px-1 py-2 font-semibold text-gray-700">{item.state}</td>
+                      <td className={`px-1 py-2 text-center font-bold ${isTop ? "text-[#c2410c]" : "text-gray-700"}`}>{item.usage}</td>
                     </tr>
                   );
                 })}
               </tbody>
-
             </table>
           </div>
-        </>
-      );
-    })()}
-
-  </div>
-
-</div>
-
-{/* ================= COMBINED ROW: STATE WISE USAGE HEAT MAP (LEFT) + HOURLY USAGE HEAT MAP (RIGHT) ================= */}
-<div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-
-{/* LEFT COLUMN: State Wise Usage Heat Map */}
-<div className="bg-white rounded-md shadow-[0_10px_40px_rgba(0,0,0,0.15)] p-4 overflow-hidden">
-  {/* ================= HEADER ================= */}
-  <div className="mb-4 pb-2">
-    {/* TOP ROW - Title on left, Region & Role filters on right */}
-    <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
-      <h2 className="text-base font-bold text-gray-800">State Wise Usage Heat Map</h2>
-      <div className="flex items-center gap-4 flex-wrap">
-        <select
-          value={selectedMapRegion}
-          onChange={(e) => setSelectedMapRegion(e.target.value)}
-          className="px-3 py-1.5 text-[12px] font-medium border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#f97316]"
-        >
-          <option value="all">All India</option>
-          <option value="North">North</option>
-          <option value="South">South</option>
-          <option value="East">East</option>
-          <option value="West">West</option>
-          <option value="Central">Central</option>
-        </select>
-        <select
-          value={selectedMapRole}
-          onChange={(e) => setSelectedMapRole(e.target.value)}
-          className="px-3 py-1.5 text-[12px] font-medium border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#f97316]"
-        >
-          <option value="all">All Role Holders</option>
-          <option value="DSE">DSE</option>
-          <option value="TL">TL</option>
-          <option value="RSE">RSE</option>
-          <option value="DSM">DSM</option>
-          <option value="GM">GM</option>
-        </select>
-      </div>
-    </div>
-
-    {/* BOTTOM ROW - Total Usage Card on LEFT, Tabs on RIGHT */}
-    <div className="flex items-center justify-between flex-wrap gap-3">
-      {/* LEFT SIDE: Total Usage Card */}
-      <div className="bg-white border border-gray-200 rounded-md overflow-hidden shadow-sm">
-        <div className="px-4 py-2 text-left">
-          <div className="text-[12px] font-bold text-gray-500 mb-0.5">Total Usage</div>
-          <div className="text-2xl font-black text-[#f97316]">
-            {(() => {
-              const filteredData = getFilteredTableData();
-              const total = filteredData.reduce((sum, item) => sum + item.usage, 0);
-              return total.toLocaleString();
-            })()}
-          </div>
-        </div>
-      </div>
-
-      {/* RIGHT SIDE: Tabs */}
-      <div className="flex items-center gap-2 flex-wrap">
-        <button
-          onClick={() => setActiveUsageTab("all")}
-          className={`px-4 py-2 rounded-md text-[12px] font-bold transition-all ${
-            activeUsageTab === "all" ? "bg-[#f97316] text-white" : "bg-gray-100 text-gray-700"
-          }`}
-        >
-          ALL
-        </button>
-        <button
-          onClick={() => setActiveUsageTab("ytd")}
-          className={`px-4 py-2 rounded-md text-[12px] font-bold transition-all ${
-            activeUsageTab === "ytd" ? "bg-[#f97316] text-white" : "bg-gray-100 text-gray-700"
-          }`}
-        >
-          YTD
-        </button>
-        <button
-          onClick={() => setActiveUsageTab("mtd")}
-          className={`px-4 py-2 rounded-md text-[12px] font-bold transition-all ${
-            activeUsageTab === "mtd" ? "bg-[#f97316] text-white" : "bg-gray-100 text-gray-700"
-          }`}
-        >
-          MTD
-        </button>
-        <button
-          onClick={() => setActiveUsageTab("week")}
-          className={`px-4 py-2 rounded-md text-[12px] font-bold transition-all ${
-            activeUsageTab === "week" ? "bg-[#f97316] text-white" : "bg-gray-100 text-gray-700"
-          }`}
-        >
-          THIS WEEK
-        </button>
-      </div>
-    </div>
-  </div>
-
-  {/* ================= BODY: MAP + TABLE (no Total Usage card inside) ================= */}
-  <div className="flex flex-col gap-4">
-    {/* MAP + TABLE ROW - Map on left, Table on right */}
-    <div className="flex flex-col lg:flex-row gap-3 items-start">
-      {/* MAP (LEFT SIDE) */}
-      <div className="w-full lg:w-[55%] rounded-2xl overflow-hidden">
-        <HighchartsReact
-          highcharts={Highcharts}
-          constructorType={"mapChart"}
-          options={{
-            ...indiaHeatMapOptions,
-            chart: {
-              ...indiaHeatMapOptions.chart,
-              height: 450,
-              backgroundColor: "transparent",
-            },
-          }}
-        />
-      </div>
-
-      {/* TABLE (RIGHT SIDE) */}
-      <div className="w-full lg:w-[45%] bg-white border border-gray-200 rounded-md overflow-hidden h-fit">
-        <div className="overflow-hidden max-h-[400px] overflow-y-auto">
-          <table className="w-full text-[11px]">
-            <thead className="sticky top-0">
-              <tr className="bg-[#4a4a4a] text-white">
-                <th className="px-2 py-2 text-center w-[40px]">S.No</th>
-                <th className="px-2 py-2 text-left">Role Holder(s)</th>
-                <th className="px-2 py-2 text-left">State</th>
-                <th className="px-2 py-2 text-center w-[90px]">
-                  {activeUsageTab === "all"
-                    ? "ALL TIME"
-                    : activeUsageTab === "ytd"
-                    ? "YTD"
-                    : activeUsageTab === "mtd"
-                    ? "MTD"
-                    : "THIS WEEK"}
-                </th>
-               </tr>
-            </thead>
-            <tbody>
-              {getFilteredTableData()
-                .sort((a, b) => b.usage - a.usage)
-                .map((item, i) => {
-                  const top3 = [...getFilteredTableData()]
-                    .sort((a, b) => b.usage - a.usage)
-                    .slice(0, 3)
-                    .map((d) => d.usage);
-                  const isTop = top3.includes(item.usage);
-                  return (
-                    <tr key={i} className={`border-b border-gray-100 hover:bg-gray-50 ${isTop ? "top-state-blink" : ""}`}>
-                      <td className="px-2 py-3 text-center font-semibold">{i + 1}</td>
-                      <td className="px-2 py-3">
-                        <div className="flex items-center gap-2">
-                          <span
-                            className={`w-2.5 h-2.5 rounded-full ${isTop ? "top-state-dot-blink" : ""}`}
-                            style={{
-                              backgroundColor:
-                                i === 0 ? "#c2410c" : i === 1 ? "#ea580c" : i === 2 ? "#f97316" : "#fdba74",
-                            }}
-                          />
-                          <span className="font-semibold text-gray-700">{item.role}</span>
-                        </div>
-                       </td>
-                      <td className="px-2 py-3 font-semibold text-gray-700">{item.state}</td>
-                      <td className={`px-2 py-3 text-center font-bold ${isTop ? "text-[#c2410c]" : "text-gray-700"}`}>
-                        {item.usage}
-                      </td>
-                    </tr>
-                  );
-                })}
-            </tbody>
-           </table>
         </div>
       </div>
     </div>
   </div>
-</div>
-
-{/* RIGHT COLUMN: Hourly Usage Heat Map (Smaller left column, larger hour boxes) */}
-<div className="bg-white rounded-md shadow-[0_10px_40px_rgba(0,0,0,0.15)] p-4">
-  {/* Header */}
-  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-15">
-    <h2 className="text-xl font-bold text-gray-900">Hourly Usage Heat Map</h2>
-    <div className="flex gap-2 flex-wrap">
-      <select className="px-3 py-1.5 rounded-md border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-[#f97316]">
-        <option>All India</option>
-        <option>North</option>
-        <option>South</option>
-        <option>West</option>
-        <option>East</option>
-        <option>Central</option>
+{/* ========== COLUMN 3: HOURLY USAGE HEAT MAP (increased height) ========== */}
+<div className="bg-white rounded-md shadow-[0_10px_40px_rgba(0,0,0,0.15)] p-3 flex flex-col h-full">
+  <div className="flex justify-between items-center mb-2">
+    <h2 className="text-sm font-bold text-gray-900">Hourly Usage Heat Map</h2>
+    <div className="flex gap-1">
+      <select className="px-2 py-1 text-[10px] border rounded-md">
+        <option>All India</option><option>North</option><option>South</option>
+        <option>West</option><option>East</option><option>Central</option>
       </select>
-      <select className="px-3 py-1.5 rounded-md border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-[#f97316]">
-        <option>All Role Holders</option>
-        <option>DSE</option>
-        <option>TL</option>
-        <option>RSE</option>
-        <option>DSM</option>
-        <option>GM</option>
+      <select className="px-2 py-1 text-[10px] border rounded-md">
+        <option>All Role Holders</option><option>DSE</option><option>TL</option>
+        <option>RSE</option><option>DSM</option><option>GM</option>
       </select>
     </div>
   </div>
 
-  {/* Heat Map - No scroll, all 24 hours fit */}
-  <div className="w-full">
-    {/* Hours Header */}
+  {/* Increased max height: change this value to your desired height */}
+  <div className="max-h-[500px] mt-10 overflow-y-auto">
+    {/* Hours header row - unchanged */}
     <div className="flex">
-      <div className="w-16 sm:w-20 bg-black text-white font-bold px-1 py-2 rounded-tl-md text-xs sm:text-sm flex-shrink-0 text-center">
-        Hours
-      </div>
-      <div className="flex flex-1 bg-gray-100 rounded-tr-md">
+      <div className="w-12 bg-black text-white font-bold text-[10px] px-1 py-1 text-center sticky left-0 z-10">Hrs</div>
+      <div className="flex flex-1 bg-gray-100">
         {Array.from({ length: 24 }, (_, i) => (
-          <div key={i} className="flex-1 text-center py-2">
-            <div className="text-[10px] sm:text-xs font-medium text-gray-700">{i + 1}</div>
-            <div className="text-[8px] sm:text-[9px] text-white rounded-sm px-0.5 inline-block mt-0.5 bg-black">
-              {i < 11 ? "AM" : "PM"}
+          <div key={i} className="flex-1 text-center py-1">
+            <div className="text-[8px] font-medium text-gray-700">{i+1}</div>
+            <div className="text-[6px] text-white bg-black rounded-sm px-0.5 inline-block">
+              {i<11 ? "AM" : "PM"}
             </div>
           </div>
         ))}
       </div>
     </div>
 
-    {/* Week Rows */}
-    {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map((day) => (
-      <div key={day} className="flex">
-        <div className="w-16 sm:w-20 bg-gray-100 px-1 py-3 text-xs sm:text-sm font-semibold flex items-center justify-center flex-shrink-0">
-          {day.slice(0,3)}
+    {/* Days rows - unchanged */}
+    {["Mon","Tue","Wed","Thu","Fri","Sat","Sun"].map((day, idx) => {
+      const fullDay = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"][idx];
+      return (
+        <div key={day} className="flex">
+          <div className="w-12 bg-gray-100 text-[10px] font-semibold flex items-center justify-center py-1 sticky left-0 z-10">{day}</div>
+          <div className="flex flex-1 bg-gray-50">
+            {Array.from({ length: 24 }, (_, hour) => {
+              let color = "bg-gray-300";
+              if (hour >= 7 && hour <= 10) color = "bg-[#efc2a2]";
+              if (hour >= 11 && hour <= 17) color = "bg-[#ec8e42]";
+              if (hour >= 12 && hour <= 14) color = "bg-[#e96b35]";
+              if (hour >= 18 && hour <= 20) color = "bg-[#efc2a2]";
+              if (hour <= 6 || hour >= 21) color = "bg-gray-300";
+              return <div key={hour} className={`flex-1 h-4 m-0.5 rounded-sm ${color}`} title={`${fullDay} ${hour+1}:00`} />;
+            })}
+          </div>
         </div>
-        <div className="flex flex-1 bg-gray-50">
-          {Array.from({ length: 24 }, (_, hour) => {
-            let color = "bg-gray-300";
-            if (hour >= 7 && hour <= 10) color = "bg-[#efc2a2]";
-            if (hour >= 11 && hour <= 17) color = "bg-[#ec8e42]";
-            if (hour >= 12 && hour <= 14) color = "bg-[#e96b35]";
-            if (hour >= 18 && hour <= 20) color = "bg-[#efc2a2]";
-            if (hour <= 6 || hour >= 21) color = "bg-gray-300";
-            return (
-              <div
-                key={hour}
-                className={`flex-1 h-5 sm:h-7 m-0.5 rounded border border-white shadow-sm ${color}`}
-                title={`${day} ${hour+1}:00`}
-              />
-            );
-          })}
-        </div>
-      </div>
-    ))}
+      );
+    })}
 
     {/* Legend */}
-    <div className="mt-4 border rounded-md p-3 flex flex-wrap gap-4 justify-center">
-      <div className="flex items-center gap-2"><div className="h-5 w-5 rounded bg-gray-300 border" /><span className="text-xs">No Usage</span></div>
-      <div className="flex items-center gap-2"><div className="h-5 w-5 rounded bg-[#efc2a2]" /><span className="text-xs">Light Usage</span></div>
-      <div className="flex items-center gap-2"><div className="h-5 w-5 rounded bg-[#ec8e42]" /><span className="text-xs">Moderate Usage</span></div>
-      <div className="flex items-center gap-2"><div className="h-5 w-5 rounded bg-[#e96b35]" /><span className="text-xs">Heavy Usage</span></div>
+    <div className="mt-7 border rounded-md p-2 flex flex-wrap gap-2 justify-center text-[9px]">
+      <div className="flex items-center gap-1"><div className="h-3 w-3 rounded bg-gray-300 border"/><span>No Usage</span></div>
+      <div className="flex items-center gap-1"><div className="h-3 w-3 rounded bg-[#efc2a2]"/><span>Light</span></div>
+      <div className="flex items-center gap-1"><div className="h-3 w-3 rounded bg-[#ec8e42]"/><span>Moderate</span></div>
+      <div className="flex items-center gap-1"><div className="h-3 w-3 rounded bg-[#e96b35]"/><span>Heavy</span></div>
     </div>
   </div>
 </div>
+
+
 </div>
 
     </div>
