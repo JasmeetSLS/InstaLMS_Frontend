@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import HighchartsReactOfficial from "highcharts-react-official";
-import api from "../services/api"; // Adjust the import path to your actual api.js file
+import api, { FILE_BASE_URL } from "../services/api"; // Adjust the import path to your actual api.js file
 
 // Use the global Highcharts from CDN
 const Highcharts = window.Highcharts;
@@ -336,6 +336,15 @@ const userStatCards = [
     series: [{ name: "Usage", joinBy: "hc-key", borderWidth: 1, borderColor: "#ffffff", nullColor: "#f5f5f5", data: getFilteredMapData() }]
   };
 
+// For User Analytics (roles)
+const pieColors = ["#0f766e", "#84cc16", "#ea580c", "#eab308", "#3b82f6"];
+
+// For Course Analytics (categories)
+const courseColors = ["#3b82f6", "#10b981", "#8b5cf6", "#ef4444", "#ec489a", "#14b8a6", "#6366f1"];
+
+// For Content Type (media types)
+const contentColors = ["#3b82f6", "#10b981", "#8b5cf6", "#ef4444", "#ec489a", "#14b8a6", "#6366f1"];
+
   if (loading) {
     return (
       <div className="min-h-screen bg-[#f7f7f7] flex items-center justify-center">
@@ -418,148 +427,178 @@ const userStatCards = [
         })}
       </div>
 
-      {/* ================= ROW 2: THREE ANALYTICS GRAPHS ================= */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        {/* USER ANALYTICS */}
-        <div className="bg-white rounded-md shadow-[0_10px_40px_rgba(0,0,0,0.15)] p-3">
-          <h2 className="text-sm font-bold text-gray-800 mb-2">User Analytics</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-1 mb-3">
-            {userStatCards.map((card) => (
-              <div
-                key={card.key}
-                onClick={() => setSelectedMetric(card.key)}
-                className={`flex flex-col items-center justify-center p-1 rounded border shadow-sm cursor-pointer transition-all hover:scale-[1.01] text-center ${selectedMetric === card.key ? "border-blue-500 ring-1 ring-blue-200" : "border-black"}`}
-              >
-                <div className={`h-5 w-5 rounded-md bg-gradient-to-br ${card.bgFrom} ${card.bgTo} flex items-center justify-center shadow-sm mb-0.5`}>
-                  <card.icon className="h-2.5 w-2.5 text-white" />
-                </div>
-                <div className="text-[9px] font-medium text-gray-600">{card.label}</div>
-                <div className="text-sm font-black text-gray-800">{card.value.toLocaleString()}</div>
-              </div>
-            ))}
+{/* ================= ROW 2: THREE ANALYTICS GRAPHS ================= */}
+<div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+  
+  {/* -------------------- USER ANALYTICS -------------------- */}
+  <div className="bg-white rounded-md shadow-[0_10px_40px_rgba(0,0,0,0.15)] p-3">
+    <h2 className="text-sm font-bold text-gray-800 mb-2">User Analytics</h2>
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-1 mb-3">
+      {userStatCards.map((card) => (
+        <div
+          key={card.key}
+          onClick={() => setSelectedMetric(card.key)}
+          className={`flex flex-col items-center justify-center p-1 rounded border shadow-sm cursor-pointer transition-all hover:scale-[1.01] text-center ${selectedMetric === card.key ? "border-blue-500 ring-1 ring-blue-200" : "border-black"}`}
+        >
+          <div className={`h-5 w-5 rounded-md bg-gradient-to-br ${card.bgFrom} ${card.bgTo} flex items-center justify-center shadow-sm mb-0.5`}>
+            <card.icon className="h-2.5 w-2.5 text-white" />
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 items-center">
-            <div>
-              <HighchartsReact
-                highcharts={Highcharts}
-                options={{
-                  ...{
-                    chart: { type: "pie", backgroundColor: "transparent", height: 250 },
-                    accessibility: { enabled: false },
-                    credits: { enabled: false },
-                    title: { text: null },
-                    plotOptions: { pie: { innerSize: 70, dataLabels: { enabled: false } } },
-                    series: [{ name: "Users", data: getCurrentRoleData() }]
-                  }
-                }}
-              />
-            </div>
-            <div className="overflow-hidden">
-              <table className="w-full text-[10px] border-collapse">
-                <thead>
-                  <tr className="bg-gray-600 text-white"><th className="p-1 text-center">S.No</th><th className="p-1 text-left">Role</th><th className="p-1 text-center">Count</th></tr>
-                </thead>
-                <tbody>
-                  {getCurrentRoleData().map((role, i) => (
-                    <tr key={i} className={i % 2 === 0 ? "bg-gray-50" : "bg-white"}>
-                      <td className="p-1 text-center font-medium">{i + 1}</td>
-                      <td className="p-1 font-medium">{role.name}</td>
-                      <td className="p-1 text-center font-bold">{role.y.toLocaleString()}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
+          <div className="text-[9px] font-medium text-gray-600">{card.label}</div>
+          <div className="text-sm font-black text-gray-800">{card.value.toLocaleString()}</div>
         </div>
-
-        {/* COURSE ANALYTICS */}
-        <div className="bg-white rounded-md shadow-[0_10px_40px_rgba(0,0,0,0.15)] p-3">
-          <h2 className="text-sm font-bold text-gray-800 mb-2">Course Analytics</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-1 mb-3">
-            {courseStatCards.map((card) => (
-              <div
-                key={card.key}
-                onClick={() => setSelectedCourseMetric(card.key)}
-                className={`flex flex-col items-center justify-center p-1 rounded border shadow-sm cursor-pointer transition-all hover:scale-[1.01] text-center ${selectedCourseMetric === card.key ? "border-blue-500 ring-1 ring-blue-200" : "border-black"}`}
-              >
-                <div className={`h-5 w-5 rounded-md bg-gradient-to-br ${card.bgFrom} ${card.bgTo} flex items-center justify-center shadow-sm mb-0.5`}>
-                  <card.icon className="h-2.5 w-2.5 text-white" />
-                </div>
-                <div className="text-[9px] font-medium text-gray-600">{card.label}</div>
-                <div className="text-sm font-black text-gray-800">{card.value}</div>
-              </div>
-            ))}
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 items-center">
-            <div>
-              <HighchartsReact
-                highcharts={Highcharts}
-                options={{
-                  chart: { type: "pie", backgroundColor: "transparent", height: 250 },
-                  accessibility: { enabled: false },
-                  credits: { enabled: false },
-                  title: { text: null },
-                  plotOptions: { pie: { innerSize: 70, dataLabels: { enabled: false } } },
-                  series: [{ name: "Courses", data: getCurrentCourseData() }]
-                }}
-              />
-            </div>
-            <div className="overflow-hidden">
-              <table className="w-full text-[10px] border-collapse">
-                <thead><tr className="bg-gray-600 text-white"><th className="p-1 text-center">S.No</th><th className="p-1 text-left">Category</th><th className="p-1 text-center">Count</th></tr></thead>
-                <tbody>
-                  {getCurrentCourseData().map((cat, i) => (
-                    <tr key={i} className={i % 2 === 0 ? "bg-gray-50" : "bg-white"}>
-                      <td className="p-1 text-center font-medium">{i + 1}</td>
-                      <td className="p-1 font-medium">{cat.name}</td>
-                      <td className="p-1 text-center font-bold">{cat.y}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        {/* CONTENT TYPE */}
-        <div className="bg-white rounded-md shadow-[0_10px_40px_rgba(0,0,0,0.15)] p-3">
-          <h2 className="text-sm font-bold text-gray-800 mb-2">Content Type</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-2 items-stretch">
-            <div className="flex flex-col justify-center items-center text-center py-2">
-              <div className="text-[12px] font-bold text-gray-700">Total Content</div>
-              <div className="text-2xl font-black text-[#f97316]">{totalContent}</div>
-            </div>
-            <div className="md:col-span-2 h-[180px] flex items-center justify-center">
-              <HighchartsReact
-                highcharts={Highcharts}
-                options={{
-                  chart: { type: "pie", backgroundColor: "transparent", height: 180, options3d: { enabled: true, alpha: 45 } },
-                  accessibility: { enabled: false },
-                  credits: { enabled: false },
-                  title: { text: null },
-                  plotOptions: { pie: { innerSize: 70, depth: 45, dataLabels: { enabled: false } } },
-                  series: [{ name: "Content", data: contentData.map(item => ({ name: item.type, y: item.count })) }]
-                }}
-              />
-            </div>
-          </div>
-          <div className="mt-2 overflow-hidden">
-            <table className="w-full text-[10px] border-collapse">
-              <thead><tr className="bg-gray-600 text-white"><th className="p-1 text-center">S.No</th><th className="p-1 text-left">Type</th><th className="p-1 text-center">Count</th></tr></thead>
-              <tbody>
-                {contentData.map((item, i) => (
-                  <tr key={i} className={i % 2 === 0 ? "bg-gray-50" : "bg-white"}>
-                    <td className="p-1 text-center">{i + 1}</td>
-                    <td className="p-1 font-medium">{item.type}</td>
-                    <td className="p-1 text-center font-bold text-[#f97316]">{item.count}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
+      ))}
+    </div>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 items-center">
+      <div>
+        <HighchartsReact
+          highcharts={Highcharts}
+          options={{
+            chart: { type: "pie", backgroundColor: "transparent", height: 250 },
+            colors: pieColors,
+            accessibility: { enabled: false },
+            credits: { enabled: false },
+            title: { text: null },
+            plotOptions: { pie: { innerSize: 70, dataLabels: { enabled: false } } },
+            series: [{ name: "Users", data: getCurrentRoleData() }]
+          }}
+        />
       </div>
+      <div className="overflow-hidden">
+        <table className="w-full text-[10px] border-collapse">
+          <thead>
+            <tr className="bg-gray-600 text-white">
+              <th className="p-1 text-center">S.No</th>
+              <th className="p-1 text-center"></th>
+              <th className="p-1 text-left">Role</th>
+              <th className="p-1 text-center">Count</th>
+            </tr>
+          </thead>
+          <tbody>
+            {getCurrentRoleData().map((role, i) => (
+              <tr key={i} className={i % 2 === 0 ? "bg-gray-50" : "bg-white"}>
+                <td className="p-1 text-center font-medium">{i + 1}</td>
+                <td className="p-1 text-center">
+                  <span className="inline-block w-2 h-2" style={{ backgroundColor: pieColors[i % pieColors.length] }} />
+                </td>
+                <td className="p-1 font-medium">{role.name}</td>
+                <td className="p-1 text-center font-bold">{role.y.toLocaleString()}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  {/* -------------------- COURSE ANALYTICS -------------------- */}
+  <div className="bg-white rounded-md shadow-[0_10px_40px_rgba(0,0,0,0.15)] p-3">
+    <h2 className="text-sm font-bold text-gray-800 mb-2">Course Analytics</h2>
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-1 mb-3">
+      {courseStatCards.map((card) => (
+        <div
+          key={card.key}
+          onClick={() => setSelectedCourseMetric(card.key)}
+          className={`flex flex-col items-center justify-center p-1 rounded border shadow-sm cursor-pointer transition-all hover:scale-[1.01] text-center ${selectedCourseMetric === card.key ? "border-blue-500 ring-1 ring-blue-200" : "border-black"}`}
+        >
+          <div className={`h-5 w-5 rounded-md bg-gradient-to-br ${card.bgFrom} ${card.bgTo} flex items-center justify-center shadow-sm mb-0.5`}>
+            <card.icon className="h-2.5 w-2.5 text-white" />
+          </div>
+          <div className="text-[9px] font-medium text-gray-600">{card.label}</div>
+          <div className="text-sm font-black text-gray-800">{card.value}</div>
+        </div>
+      ))}
+    </div>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 items-center">
+      <div>
+        <HighchartsReact
+          highcharts={Highcharts}
+          options={{
+            chart: { type: "pie", backgroundColor: "transparent", height: 250 },
+            colors: courseColors,      // apply custom colors
+            accessibility: { enabled: false },
+            credits: { enabled: false },
+            title: { text: null },
+            plotOptions: { pie: { innerSize: 70, dataLabels: { enabled: false } } },
+            series: [{ name: "Courses", data: getCurrentCourseData() }]
+          }}
+        />
+      </div>
+      <div className="overflow-hidden">
+        <table className="w-full text-[10px] border-collapse">
+          <thead>
+            <tr className="bg-gray-600 text-white">
+              <th className="p-1 text-center">S.No</th>
+              <th className="p-1 text-center"></th>
+              <th className="p-1 text-left">Category</th>
+              <th className="p-1 text-center">Count</th>
+            </tr>
+          </thead>
+          <tbody>
+            {getCurrentCourseData().map((cat, i) => (
+              <tr key={i} className={i % 2 === 0 ? "bg-gray-50" : "bg-white"}>
+                <td className="p-1 text-center font-medium">{i + 1}</td>
+                <td className="p-1 text-center">
+                  <span className="inline-block w-2 h-2" style={{ backgroundColor: courseColors[i % courseColors.length] }} />
+                </td>
+                <td className="p-1 font-medium">{cat.name}</td>
+                <td className="p-1 text-center font-bold">{cat.y}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  {/* -------------------- CONTENT TYPE -------------------- */}
+  <div className="bg-white rounded-md shadow-[0_10px_40px_rgba(0,0,0,0.15)] p-3">
+    <h2 className="text-sm font-bold text-gray-800 mb-2">Content Type</h2>
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-2 items-stretch">
+      <div className="flex flex-col justify-center items-center text-center py-2">
+        <div className="text-[12px] font-bold text-gray-700">Total Content</div>
+        <div className="text-2xl font-black text-[#f97316]">{totalContent}</div>
+      </div>
+      <div className="md:col-span-2 h-[180px] flex items-center justify-center">
+        <HighchartsReact
+          highcharts={Highcharts}
+          options={{
+            chart: { type: "pie", backgroundColor: "transparent", height: 180, options3d: { enabled: true, alpha: 45 } },
+            colors: contentColors,     // apply custom colors for media types
+            accessibility: { enabled: false },
+            credits: { enabled: false },
+            title: { text: null },
+            plotOptions: { pie: { innerSize: 70, depth: 45, dataLabels: { enabled: false } } },
+            series: [{ name: "Content", data: contentData.map(item => ({ name: item.type, y: item.count })) }]
+          }}
+        />
+      </div>
+    </div>
+    <div className="mt-2 overflow-hidden">
+      <table className="w-full text-[10px] border-collapse">
+        <thead>
+          <tr className="bg-gray-600 text-white">
+            <th className="p-1 text-center">S.No</th>
+            <th className="p-1 text-center"></th>
+            <th className="p-1 text-left">Type</th>
+            <th className="p-1 text-center">Count</th>
+          </tr>
+        </thead>
+        <tbody>
+          {contentData.map((item, i) => (
+            <tr key={i} className={i % 2 === 0 ? "bg-gray-50" : "bg-white"}>
+              <td className="p-1 text-center">{i + 1}</td>
+              <td className="p-1 text-center">
+                <span className="inline-block w-2 h-2" style={{ backgroundColor: contentColors[i % contentColors.length] }} />
+              </td>
+              <td className="p-1 font-medium">{item.type}</td>
+              <td className="p-1 text-center font-bold text-[#f97316]">{item.count}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
 
 {/* ================= LEADERBOARD ================= */}
 <div className="mb-3"><h2 className="text-2xl font-bold">LeaderBoard</h2></div>
@@ -597,7 +636,7 @@ const userStatCards = [
         />
         <div className="absolute inset-0 flex flex-col items-center justify-end pb-5">
           <img
-            src={leaderboardTabs[activeTab].data[1]?.photo || "/default-avatar.png"}
+             src={`${FILE_BASE_URL}${leaderboardTabs[activeTab].data[1]?.photo || ""}`}
             alt={leaderboardTabs[activeTab].data[1]?.name}
             className="w-16 h-16 rounded-full object-cover border-2 border-white shadow-md mb-7"
           />
@@ -617,7 +656,7 @@ const userStatCards = [
         />
         <div className="absolute inset-0 flex flex-col items-center justify-end pb-7">
           <img
-             src={leaderboardTabs[activeTab].data[0]?.photo || "/default-avatar.png"}
+            src={`${FILE_BASE_URL}${leaderboardTabs[activeTab].data[0]?.photo || ""}`}
             alt={leaderboardTabs[activeTab].data[0]?.name}
            className="w-16 h-16 rounded-full object-cover border-2 border-white shadow-md mb-10"
           />
@@ -637,7 +676,7 @@ const userStatCards = [
         />
         <div className="absolute inset-0 flex flex-col items-center justify-end pb-5">
           <img
-           src={leaderboardTabs[activeTab].data[2]?.photo || "/default-avatar.png"}
+            src={`${FILE_BASE_URL}${leaderboardTabs[activeTab].data[2]?.photo || ""}`}
             alt={leaderboardTabs[activeTab].data[2]?.name}
             className="w-16 h-16 rounded-full object-cover border-2 border-white shadow-md mb-7"
           />
@@ -673,7 +712,7 @@ const userStatCards = [
               <td className="px-6 py-3">{idx + 1}</td>
               <td className="px-6 py-3">{user.name}</td>
               <td className="px-6 py-3">
-                 <img src={user.photo || "/default-avatar.png"} alt={user.name}  className="w-10 h-10 border rounded-full object-cover" />
+                <img src={`${FILE_BASE_URL}${user.photo}`} alt={user.name} className="w-10 h-10 border rounded-full object-cover" />
               </td>
               <td className="px-6 py-3">{user.role}</td>
               <td className="px-6 py-3 text-center">{user.dealership}</td>
