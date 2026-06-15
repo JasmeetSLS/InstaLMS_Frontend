@@ -97,6 +97,12 @@ const createApiMethods = (basePath = '') => ({
 
 const admin = createApiMethods('/admin');
 
+// Helper to build query string
+const buildQuery = (params) => {
+  const query = new URLSearchParams(params).toString();
+  return query ? `?${query}` : '';
+};
+
 // Main API object
 const api = {
   // Core request method (exposed for custom requests)
@@ -115,17 +121,23 @@ const api = {
   getPosts: () => admin.get('/posts'),
   createPost: (formData) => admin.post('/add-post', formData, { isFormData: true }),
   
-  // Quiz APIs (NEW)
+  // Quiz APIs
   bulkUploadQuiz: (formData) => admin.post('/quiz/bulk-upload', formData, { isFormData: true }),
   getQuizQuestions: (postId) => admin.get(`/quiz/questions/${postId}`),
   getAllPostTitles: () => admin.get('/posts/titles'),
 
-    // CMS APIs (NEW)
+  // CMS APIs
   getCMSPages: () => admin.get('/cms/pages'),
   createCMSPage: (formData) => admin.post('/cms/page', formData, { isFormData: true }),
 
-    // Role APIs (NEW)
+  // Role APIs
   getRoles: () => admin.get('/roles'),
+
+  // Dashboard APIs (NEW)
+  getDashboardDropdowns: (params = {}) => admin.get(`/dashboard/dropdowns${buildQuery(params)}`),
+  getDashboardStats: (params = {}) => admin.get(`/dashboard/stats${buildQuery(params)}`),
+  getDashboardLeaderboard: (params = {}) => admin.get(`/dashboard/leaderboard${buildQuery(params)}`),
+  getDashboardLearningProgress: (params = {}) => admin.get(`/dashboard/learning-progress${buildQuery(params)}`),
 };
 
 export default api;
