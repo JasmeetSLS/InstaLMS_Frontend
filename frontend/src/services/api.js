@@ -138,6 +138,9 @@ const api = {
   getDashboardStats: (params = {}) => admin.get(`/dashboard/stats${buildQuery(params)}`),
   getDashboardLeaderboard: (params = {}) => admin.get(`/dashboard/leaderboard${buildQuery(params)}`),
   getDashboardLearningProgress: (params = {}) => admin.get(`/dashboard/learning-progress${buildQuery(params)}`),
+  getUserContentPreferences: (params = {}) => admin.get(`/dashboard/user-content-preferences${buildQuery(params)}`),
+  getHourlyUsage: (params = {}) => admin.get(`/dashboard/hourly-usage${buildQuery(params)}`),
+  getStateWiseUsage: (params = {}) => admin.get(`/dashboard/state-wise-usage${buildQuery(params)}`),
 };
 
 export default api;
