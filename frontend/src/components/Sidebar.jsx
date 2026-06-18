@@ -7,7 +7,8 @@ import {
   Newspaper,
   Brain,
   Layers,
-  BarChart3
+  BarChart3,
+  FileText
 } from 'lucide-react';
 
 const Sidebar = ({ isOpen, onClose }) => {
@@ -38,6 +39,11 @@ const Sidebar = ({ isOpen, onClose }) => {
       path: '/admin/performanceAnalytics',
       name: 'Performance Analytics',
       icon: <BarChart3 className="w-5 h-5" />,
+    },
+     {
+      path: '/admin/content',
+      name: 'Content',
+      icon: <FileText className="w-5 h-5" />,
     },
   ];
 

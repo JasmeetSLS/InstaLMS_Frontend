@@ -9,6 +9,7 @@ import Posts from './pages/Posts';
 import Quiz from './pages/Quiz';
 import CMS from './pages/CMS';
 import PerformanceAnalytics from './pages/PerformanceAnalytics';
+import Content from './pages/Content';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
          <Route path="/admin/quiz" element={<AdminLayout><Quiz/></AdminLayout>} />
          <Route path="/admin/cms" element={<AdminLayout><CMS/></AdminLayout>} />
           <Route path="/admin/performanceAnalytics" element={<AdminLayout><PerformanceAnalytics/></AdminLayout>} />
+          <Route path="/admin/content" element={<AdminLayout><Content/></AdminLayout>} />
         {/* Redirect any unknown routes to home */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

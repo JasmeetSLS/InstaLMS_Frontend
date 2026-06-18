@@ -141,6 +141,11 @@ const api = {
   getUserContentPreferences: (params = {}) => admin.get(`/dashboard/user-content-preferences${buildQuery(params)}`),
   getHourlyUsage: (params = {}) => admin.get(`/dashboard/hourly-usage${buildQuery(params)}`),
   getStateWiseUsage: (params = {}) => admin.get(`/dashboard/state-wise-usage${buildQuery(params)}`),
+
+
+   // CMS Category APIs (NEW)
+  getCmsCategories: () => admin.get('/cms-categories'),
+  createCmsCategory: (formData) => admin.post('/add-cms-category', formData, { isFormData: true }),
 };
 
 export default api;
