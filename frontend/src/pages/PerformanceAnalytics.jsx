@@ -330,13 +330,34 @@ const [hourlyData, setHourlyData] = useState({
     most_quizzes_completed: [],
     highest_engagement: []
   });
-  const [learningProgress, setLearningProgress] = useState({
-    mycourse: { total_courses_available: 0, avg_completion_percentage: 0, users_fully_completed: 0 },
-    mycourse_certified: { total_courses_available: 0, avg_completion_percentage: 0, users_fully_completed: 0 },
-    quiz: { total_quizzes_available: 0, avg_completion_percentage: 0, users_fully_completed_quizzes: 0 },
-    quiz_score: { quizzes_average_total_score: "0", avg_score_percentage: 0, users_quiz_average__score: "0" },
+const [learningProgress, setLearningProgress] = useState({
+    mycourse: { 
+        total_courses_available: 0, 
+        completion_percentage: 0,   // changed from avg_completion_percentage
+        completed_course: 0 
+    },
+    mycourse_certified: { 
+        total_courses_available: 0, 
+        completion_percentage: 0,   // changed
+        completed_course: 0 
+    },
+    mycourse_assessment: { 
+        total_courses_available: 0, 
+        completion_percentage: 0,   // changed
+        completed_course: 0 
+    },
+    quiz: { 
+        total_quizzes_available: 0, 
+        avg_completion_percentage: 0, 
+        users_fully_completed_quizzes: 0 
+    }, // this may not be used, but keep as is
+    quiz_score: { 
+        quizzes_average_total_score: "0", 
+        avg_score_percentage: 0, 
+        users_quiz_average__score: "0" 
+    },
     assessment_breakup: []
-  });
+});
 
   const [stateWiseData, setStateWiseData] = useState({
     states: [],
@@ -365,34 +386,34 @@ const [hourlyData, setHourlyData] = useState({
 
 const donutCards = [
     { 
-      title: "Learning Path", 
-      percentage: learningProgress.mycourse?.avg_completion_percentage || 0, 
-      value: learningProgress.mycourse?.user_completed_courses || 0, 
-      total: learningProgress.mycourse?.total_courses_available || 0, 
-      color: "#f97316" 
+        title: "Learning Path", 
+        percentage: learningProgress.mycourse?.completion_percentage || 0,   // changed
+        value: learningProgress.mycourse?.completed_course || 0, 
+        total: learningProgress.mycourse?.total_courses_available || 0, 
+        color: "#f97316" 
     },
     { 
-      title: "Certificates", 
-      percentage: learningProgress.mycourse_certified?.avg_completion_percentage || 0, 
-      value: learningProgress.mycourse_certified?.user_completed_courses || 0, 
-      total: learningProgress.mycourse_certified?.total_courses_available || 0, 
-      color: "#10b981" 
+        title: "Certificates", 
+        percentage: learningProgress.mycourse_certified?.completion_percentage || 0,   // changed
+        value: learningProgress.mycourse_certified?.completed_course || 0, 
+        total: learningProgress.mycourse_certified?.total_courses_available || 0, 
+        color: "#10b981" 
     },
     { 
-      title: "Assessment", 
-      percentage: learningProgress.Assessment?.avg_completion_percentage || 0, 
-      value: learningProgress.Assessment?.user_completed_assessment || 0, 
-      total: learningProgress.Assessment?.total_Assessment_available || 0, 
-      color: "#3b82f6" 
+        title: "Assessment", 
+        percentage: learningProgress.mycourse_assessment?.completion_percentage || 0,   // changed
+        value: learningProgress.mycourse_assessment?.completed_course || 0, 
+        total: learningProgress.mycourse_assessment?.total_courses_available || 0, 
+        color: "#3b82f6" 
     },
     { 
-      title: "Score", 
-      percentage: learningProgress.quiz_score?.avg_score_percentage || 0, 
-      value: parseFloat(learningProgress.quiz_score?.users_quiz_average__score || 0), 
-      total: parseFloat(learningProgress.quiz_score?.quizzes_average_total_score || 0), 
-      color: "#8b5cf6" 
+        title: "Score", 
+        percentage: learningProgress.quiz_score?.avg_score_percentage || 0, 
+        value: parseFloat(learningProgress.quiz_score?.users_quiz_average__score || 0), 
+        total: parseFloat(learningProgress.quiz_score?.quizzes_average_total_score || 0), 
+        color: "#8b5cf6" 
     }
-  ];
+];
 
   // User stat cards
   const userStatCards = [
