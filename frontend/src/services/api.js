@@ -146,6 +146,12 @@ const api = {
    // CMS Category APIs (NEW)
   getCmsCategories: () => admin.get('/cms-categories'),
   createCmsCategory: (formData) => admin.post('/add-cms-category', formData, { isFormData: true }),
+
+  //CMS Stream API
+    getStreamsByCategory: (categoryId) => admin.get(`/streams/${categoryId}`),
+
+    //CMS Section APIs
+    getSectionsByStream: (streamId) => admin.get(`/sections/${streamId}`),
 };
 
 export default api;

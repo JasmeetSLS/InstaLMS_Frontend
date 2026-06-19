@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";  // <-- Add
 import api from "../services/api";
 
 const Content = () => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchCategories();
@@ -28,6 +30,10 @@ const Content = () => {
       .join("")
       .substring(0, 2)
       .toUpperCase();
+  };
+
+  const handleCategoryClick = (categoryId) => {
+    navigate(`/admin/stream/${categoryId}`);  // <-- Singular route
   };
 
   if (loading) {
@@ -64,6 +70,7 @@ const Content = () => {
             <div
               key={category.id}
               className="group bg-white border rounded-md overflow-hidden cursor-pointer transition hover:shadow-lg"
+              onClick={() => handleCategoryClick(category.id)}  // <-- Click handler
             >
               {/* Top Bar */}
               <div className="h-10 flex justify-between items-center px-4 border-b text-sm font-medium text-gray-700 group-hover:bg-gradient-to-r group-hover:from-red-600 group-hover:to-orange-400 group-hover:text-white">
@@ -80,12 +87,10 @@ const Content = () => {
 
               {/* Content */}
               <div className="p-5 flex items-start gap-4 min-h-[110px] group-hover:bg-gradient-to-r group-hover:from-red-600 group-hover:to-orange-400">
-                {/* Avatar */}
                 <div className="w-12 h-12 rounded-full border-2 border-red-300 bg-white flex items-center justify-center text-red-500 text-sm font-semibold flex-shrink-0">
                   {getInitials(category.title)}
                 </div>
 
-                {/* Text */}
                 <div className="flex-1 min-w-0">
                   <h3 className="font-bold text-lg text-gray-800 group-hover:text-white">
                     {category.title}

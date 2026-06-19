@@ -10,6 +10,8 @@ import Quiz from './pages/Quiz';
 import CMS from './pages/CMS';
 import PerformanceAnalytics from './pages/PerformanceAnalytics';
 import Content from './pages/Content';
+import Stream from './pages/Stream';
+import Sections from './pages/Sections';
 
 function App() {
   return (
@@ -25,6 +27,8 @@ function App() {
          <Route path="/admin/cms" element={<AdminLayout><CMS/></AdminLayout>} />
           <Route path="/admin/performanceAnalytics" element={<AdminLayout><PerformanceAnalytics/></AdminLayout>} />
           <Route path="/admin/content" element={<AdminLayout><Content/></AdminLayout>} />
+          <Route path="/admin/stream/:categoryId" element={<AdminLayout><Stream /></AdminLayout>} /> 
+          <Route path="/admin/sections/:streamId" element={<AdminLayout><Sections/></AdminLayout>} />
         {/* Redirect any unknown routes to home */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
