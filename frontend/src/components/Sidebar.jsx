@@ -8,7 +8,8 @@ import {
   Brain,
   Layers,
   BarChart3,
-  FileText
+  FileText,
+  UserCog
 } from 'lucide-react';
 
 const Sidebar = ({ isOpen, onClose }) => {
@@ -92,10 +93,9 @@ const Sidebar = ({ isOpen, onClose }) => {
           <div className="flex items-center justify-center group-hover:justify-between transition-all">
             {/* Logo */}
             <div className="flex items-center gap-3">
-              <div className="min-w-[40px] h-10 flex items-center justify-center rounded-lg bg-white/10 text-white font-bold">
-                M
-              </div>
-
+             <div className="min-w-[40px] h-10 flex items-center justify-center rounded-lg bg-gradient-to-r from-red-600 to-orange-400 hover:from-red-700 hover:to-orange-500 text-white px-5 py-2 text-sm rounded-md shadow-sm">
+  <UserCog size={20} />
+</div>
               <div
                 className="
                   opacity-0 max-w-0 overflow-hidden

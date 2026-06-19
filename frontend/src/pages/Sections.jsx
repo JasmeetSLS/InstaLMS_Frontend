@@ -114,6 +114,17 @@ const Sections = () => {
     }
   };
 
+  const handleAddNew = () => {
+  const sectionId = selectedSection?.id;
+  if (sectionId) {
+    navigate(`/admin/add-content-assessment?sectionId=${sectionId}`);
+  } else {
+    // Optionally show a toast or alert
+    console.warn("No section selected");
+  }
+};
+
+
   const goToNextQuestion = () => {
     if (currentQuestionIndex < assessmentQuestions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
@@ -278,7 +289,7 @@ const Sections = () => {
           </span>
         </div>
         <div className="flex items-center gap-4">
-          <span className="text-sm text-gray-500 font-medium">Vijay Gaikwad</span>
+          <span className="text-sm text-gray-500 font-medium">Super Admin</span>
           <Bell size={16} className="text-red-500" />
           <UserCircle size={22} className="text-red-500" />
         </div>
@@ -376,9 +387,13 @@ const Sections = () => {
               >
                 Assessment Questions ({assessments.length})
               </button>
-              <div className="ml-auto px-3">
-                <PlusCircle size={22} className="text-red-500 cursor-pointer" />
-              </div>
+<div className="ml-auto px-3">
+  <PlusCircle
+    size={22}
+    className="text-red-500 cursor-pointer"
+    onClick={handleAddNew}
+  />
+</div>
             </div>
 
             <div className="p-3 space-y-2 overflow-auto flex-1">

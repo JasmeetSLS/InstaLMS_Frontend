@@ -59,7 +59,7 @@
 //       <div className="h-12 bg-white border-b flex items-center justify-end px-6">
 //         <div className="flex items-center gap-4">
 //           <span className="text-sm text-gray-500 font-medium">
-//             Vijay Gaikwad
+//             Super Admin
 //           </span>
 
 //           <button className="w-8 h-8 rounded-full border border-red-300 flex items-center justify-center">
@@ -319,7 +319,7 @@ const Stream = () => {
         </div>
         <div className="flex items-center gap-4">
           <span className="text-sm text-gray-500 font-medium">
-            Vijay Gaikwad
+            Super Admin
           </span>
 
           <button className="w-8 h-8 rounded-full border border-red-300 flex items-center justify-center">

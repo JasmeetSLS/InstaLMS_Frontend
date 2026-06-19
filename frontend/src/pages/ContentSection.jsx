@@ -37,7 +37,7 @@ const ContentSection = () => {
       <header className="h-12 bg-white border-b border-gray-200 flex items-center justify-end px-5">
         <div className="flex items-center gap-4">
           <span className="text-sm text-gray-500">
-            Vijay Gaikwad
+            Super Admin
           </span>
 
           <Bell

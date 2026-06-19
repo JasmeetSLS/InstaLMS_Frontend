@@ -12,6 +12,9 @@ import PerformanceAnalytics from './pages/PerformanceAnalytics';
 import Content from './pages/Content';
 import Stream from './pages/Stream';
 import Sections from './pages/Sections';
+import AddContentAssessment from './pages/AddContentAssessment';
+import CreateContent from './pages/CreateContent';
+import CreateAssessment from './pages/CreateAssessment';
 
 function App() {
   return (
@@ -29,6 +32,9 @@ function App() {
           <Route path="/admin/content" element={<AdminLayout><Content/></AdminLayout>} />
           <Route path="/admin/stream/:categoryId" element={<AdminLayout><Stream /></AdminLayout>} /> 
           <Route path="/admin/sections/:streamId" element={<AdminLayout><Sections/></AdminLayout>} />
+          <Route path="/admin/add-content-assessment" element={<AdminLayout><AddContentAssessment /></AdminLayout>} />
+          <Route path="/admin/create-content" element={<AdminLayout><CreateContent /></AdminLayout>} />
+<Route path="/admin/create-assessment" element={<AdminLayout><CreateAssessment /></AdminLayout>} />
         {/* Redirect any unknown routes to home */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
