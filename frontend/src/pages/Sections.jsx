@@ -23,11 +23,14 @@ const Sections = () => {
   const [contents, setContents] = useState([]);
   const [assessments, setAssessments] = useState([]);
   const [selectedContent, setSelectedContent] = useState(null);
-  const [activeTab, setActiveTab] = useState("cards"); // "cards" or "assessments"
+  const [selectedAssessment, setSelectedAssessment] = useState(null);
+  const [assessmentQuestions, setAssessmentQuestions] = useState([]);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [activeTab, setActiveTab] = useState("cards");
   const [loading, setLoading] = useState(true);
   const [loadingContent, setLoadingContent] = useState(false);
+  const [loadingPreview, setLoadingPreview] = useState(false);
 
-  // Fetch sections
   useEffect(() => {
     fetchSections();
   }, [streamId]);
@@ -38,7 +41,6 @@ const Sections = () => {
       const response = await api.getSectionsByStream(streamId);
       const sectionsData = response.data || [];
       setSections(sectionsData);
-      // Auto-select first section
       if (sectionsData.length > 0) {
         setSelectedSection(sectionsData[0]);
         await fetchSectionData(sectionsData[0].id);
@@ -53,7 +55,6 @@ const Sections = () => {
   const fetchSectionData = async (sectionId) => {
     try {
       setLoadingContent(true);
-      // Fetch contents and assessments for the selected section
       const [contentsRes, assessmentsRes] = await Promise.all([
         api.getContentsBySection(sectionId),
         api.getAssessmentsBySection(sectionId),
@@ -62,11 +63,14 @@ const Sections = () => {
       const assessmentsData = assessmentsRes.data || [];
       setContents(contentsData);
       setAssessments(assessmentsData);
-      // Auto-select first content for preview
+      setSelectedContent(null);
+      setSelectedAssessment(null);
+      setAssessmentQuestions([]);
+      setCurrentQuestionIndex(0);
       if (contentsData.length > 0) {
-        setSelectedContent(contentsData[0]);
-      } else {
-        setSelectedContent(null);
+        setActiveTab("cards");
+      } else if (assessmentsData.length > 0) {
+        setActiveTab("assessments");
       }
     } catch (error) {
       console.error("Error fetching section data:", error);
@@ -80,26 +84,173 @@ const Sections = () => {
     await fetchSectionData(section.id);
   };
 
-  const handleContentClick = (content) => {
-    setSelectedContent(content);
+  const handleContentClick = async (content) => {
+    setLoadingPreview(true);
+    try {
+      const response = await api.getContentById(content.id);
+      setSelectedContent(response.data);
+      setSelectedAssessment(null);
+      setAssessmentQuestions([]);
+    } catch (error) {
+      console.error("Error fetching content details:", error);
+    } finally {
+      setLoadingPreview(false);
+    }
   };
 
-  // Get image URL for content preview
+  const handleAssessmentClick = async (assessment) => {
+    setSelectedAssessment(assessment);
+    setSelectedContent(null);
+    setCurrentQuestionIndex(0);
+    setLoadingPreview(true);
+    try {
+      const response = await api.getAssessmentQuestions(assessment.id);
+      setAssessmentQuestions(response.data?.questions || []);
+    } catch (error) {
+      console.error("Error fetching assessment questions:", error);
+      setAssessmentQuestions([]);
+    } finally {
+      setLoadingPreview(false);
+    }
+  };
+
+  const goToNextQuestion = () => {
+    if (currentQuestionIndex < assessmentQuestions.length - 1) {
+      setCurrentQuestionIndex(currentQuestionIndex + 1);
+    }
+  };
+
+  const goToPrevQuestion = () => {
+    if (currentQuestionIndex > 0) {
+      setCurrentQuestionIndex(currentQuestionIndex - 1);
+    }
+  };
+
   const getContentImage = (content) => {
     if (!content) return null;
     if (content.media_url) {
       if (content.media_url.startsWith("http")) return content.media_url;
       return `http://localhost:5000${content.media_url}`;
     }
-    // Fallback default image
     return "https://images.unsplash.com/photo-1558981806-ec527fa84c39?w=800";
   };
 
-  // Get content description text (might be from description or content field)
   const getContentDescription = (content) => {
     if (!content) return "";
-    // If content has description, use it; otherwise, could be from other fields
     return content.description || "No description available";
+  };
+
+  // Renders the assessment preview inside the phone mockup
+  const renderAssessmentPreview = () => {
+    if (!selectedAssessment) return null;
+    const qs = assessmentQuestions;
+    if (qs.length === 0) {
+      return <div className="text-gray-500 text-sm">No questions available</div>;
+    }
+    const question = qs[currentQuestionIndex];
+    const total = qs.length;
+
+  const renderQuestionContent = () => {
+    switch (question.question_type) {
+      case "mcq":
+      case "this_or_that":
+      case "true_false":
+        return (
+          <div className="mt-3 space-y-2">
+            {question.options &&
+              question.options.map((opt, idx) => {
+                const isCorrect = opt.is_correct === 1;
+                // Remove trailing "0" or any numbers from option text
+                const cleanText = opt.option_text.replace(/\s*\d+$/, '').trim();
+                const letter = String.fromCharCode(65 + idx);
+                return (
+                  <div
+                    key={idx}
+                    className={`flex items-center gap-2 text-sm p-1.5 rounded ${
+                      isCorrect ? "bg-green-100 border border-green-300" : ""
+                    }`}
+                  >
+                    <span className="w-5 h-5 rounded-full border border-gray-300 flex items-center justify-center text-xs font-medium">
+                      {letter}
+                    </span>
+                    <span className="text-sm">{cleanText}</span>
+                    {isCorrect && <CheckCircle size={16} className="text-green-600 ml-auto" />}
+                  </div>
+                );
+              })}
+          </div>
+        );
+
+        case "match_following":
+          return (
+            <div className="mt-3 text-sm space-y-1.5">
+              {question.matches &&
+                question.matches.map((match, idx) => (
+                  <div key={idx} className="flex justify-between border-b border-gray-100 py-1.5">
+                    <span className="font-medium text-sm">{match.left_text}</span>
+                    <span className="text-gray-600 text-sm">→ {match.right_text}</span>
+                  </div>
+                ))}
+            </div>
+          );
+
+        case "order_following":
+          return (
+            <div className="mt-3 text-sm space-y-1.5">
+              {question.orders &&
+                question.orders.map((order, idx) => (
+                  <div key={idx} className="flex items-center gap-3 py-1.5 border-b border-gray-100">
+                    <span className="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-xs font-bold">
+                      {order.correct_position}
+                    </span>
+                    <span className="text-sm">{order.item_text}</span>
+                  </div>
+                ))}
+            </div>
+          );
+
+        case "fill_blank":
+          return (
+            <div className="mt-3 text-sm">
+              <p className="font-medium text-green-600">
+                Answer: <span className="text-gray-800">{question.answer || "N/A"}</span>
+              </p>
+              <p className="text-gray-400 mt-1 text-xs">(Fill in the blank question)</p>
+            </div>
+          );
+
+        default:
+          return <div className="text-gray-400 text-xs">Unsupported question type</div>;
+      }
+    };
+
+    return (
+      <div>
+        <div className="flex justify-between items-center text-sm text-gray-500">
+          <span>
+            Question {currentQuestionIndex + 1} of {total}
+          </span>
+        </div>
+        <p className="mt-2 text-base font-medium text-gray-800">{question.question_text}</p>
+        {renderQuestionContent()}
+        <div className="flex justify-between mt-4 gap-2">
+          <button
+            onClick={goToPrevQuestion}
+            disabled={currentQuestionIndex === 0}
+            className="text-sm px-3 py-1.5 border rounded disabled:opacity-50"
+          >
+            Previous
+          </button>
+          <button
+            onClick={goToNextQuestion}
+            disabled={currentQuestionIndex === total - 1}
+            className="text-sm px-3 py-1.5 border rounded disabled:opacity-50"
+          >
+            Next
+          </button>
+        </div>
+      </div>
+    );
   };
 
   if (loading) {
@@ -122,7 +273,9 @@ const Sections = () => {
             <ArrowLeft size={16} /> Back
           </button>
           <span className="text-gray-300">|</span>
-          <span className="text-sm text-gray-500">Stream ID: {streamId}</span>
+          <span className="text-sm font-medium text-gray-700">
+            Sections for Stream
+          </span>
         </div>
         <div className="flex items-center gap-4">
           <span className="text-sm text-gray-500 font-medium">Vijay Gaikwad</span>
@@ -161,8 +314,9 @@ const Sections = () => {
 
       {/* Main Content */}
       <div className="p-3">
-        <div className="grid grid-cols-[240px_1fr_260px] gap-3 h-[calc(100vh-170px)]">
-          {/* LEFT PANEL - Sections List */}
+        {/* Increased right panel width to 320px */}
+        <div className="grid grid-cols-[240px_1fr_320px] gap-3 h-[calc(100vh-170px)]">
+          {/* LEFT PANEL - Sections */}
           <div className="bg-white border rounded overflow-hidden flex flex-col">
             <div className="flex items-center justify-between px-3 py-3 border-b">
               <h3 className="text-base font-medium">Section</h3>
@@ -192,9 +346,8 @@ const Sections = () => {
             </div>
           </div>
 
-          {/* CENTER PANEL - Contents / Assessments */}
+          {/* CENTER PANEL - Cards / Assessments */}
           <div className="bg-white border rounded flex flex-col overflow-hidden">
-            {/* Tabs */}
             <div className="flex items-center border-b bg-gray-50">
               <button
                 className={`px-6 py-3 text-sm border-b-2 ${
@@ -202,7 +355,11 @@ const Sections = () => {
                     ? "border-red-500 font-medium"
                     : "border-transparent text-gray-500"
                 }`}
-                onClick={() => setActiveTab("cards")}
+                onClick={() => {
+                  setActiveTab("cards");
+                  setSelectedAssessment(null);
+                  setAssessmentQuestions([]);
+                }}
               >
                 Cards ({contents.length})
               </button>
@@ -212,7 +369,10 @@ const Sections = () => {
                     ? "border-red-500 font-medium"
                     : "border-transparent text-gray-500"
                 }`}
-                onClick={() => setActiveTab("assessments")}
+                onClick={() => {
+                  setActiveTab("assessments");
+                  setSelectedContent(null);
+                }}
               >
                 Assessment Questions ({assessments.length})
               </button>
@@ -221,7 +381,6 @@ const Sections = () => {
               </div>
             </div>
 
-            {/* Content List */}
             <div className="p-3 space-y-2 overflow-auto flex-1">
               {activeTab === "cards" ? (
                 contents.length === 0 ? (
@@ -235,7 +394,7 @@ const Sections = () => {
                       className={`border rounded p-2.5 flex items-center justify-between cursor-pointer ${
                         selectedContent?.id === content.id
                           ? "bg-red-50 border-red-300"
-                          : "bg-white"
+                          : "bg-white hover:bg-gray-50"
                       }`}
                       onClick={() => handleContentClick(content)}
                     >
@@ -270,7 +429,12 @@ const Sections = () => {
                   assessments.map((assessment) => (
                     <div
                       key={assessment.id}
-                      className="border rounded p-2.5 flex items-center justify-between bg-white"
+                      className={`border rounded p-2.5 flex items-center justify-between cursor-pointer ${
+                        selectedAssessment?.id === assessment.id
+                          ? "bg-blue-50 border-blue-300"
+                          : "bg-white hover:bg-gray-50"
+                      }`}
+                      onClick={() => handleAssessmentClick(assessment)}
                     >
                       <div className="flex items-center gap-2">
                         <div className="w-7 h-7 rounded-full border border-blue-300 flex items-center justify-center">
@@ -299,39 +463,52 @@ const Sections = () => {
               <button className="flex-1 py-3 text-sm text-gray-500">Activity Log</button>
             </div>
             <div className="flex justify-center py-3 overflow-auto flex-1">
-              {selectedContent ? (
-                <div className="w-[220px] h-[500px] bg-[#20242c] rounded-[28px] p-3">
-                  <div className="bg-white rounded-[20px] h-full overflow-auto">
-                    <div className="p-3">
-                      <h3 className="font-bold text-sm leading-5">
+              {/* Mobile mockup - width increased to 260px */}
+              <div className="w-[260px] h-[500px] bg-[#20242c] rounded-[28px] p-3">
+                <div className="bg-white rounded-[20px] h-full overflow-auto p-4">
+                  {loadingPreview ? (
+                    <div className="flex items-center justify-center h-full text-gray-400 text-sm">
+                      Loading...
+                    </div>
+                  ) : activeTab === "cards" && selectedContent ? (
+                    <>
+                      <h3 className="font-bold text-base leading-5">
                         {selectedContent.title || "Content Preview"}
                       </h3>
                       {selectedContent.media_url && (
                         <img
                           src={getContentImage(selectedContent)}
                           alt={selectedContent.title}
-                          className="w-full h-24 object-cover mt-2 rounded"
+                          className="w-full h-28 object-cover mt-2 rounded"
                           onError={(e) => {
                             e.target.src =
                               "https://images.unsplash.com/photo-1558981806-ec527fa84c39?w=800";
                           }}
                         />
                       )}
-                      <div className="mt-2 text-[11px] leading-5">
-                        {/* Render description with line breaks and bullet points if needed */}
-                        <p className="text-blue-600 font-semibold">Welcome!</p>
+                      <div className="mt-3 text-sm leading-5">
                         <p className="mt-2">{getContentDescription(selectedContent)}</p>
-                        {/* If content has description with bullet points, we can parse */}
-                        {/* For now, show plain text */}
                       </div>
+                    </>
+                  ) : activeTab === "assessments" && selectedAssessment ? (
+                    renderAssessmentPreview()
+                  ) : (
+                    <div className="flex flex-col items-center justify-center h-full text-gray-400 text-sm p-2">
+                      {activeTab === "cards" ? (
+                        <>
+                          <ImageIcon size={40} className="mb-3 text-gray-300" />
+                          <span className="text-center break-words">Select a card to preview</span>
+                        </>
+                      ) : (
+                        <>
+                          <FileText size={40} className="mb-3 text-gray-300" />
+                          <span className="text-center break-words">Select an assessment to preview</span>
+                        </>
+                      )}
                     </div>
-                  </div>
+                  )}
                 </div>
-              ) : (
-                <div className="text-gray-400 text-sm flex items-center justify-center h-full">
-                  Select a card to preview
-                </div>
-              )}
+              </div>
             </div>
           </div>
         </div>

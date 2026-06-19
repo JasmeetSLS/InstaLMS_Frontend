@@ -155,9 +155,11 @@ const api = {
 
     //CMS Content APIs
        getContentsBySection: (sectionId) => admin.get(`/contents/${sectionId}`),
+        getContentById: (contentId) => admin.get(`/content/${contentId}`),
 
     // CMS Assessment APIs
 getAssessmentsBySection: (sectionId) => admin.get(`/assessments/${sectionId}`),
+getAssessmentQuestions: (assessmentId) => admin.get(`/assessment/${assessmentId}/questions`),
 };
 
 export default api;
