@@ -152,6 +152,12 @@ const api = {
 
     //CMS Section APIs
     getSectionsByStream: (streamId) => admin.get(`/sections/${streamId}`),
+
+    //CMS Content APIs
+       getContentsBySection: (sectionId) => admin.get(`/contents/${sectionId}`),
+
+    // CMS Assessment APIs
+getAssessmentsBySection: (sectionId) => admin.get(`/assessments/${sectionId}`),
 };
 
 export default api;
