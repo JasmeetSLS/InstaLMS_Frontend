@@ -432,7 +432,7 @@ const Sections = () => {
                   setSelectedContent(null);
                 }}
               >
-                Assessment Questions ({assessments.length})
+                Assessment ({assessments.length})
               </button>
               <div className="ml-auto px-3">
                 <PlusCircle
