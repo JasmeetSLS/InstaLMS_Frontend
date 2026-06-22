@@ -14,7 +14,7 @@ import Stream from './pages/Stream';
 import Sections from './pages/Sections';
 import AddContentAssessment from './pages/AddContentAssessment';
 import CreateContent from './pages/CreateContent';
-import CreateAssessment from './pages/CreateAssessment';
+import CreateQuestion from './pages/CreateQuestion';
 
 function App() {
   return (
@@ -34,7 +34,7 @@ function App() {
           <Route path="/admin/sections/:streamId" element={<AdminLayout><Sections/></AdminLayout>} />
           <Route path="/admin/add-content-assessment" element={<AdminLayout><AddContentAssessment /></AdminLayout>} />
           <Route path="/admin/create-content" element={<AdminLayout><CreateContent /></AdminLayout>} />
-<Route path="/admin/create-assessment" element={<AdminLayout><CreateAssessment /></AdminLayout>} />
+<Route path="/admin/create-question" element={<AdminLayout><CreateQuestion /></AdminLayout>} />
         {/* Redirect any unknown routes to home */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

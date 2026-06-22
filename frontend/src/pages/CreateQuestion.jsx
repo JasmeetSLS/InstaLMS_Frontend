@@ -9,12 +9,13 @@ import {
   CheckCircle,
 } from "lucide-react";
 
-const CreateAssessment = () => {
+const CreateQuestion = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const sectionId = searchParams.get("sectionId");
   const template = searchParams.get("template") || "MCQ - Single";
+  const questionType = searchParams.get("questionType") || "mcq";
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -48,9 +49,10 @@ const CreateAssessment = () => {
   };
 
   const handleSubmit = () => {
-    // TODO: Implement API call to create assessment
-    console.log("Creating assessment:", {
+    // TODO: Implement API call to create question
+    console.log("Creating question:", {
       sectionId,
+      questionType,
       template,
       title,
       description,
@@ -59,7 +61,7 @@ const CreateAssessment = () => {
       correctOption,
       passingPercentage,
     });
-    alert("Assessment created successfully!");
+    alert("Question created successfully!");
     navigate(-1);
   };
 
@@ -80,7 +82,7 @@ const CreateAssessment = () => {
             <ArrowLeft size={16} /> Back
           </button>
           <span className="text-gray-300">|</span>
-          <span className="text-sm text-gray-500">Create Assessment</span>
+          <span className="text-sm text-gray-500">Create Question</span>
         </div>
         <div className="flex items-center gap-4">
           <span className="text-sm text-gray-500">Super Admin</span>
@@ -98,7 +100,7 @@ const CreateAssessment = () => {
         <span className="mx-2 text-gray-400">{">"}</span>
         <span>Introduction to UPVC</span>
         <span className="mx-2 text-gray-400">{">"}</span>
-        <span className="font-semibold">Create Assessment</span>
+        <span className="font-semibold">Create Question</span>
         <span className="text-gray-400 ml-1">({template})</span>
       </div>
 
@@ -111,16 +113,16 @@ const CreateAssessment = () => {
               {template}
             </h2>
 
-            {/* Assessment Title */}
+            {/* Question Title (optional) */}
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Assessment Title <span className="text-red-500">*</span>
+                Question Title <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                placeholder="Enter assessment title"
+                placeholder="Enter question title"
                 className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-400"
               />
             </div>
@@ -139,7 +141,7 @@ const CreateAssessment = () => {
               />
             </div>
 
-            {/* Question */}
+            {/* Question Text */}
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Question <span className="text-red-500">*</span>
@@ -245,7 +247,7 @@ const CreateAssessment = () => {
               </div>
             )}
 
-            {/* Passing Percentage */}
+            {/* Passing Percentage – still relevant for MCQ? We keep it for now */}
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Passing Percentage
@@ -332,11 +334,11 @@ const CreateAssessment = () => {
           onClick={handleSubmit}
           className="px-6 py-2 text-sm rounded bg-gradient-to-r from-red-500 to-orange-500 text-white"
         >
-          Save Assessment
+          Save Question
         </button>
       </div>
     </div>
   );
 };
 
-export default CreateAssessment;
+export default CreateQuestion;

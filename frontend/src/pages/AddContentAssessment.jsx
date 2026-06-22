@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 import api from "../services/api";
 
-// ✅ Removed "Activity"
+// Content templates – stay as before
 const contentTemplates = [
   { icon: Image, label: "Image Text" },
   { icon: Images, label: "Multi-Image" },
@@ -30,14 +30,14 @@ const contentTemplates = [
   { icon: Globe, label: "Extract from URL" },
 ];
 
-// ✅ Removed "Hotspot"
+// Question templates – map each to a backend question_type
 const questionTemplates = [
-  { icon: Grid2x2, label: "MCQ - Single" },
-  { icon: Grid2x2, label: "MCQ - Multiple" },
-  { icon: Equal, label: "Fill Blanks" },
-  { icon: ListOrdered, label: "Order the following" },
-  { icon: CheckCircle2, label: "True or False" },
-  { icon: ArrowLeftRight, label: "This or That" },
+  { icon: Grid2x2, label: "MCQ - Single", type: "mcq" },
+  { icon: Grid2x2, label: "MCQ - Multiple", type: "mcq" }, // same type, but we can differentiate later
+  { icon: Equal, label: "Fill Blanks", type: "fill_blank" },
+  { icon: ListOrdered, label: "Order the following", type: "order_following" },
+  { icon: CheckCircle2, label: "True or False", type: "true_false" },
+  { icon: ArrowLeftRight, label: "This or That", type: "this_or_that" },
 ];
 
 const TemplateCard = ({ icon: Icon, label, onClick }) => (
@@ -65,17 +65,58 @@ const AddContentAssessment = () => {
   const [streamTitle, setStreamTitle] = useState("Stream");
   const [loading, setLoading] = useState(true);
 
+  // Fetch section details to show in breadcrumb
+  useEffect(() => {
+    if (sectionId) {
+      fetchSectionDetails();
+    } else {
+      setLoading(false);
+    }
+  }, [sectionId]);
+
+  const fetchSectionDetails = async () => {
+    try {
+      setLoading(true);
+      // You need an endpoint to get section by ID (if not already available)
+      // Here we assume you have a getSectionById method – add it if missing.
+      const response = await api.getSectionById(sectionId);
+      const data = response.data;
+      setSectionTitle(data.title || "Section");
+      setStreamTitle(data.stream_title || "Stream");
+    } catch (error) {
+      console.error("Error fetching section details:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleBack = () => {
     navigate(-1);
   };
 
-  // ✅ URL order: sectionId, type, template
-  const handleTemplateSelect = (label, type) => {
-    const basePath = type === "content" ? "/admin/create-content" : "/admin/create-assessment";
-    navigate(
-      `${basePath}?sectionId=${sectionId}&type=${type}&template=${encodeURIComponent(label)}`
-    );
+  // Handle template selection – redirect to appropriate creation page
+  const handleTemplateSelect = (label, type, questionType = null) => {
+    if (type === "content") {
+      // Content creation
+      navigate(
+        `/admin/create-content?sectionId=${sectionId}&template=${encodeURIComponent(label)}`
+      );
+    } else {
+      // Question creation – use the question type
+      navigate(
+        `/admin/create-question?sectionId=${sectionId}&questionType=${encodeURIComponent(questionType)}&template=${encodeURIComponent(label)}`
+      );
+    }
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#f5f5f5] flex justify-center items-center">
+        <div className="text-lg font-medium">Loading...</div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-[#f5f5f5]">
       {/* Header */}
@@ -141,14 +182,14 @@ const AddContentAssessment = () => {
           </button>
           <button
             className={`flex items-center gap-2 px-6 py-3 text-sm border-b-2 ${
-              activeTab === "assessment"
+              activeTab === "question"
                 ? "border-red-500 font-medium text-red-600"
                 : "border-transparent text-gray-500 hover:text-gray-700"
             }`}
-            onClick={() => setActiveTab("assessment")}
+            onClick={() => setActiveTab("question")}
           >
             <FileQuestion size={16} />
-            Assessment
+            Question
           </button>
         </div>
 
@@ -175,7 +216,7 @@ const AddContentAssessment = () => {
                   <TemplateCard
                     key={item.label}
                     {...item}
-                    onClick={() => handleTemplateSelect(item.label, "assessment")}
+                    onClick={() => handleTemplateSelect(item.label, "question", item.type)}
                   />
                 ))}
               </div>
