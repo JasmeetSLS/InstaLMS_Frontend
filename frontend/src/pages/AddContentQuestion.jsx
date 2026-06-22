@@ -22,8 +22,7 @@ import api from "../services/api";
 
 // Content templates – stay as before
 const contentTemplates = [
-  { icon: Image, label: "Image Text" },
-  { icon: Images, label: "Multi-Image" },
+  { icon: Images, label: "Multiple Image Text" }, 
   { icon: Video, label: "Video" },
   { icon: LayoutPanelLeft, label: "Image-Text Side by Side" },
   { icon: FileText, label: "Extract from PDF" },
