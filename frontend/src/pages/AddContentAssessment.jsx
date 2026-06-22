@@ -65,28 +65,6 @@ const AddContentAssessment = () => {
   const [streamTitle, setStreamTitle] = useState("Stream");
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (sectionId) {
-      fetchSectionDetails();
-    } else {
-      setLoading(false);
-    }
-  }, [sectionId]);
-
-  const fetchSectionDetails = async () => {
-    try {
-      setLoading(true);
-      const response = await api.getSectionById(sectionId);
-      const data = response.data;
-      setSectionTitle(data.title || "Section");
-      setStreamTitle(data.stream_title || "Stream");
-    } catch (error) {
-      console.error("Error fetching section details:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleBack = () => {
     navigate(-1);
   };
@@ -98,15 +76,6 @@ const AddContentAssessment = () => {
       `${basePath}?sectionId=${sectionId}&type=${type}&template=${encodeURIComponent(label)}`
     );
   };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-[#f5f5f5] flex justify-center items-center">
-        <div className="text-lg font-medium">Loading...</div>
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-[#f5f5f5]">
       {/* Header */}

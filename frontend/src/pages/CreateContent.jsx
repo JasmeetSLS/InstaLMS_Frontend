@@ -68,26 +68,6 @@ const CreateContent = () => {
   const [streamTitle, setStreamTitle] = useState("Stream");
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    if (sectionId) {
-      fetchSectionDetails();
-    }
-  }, [sectionId]);
-
-  const fetchSectionDetails = async () => {
-    try {
-      setLoading(true);
-      const response = await api.getSectionById(sectionId);
-      const data = response.data;
-      setSectionTitle(data.title || "Section");
-      setStreamTitle(data.stream_title || "Stream");
-    } catch (error) {
-      console.error("Error fetching section details:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleBack = () => {
     navigate(-1);
   };
