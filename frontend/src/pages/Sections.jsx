@@ -11,6 +11,7 @@ import {
   Image as ImageIcon,
   FileText,
   CheckCircle,
+  X, // for modal close
 } from "lucide-react";
 import api from "../services/api";
 
@@ -18,6 +19,7 @@ const Sections = () => {
   const { streamId } = useParams();
   const navigate = useNavigate();
 
+  // existing states
   const [sections, setSections] = useState([]);
   const [selectedSection, setSelectedSection] = useState(null);
   const [contents, setContents] = useState([]);
@@ -30,6 +32,13 @@ const Sections = () => {
   const [loading, setLoading] = useState(true);
   const [loadingContent, setLoadingContent] = useState(false);
   const [loadingPreview, setLoadingPreview] = useState(false);
+
+  // --- Add Section Modal state ---
+  const [showAddSectionModal, setShowAddSectionModal] = useState(false);
+  const [newSectionTitle, setNewSectionTitle] = useState("");
+  const [newSectionDescription, setNewSectionDescription] = useState("");
+  const [sectionSubmitting, setSectionSubmitting] = useState(false);
+  const [sectionError, setSectionError] = useState("");
 
   useEffect(() => {
     fetchSections();
@@ -115,15 +124,13 @@ const Sections = () => {
   };
 
   const handleAddNew = () => {
-  const sectionId = selectedSection?.id;
-  if (sectionId) {
-    navigate(`/admin/add-content-assessment?sectionId=${sectionId}`);
-  } else {
-    // Optionally show a toast or alert
-    console.warn("No section selected");
-  }
-};
-
+    const sectionId = selectedSection?.id;
+    if (sectionId) {
+      navigate(`/admin/add-content-assessment?sectionId=${sectionId}`);
+    } else {
+      console.warn("No section selected");
+    }
+  };
 
   const goToNextQuestion = () => {
     if (currentQuestionIndex < assessmentQuestions.length - 1) {
@@ -151,7 +158,6 @@ const Sections = () => {
     return content.description || "No description available";
   };
 
-  // Renders the assessment preview inside the phone mockup
   const renderAssessmentPreview = () => {
     if (!selectedAssessment) return null;
     const qs = assessmentQuestions;
@@ -161,36 +167,35 @@ const Sections = () => {
     const question = qs[currentQuestionIndex];
     const total = qs.length;
 
-  const renderQuestionContent = () => {
-    switch (question.question_type) {
-      case "mcq":
-      case "this_or_that":
-      case "true_false":
-        return (
-          <div className="mt-3 space-y-2">
-            {question.options &&
-              question.options.map((opt, idx) => {
-                const isCorrect = opt.is_correct === 1;
-                // Remove trailing "0" or any numbers from option text
-                const cleanText = opt.option_text.replace(/\s*\d+$/, '').trim();
-                const letter = String.fromCharCode(65 + idx);
-                return (
-                  <div
-                    key={idx}
-                    className={`flex items-center gap-2 text-sm p-1.5 rounded ${
-                      isCorrect ? "bg-green-100 border border-green-300" : ""
-                    }`}
-                  >
-                    <span className="w-5 h-5 rounded-full border border-gray-300 flex items-center justify-center text-xs font-medium">
-                      {letter}
-                    </span>
-                    <span className="text-sm">{cleanText}</span>
-                    {isCorrect && <CheckCircle size={16} className="text-green-600 ml-auto" />}
-                  </div>
-                );
-              })}
-          </div>
-        );
+    const renderQuestionContent = () => {
+      switch (question.question_type) {
+        case "mcq":
+        case "this_or_that":
+        case "true_false":
+          return (
+            <div className="mt-3 space-y-2">
+              {question.options &&
+                question.options.map((opt, idx) => {
+                  const isCorrect = opt.is_correct === 1;
+                  const cleanText = opt.option_text.replace(/\s*\d+$/, "").trim();
+                  const letter = String.fromCharCode(65 + idx);
+                  return (
+                    <div
+                      key={idx}
+                      className={`flex items-center gap-2 text-sm p-1.5 rounded ${
+                        isCorrect ? "bg-green-100 border border-green-300" : ""
+                      }`}
+                    >
+                      <span className="w-5 h-5 rounded-full border border-gray-300 flex items-center justify-center text-xs font-medium">
+                        {letter}
+                      </span>
+                      <span className="text-sm">{cleanText}</span>
+                      {isCorrect && <CheckCircle size={16} className="text-green-600 ml-auto" />}
+                    </div>
+                  );
+                })}
+            </div>
+          );
 
         case "match_following":
           return (
@@ -264,6 +269,45 @@ const Sections = () => {
     );
   };
 
+  // --- Add Section Modal handlers ---
+  const handleOpenAddSection = () => {
+    setShowAddSectionModal(true);
+    setNewSectionTitle("");
+    setNewSectionDescription("");
+    setSectionError("");
+  };
+
+  const handleCloseAddSection = () => {
+    setShowAddSectionModal(false);
+    setNewSectionTitle("");
+    setNewSectionDescription("");
+    setSectionError("");
+    setSectionSubmitting(false);
+  };
+
+  const handleAddSectionSubmit = async (e) => {
+    e.preventDefault();
+    if (!newSectionTitle.trim()) {
+      setSectionError("Title is required");
+      return;
+    }
+    setSectionSubmitting(true);
+    setSectionError("");
+    try {
+      await api.createSection({
+        stream_id: parseInt(streamId),
+        title: newSectionTitle.trim(),
+        description: newSectionDescription.trim() || "",
+      });
+      handleCloseAddSection();
+      await fetchSections(); // refresh sections list
+    } catch (err) {
+      setSectionError(err.message || "Failed to add section");
+    } finally {
+      setSectionSubmitting(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-[#f4f4f4] flex justify-center items-center">
@@ -325,13 +369,16 @@ const Sections = () => {
 
       {/* Main Content */}
       <div className="p-3">
-        {/* Increased right panel width to 320px */}
         <div className="grid grid-cols-[240px_1fr_320px] gap-3 h-[calc(100vh-170px)]">
           {/* LEFT PANEL - Sections */}
           <div className="bg-white border rounded overflow-hidden flex flex-col">
             <div className="flex items-center justify-between px-3 py-3 border-b">
               <h3 className="text-base font-medium">Section</h3>
-              <PlusCircle size={22} className="text-red-500 cursor-pointer" />
+              <PlusCircle
+                size={22}
+                className="text-red-500 cursor-pointer"
+                onClick={handleOpenAddSection} // <-- added click handler
+              />
             </div>
             <div className="overflow-y-auto p-3 space-y-3 flex-1">
               {sections.map((section) => (
@@ -387,13 +434,13 @@ const Sections = () => {
               >
                 Assessment Questions ({assessments.length})
               </button>
-<div className="ml-auto px-3">
-  <PlusCircle
-    size={22}
-    className="text-red-500 cursor-pointer"
-    onClick={handleAddNew}
-  />
-</div>
+              <div className="ml-auto px-3">
+                <PlusCircle
+                  size={22}
+                  className="text-red-500 cursor-pointer"
+                  onClick={handleAddNew}
+                />
+              </div>
             </div>
 
             <div className="p-3 space-y-2 overflow-auto flex-1">
@@ -478,7 +525,6 @@ const Sections = () => {
               <button className="flex-1 py-3 text-sm text-gray-500">Activity Log</button>
             </div>
             <div className="flex justify-center py-3 overflow-auto flex-1">
-              {/* Mobile mockup - width increased to 260px */}
               <div className="w-[260px] h-[500px] bg-[#20242c] rounded-[28px] p-3">
                 <div className="bg-white rounded-[20px] h-full overflow-auto p-4">
                   {loadingPreview ? (
@@ -528,6 +574,75 @@ const Sections = () => {
           </div>
         </div>
       </div>
+
+      {/* --- Add Section Modal --- */}
+      {showAddSectionModal && (
+        <div className="fixed inset-0 bg-[#000000d6] bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-bold">Add New Section</h2>
+              <button
+                onClick={handleCloseAddSection}
+                className="text-gray-500 hover:text-gray-700"
+                disabled={sectionSubmitting}
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            {sectionError && (
+              <div className="mb-4 p-2 bg-red-100 border border-red-400 text-red-700 text-sm rounded">
+                {sectionError}
+              </div>
+            )}
+
+            <form onSubmit={handleAddSectionSubmit}>
+              <div className="mb-4">
+                <label className="block text-sm font-medium mb-1">
+                  Title <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  value={newSectionTitle}
+                  onChange={(e) => setNewSectionTitle(e.target.value)}
+                  className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-400"
+                  required
+                  disabled={sectionSubmitting}
+                />
+              </div>
+
+              <div className="mb-4">
+                <label className="block text-sm font-medium mb-1">Description</label>
+                <textarea
+                  value={newSectionDescription}
+                  onChange={(e) => setNewSectionDescription(e.target.value)}
+                  rows={3}
+                  className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-400"
+                  disabled={sectionSubmitting}
+                />
+              </div>
+
+              <div className="flex justify-end gap-3 mt-6">
+                <button
+                  type="button"
+                  onClick={handleCloseAddSection}
+                  className="px-4 py-2 text-sm border border-gray-300 rounded hover:bg-gray-50"
+                  disabled={sectionSubmitting}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 text-sm bg-red-600 text-white rounded hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                  disabled={sectionSubmitting}
+                >
+                  {sectionSubmitting ? "Adding..." : "Add Section"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

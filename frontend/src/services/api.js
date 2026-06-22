@@ -153,6 +153,7 @@ const api = {
 
     //CMS Section APIs
     getSectionsByStream: (streamId) => admin.get(`/sections/${streamId}`),
+    createSection: (data) => admin.post('/add-section', data), 
 
     //CMS Content APIs
        getContentsBySection: (sectionId) => admin.get(`/contents/${sectionId}`),
