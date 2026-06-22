@@ -12,8 +12,16 @@ import {
   FileText as FileTextIcon,
   Link2,
   Trash2,
+  Loader2,
 } from "lucide-react";
 import api from "../services/api";
+
+// --- PDF.js with Vite-compatible worker ---
+import * as pdfjsLib from "pdfjs-dist";
+pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
+  "pdfjs-dist/build/pdf.worker.mjs",
+  import.meta.url
+).toString();
 
 const CreateContent = () => {
   const navigate = useNavigate();
@@ -34,7 +42,7 @@ const CreateContent = () => {
   const [imagePreview, setImagePreview] = useState(null);
 
   // Multi-Image fields
-  const [images, setImages] = useState([]); // array of { file, preview }
+  const [images, setImages] = useState([]);
 
   // Video fields
   const [videoFile, setVideoFile] = useState(null);
@@ -49,6 +57,8 @@ const CreateContent = () => {
   // PDF fields
   const [pdfFile, setPdfFile] = useState(null);
   const [pdfName, setPdfName] = useState("");
+  const [pdfText, setPdfText] = useState("");
+  const [isExtracting, setIsExtracting] = useState(false);
 
   // URL fields
   const [sourceUrl, setSourceUrl] = useState("");
@@ -82,7 +92,33 @@ const CreateContent = () => {
     navigate(-1);
   };
 
-  // Image Text handlers
+  // --- PDF Extraction ---
+  const extractTextFromPDF = async (file) => {
+    try {
+      setIsExtracting(true);
+      const arrayBuffer = await file.arrayBuffer();
+      const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+      let fullText = "";
+
+      for (let i = 1; i <= pdf.numPages; i++) {
+        const page = await pdf.getPage(i);
+        const textContent = await page.getTextContent();
+        const pageText = textContent.items.map((item) => item.str).join(" ");
+        fullText += pageText + "\n\n";
+      }
+
+      setPdfText(fullText.trim());
+      return fullText.trim();
+    } catch (error) {
+      console.error("Error extracting PDF text:", error);
+      setPdfText("Failed to extract text from PDF.");
+      return "";
+    } finally {
+      setIsExtracting(false);
+    }
+  };
+
+  // --- Handlers ---
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -97,7 +133,6 @@ const CreateContent = () => {
     setImagePreview(null);
   };
 
-  // Multi-Image handlers
   const handleMultiImageChange = (e) => {
     const files = e.target.files;
     const newImages = [];
@@ -119,7 +154,6 @@ const CreateContent = () => {
     document.getElementById("multiImageUpload").click();
   };
 
-  // Video handlers
   const handleVideoChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -135,7 +169,6 @@ const CreateContent = () => {
     setVideoUrl("");
   };
 
-  // Side Image handlers
   const handleSideImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -150,17 +183,19 @@ const CreateContent = () => {
     setSideImagePreview(null);
   };
 
-  // PDF handlers
   const handlePdfChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       setPdfFile(file);
       setPdfName(file.name);
+      setPdfText("");
+      extractTextFromPDF(file);
     }
   };
   const removePdf = () => {
     setPdfFile(null);
     setPdfName("");
+    setPdfText("");
   };
 
   const handleSubmit = () => {
@@ -171,7 +206,6 @@ const CreateContent = () => {
       description,
       isNumberedList,
       openInBrowser,
-      // template-specific fields
       imageFile,
       images,
       videoFile,
@@ -179,6 +213,7 @@ const CreateContent = () => {
       sideImageFile,
       sideText,
       pdfFile,
+      pdfText,
       sourceUrl,
     };
     console.log("Saving content:", payload);
@@ -186,13 +221,12 @@ const CreateContent = () => {
     navigate(-1);
   };
 
-  // Render different fields based on template
+  // --- Render template-specific fields ---
   const renderTemplateFields = () => {
     switch (template) {
       case "Image Text":
         return (
           <>
-            {/* Image Upload */}
             <div className="relative h-56 bg-gray-100 border flex items-center justify-center">
               {imagePreview ? (
                 <>
@@ -231,8 +265,6 @@ const CreateContent = () => {
             <div className="text-xs text-gray-500 mt-3 space-y-1">
               <p>* File formats: jpg, jpeg, webp, png, gif (Max 2MB)</p>
             </div>
-
-            {/* Options */}
             <div className="mt-6 space-y-3">
               <label className="flex items-center gap-2 text-sm">
                 <input
@@ -257,7 +289,6 @@ const CreateContent = () => {
       case "Multi-Image":
         return (
           <>
-            {/* Multiple Images */}
             <div className="mt-4">
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Images
@@ -303,7 +334,6 @@ const CreateContent = () => {
       case "Video":
         return (
           <>
-            {/* Video Upload */}
             <div className="relative h-56 bg-gray-100 border flex items-center justify-center">
               {videoPreview ? (
                 <>
@@ -357,7 +387,6 @@ const CreateContent = () => {
       case "Image-Text Side by Side":
         return (
           <>
-            {/* Image */}
             <div className="relative h-56 bg-gray-100 border flex items-center justify-center">
               {sideImagePreview ? (
                 <>
@@ -411,18 +440,24 @@ const CreateContent = () => {
       case "Extract from PDF":
         return (
           <>
-            {/* PDF Upload */}
             <div className="relative h-56 bg-gray-100 border flex items-center justify-center">
               {pdfFile ? (
                 <div className="text-center">
                   <FileTextIcon size={48} className="mx-auto text-red-500 mb-2" />
                   <p className="text-sm font-medium">{pdfName}</p>
-                  <button
-                    onClick={removePdf}
-                    className="mt-2 text-xs text-red-500 hover:underline"
-                  >
-                    Remove
-                  </button>
+                  {isExtracting ? (
+                    <div className="flex items-center justify-center gap-2 mt-2 text-xs text-gray-500">
+                      <Loader2 size={16} className="animate-spin" />
+                      Extracting text...
+                    </div>
+                  ) : (
+                    <button
+                      onClick={removePdf}
+                      className="mt-2 text-xs text-red-500 hover:underline"
+                    >
+                      Remove
+                    </button>
+                  )}
                 </div>
               ) : (
                 <div className="text-center">
@@ -445,6 +480,14 @@ const CreateContent = () => {
               )}
             </div>
             <p className="text-xs text-gray-500 mt-2">* Upload PDF file (Max 10MB)</p>
+            {pdfText && (
+              <div className="mt-3 p-2 bg-gray-50 border rounded text-xs max-h-32 overflow-y-auto">
+                <p className="font-medium text-gray-700">Extracted text preview:</p>
+                <p className="text-gray-600 whitespace-pre-wrap">
+                  {pdfText.length > 300 ? `${pdfText.substring(0, 300)}...` : pdfText}
+                </p>
+              </div>
+            )}
           </>
         );
 
@@ -474,7 +517,7 @@ const CreateContent = () => {
     }
   };
 
-  // Render preview content based on template
+  // --- Preview renderer ---
   const renderPreviewContent = () => {
     switch (template) {
       case "Image Text":
@@ -610,10 +653,24 @@ const CreateContent = () => {
           <>
             <h3 className="font-bold text-sm">{title || "Content Preview"}</h3>
             {pdfFile ? (
-              <div className="mt-2 p-4 bg-gray-100 rounded flex items-center justify-center gap-2 text-sm">
-                <FileTextIcon size={24} className="text-red-500" />
-                <span>{pdfName}</span>
-              </div>
+              <>
+                <div className="mt-2 p-2 bg-gray-100 rounded flex items-center justify-center gap-2 text-xs">
+                  <FileTextIcon size={20} className="text-red-500" />
+                  <span className="truncate">{pdfName}</span>
+                </div>
+                {isExtracting ? (
+                  <div className="mt-3 flex items-center justify-center gap-2 text-xs text-gray-500">
+                    <Loader2 size={16} className="animate-spin" />
+                    Extracting text...
+                  </div>
+                ) : pdfText ? (
+                  <div className="mt-3 text-xs max-h-40 overflow-y-auto text-gray-700 whitespace-pre-wrap border p-2 rounded bg-gray-50">
+                    {pdfText.length > 500 ? pdfText.substring(0, 500) + "..." : pdfText}
+                  </div>
+                ) : (
+                  <p className="mt-3 text-xs text-gray-400">No text extracted yet.</p>
+                )}
+              </>
             ) : (
               <div className="mt-2 h-20 bg-gray-100 rounded flex items-center justify-center text-xs text-gray-400">
                 No PDF uploaded
@@ -661,6 +718,15 @@ const CreateContent = () => {
         return <p className="text-gray-400 text-xs">Preview not available</p>;
     }
   };
+
+  // --- Main render ---
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#f4f4f4] flex justify-center items-center">
+        <div className="text-lg font-medium">Loading...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#f4f4f4]">
@@ -717,7 +783,7 @@ const CreateContent = () => {
             </h2>
 
             <div className="max-w-lg mx-auto">
-              {/* Title - Always present */}
+              {/* Title */}
               <input
                 type="text"
                 value={title}
@@ -732,7 +798,7 @@ const CreateContent = () => {
               {/* Template-specific fields */}
               {renderTemplateFields()}
 
-              {/* Description - Always present */}
+              {/* Description */}
               <div className="mt-5">
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Description

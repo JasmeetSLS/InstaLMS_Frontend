@@ -18,6 +18,7 @@
     "highcharts": "^12.6.0",
     "highcharts-react-official": "^3.2.3",
     "lucide-react": "^1.0.1",
+    "pdfjs-dist": "^6.0.227",
     "react": "^19.2.4",
     "react-chartjs-2": "^5.3.1",
     "react-dom": "^19.2.4",

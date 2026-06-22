@@ -274,7 +274,7 @@ const CreateAssessment = () => {
                   <span className="font-mono text-red-500">0:06:16</span>
                 </div>
                 <p className="mt-2 text-sm font-medium text-gray-800">
-                  {questionText || "How many variants does the Pulsar 150 come in?"}
+                  {questionText || "Question Text"}
                 </p>
                 {!isFillBlank && !isOrdering && (
                   <div className="mt-2 space-y-1">
