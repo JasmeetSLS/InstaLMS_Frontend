@@ -54,7 +54,7 @@ const TemplateCard = ({ icon: Icon, label, onClick }) => (
   </div>
 );
 
-const AddContentAssessment = () => {
+const AddContentQuestion = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
@@ -94,20 +94,18 @@ const AddContentAssessment = () => {
     navigate(-1);
   };
 
-  // Handle template selection – redirect to appropriate creation page
-  const handleTemplateSelect = (label, type, questionType = null) => {
-    if (type === "content") {
-      // Content creation
-      navigate(
-        `/admin/create-content?sectionId=${sectionId}&template=${encodeURIComponent(label)}`
-      );
-    } else {
-      // Question creation – use the question type
-      navigate(
-        `/admin/create-question?sectionId=${sectionId}&questionType=${encodeURIComponent(questionType)}&template=${encodeURIComponent(label)}`
-      );
-    }
-  };
+const handleTemplateSelect = (label, type) => {
+  if (type === "content") {
+    navigate(
+      `/admin/create-content?sectionId=${sectionId}&type=content&template=${encodeURIComponent(label)}`
+    );
+  } else {
+    // For questions, only pass type and template – no questionType
+    navigate(
+      `/admin/create-question?sectionId=${sectionId}&type=question&template=${encodeURIComponent(label)}`
+    );
+  }
+};
 
   if (loading) {
     return (
@@ -252,4 +250,4 @@ const AddContentAssessment = () => {
   );
 };
 
-export default AddContentAssessment;
+export default AddContentQuestion;

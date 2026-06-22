@@ -817,7 +817,7 @@ const Sections = () => {
   const handleAddNew = () => {
     const sectionId = selectedSection?.id;
     if (sectionId) {
-      navigate(`/admin/add-content-assessment?sectionId=${sectionId}`);
+      navigate(`/admin/add-content-question?sectionId=${sectionId}`);
     } else {
       console.warn("No section selected");
     }

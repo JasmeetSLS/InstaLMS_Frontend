@@ -12,7 +12,7 @@ import PerformanceAnalytics from './pages/PerformanceAnalytics';
 import Content from './pages/Content';
 import Stream from './pages/Stream';
 import Sections from './pages/Sections';
-import AddContentAssessment from './pages/AddContentAssessment';
+import AddContentQuestion from './pages/AddContentQuestion';
 import CreateContent from './pages/CreateContent';
 import CreateQuestion from './pages/CreateQuestion';
 
@@ -32,7 +32,7 @@ function App() {
           <Route path="/admin/content" element={<AdminLayout><Content/></AdminLayout>} />
           <Route path="/admin/stream/:categoryId" element={<AdminLayout><Stream /></AdminLayout>} /> 
           <Route path="/admin/sections/:streamId" element={<AdminLayout><Sections/></AdminLayout>} />
-          <Route path="/admin/add-content-assessment" element={<AdminLayout><AddContentAssessment /></AdminLayout>} />
+          <Route path="/admin/add-content-question" element={<AdminLayout><AddContentQuestion /></AdminLayout>} />
           <Route path="/admin/create-content" element={<AdminLayout><CreateContent /></AdminLayout>} />
 <Route path="/admin/create-question" element={<AdminLayout><CreateQuestion /></AdminLayout>} />
         {/* Redirect any unknown routes to home */}
