@@ -149,6 +149,7 @@ const api = {
 
   //CMS Stream API
     getStreamsByCategory: (categoryId) => admin.get(`/streams/${categoryId}`),
+    createStream: (formData) => admin.post('/add-stream', formData, { isFormData: true }),
 
     //CMS Section APIs
     getSectionsByStream: (streamId) => admin.get(`/sections/${streamId}`),
