@@ -1,0 +1,12 @@
+@keyframes zoomInOut {
+  0% { transform: scale(1.1); }
+  50% { transform: scale(1.3); }
+  100% { transform: scale(1.1); }
+}
+
+.bg-animated {
+  /* Remove the blur */
+  animation: zoomInOut 20s ease-in-out infinite alternate;
+  filter: blur(1px);   
+  will-change: transform;
+}
