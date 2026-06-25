@@ -249,8 +249,8 @@ case "multiple_image_text": {
     .find((s) => s.type === "image" && s.content);
 
   return (
-    <div className="relative w-full h-full overflow-hidden"> {/* outer: no scroll */}
-      {/* Background image – fixed within this container */}
+    <div className="relative w-full h-full overflow-hidden">
+      {/* Background image – fixed, zooming, blurred */}
       {lastImageSlide && (
         <img
           src={`${FILE_BASE_URL}${lastImageSlide.content}`}
@@ -262,7 +262,14 @@ case "multiple_image_text": {
           }}
         />
       )}
-      {/* No overlay */}
+      {/* Semi‑transparent blue overlay for readability */}
+      <div
+        className="absolute inset-0"
+        style={{
+          backgroundColor: "#1d3557",
+          opacity: 0.5, // adjust as needed (0.4–0.6)
+        }}
+      />
       {/* Content wrapper – scrollable */}
       <div className="relative z-10 h-full overflow-auto p-4 text-white">
         <h3 className="font-bold text-base leading-5">
