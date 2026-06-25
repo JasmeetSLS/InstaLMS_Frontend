@@ -20,11 +20,10 @@ import {
 } from "lucide-react";
 import api from "../services/api";
 
-// Content templates – stay as before
+// Content templates – "Image-Text Side by Side" has been removed
 const contentTemplates = [
   { icon: Images, label: "Multiple Image Text" }, 
   { icon: Video, label: "Video" },
-  { icon: LayoutPanelLeft, label: "Image-Text Side by Side" },
   { icon: FileText, label: "Extract from PDF" },
   { icon: Globe, label: "Extract from URL" },
 ];
@@ -93,18 +92,18 @@ const AddContentQuestion = () => {
     navigate(-1);
   };
 
-const handleTemplateSelect = (label, type) => {
-  if (type === "content") {
-    navigate(
-      `/admin/create-content?sectionId=${sectionId}&type=content&template=${encodeURIComponent(label)}`
-    );
-  } else {
-    // For questions, only pass type and template – no questionType
-    navigate(
-      `/admin/create-question?sectionId=${sectionId}&type=question&template=${encodeURIComponent(label)}`
-    );
-  }
-};
+  const handleTemplateSelect = (label, type) => {
+    if (type === "content") {
+      navigate(
+        `/admin/create-content?sectionId=${sectionId}&type=content&template=${encodeURIComponent(label)}`
+      );
+    } else {
+      // For questions, only pass type and template – no questionType
+      navigate(
+        `/admin/create-question?sectionId=${sectionId}&type=question&template=${encodeURIComponent(label)}`
+      );
+    }
+  };
 
   if (loading) {
     return (

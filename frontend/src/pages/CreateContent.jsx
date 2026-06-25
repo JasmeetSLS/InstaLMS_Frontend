@@ -1706,11 +1706,6 @@ const CreateContent = () => {
   const [videoPreview, setVideoPreview] = useState(null);
   const [videoUrl, setVideoUrl] = useState("");
 
-  // Image-Text Side by Side fields
-  const [sideImageFile, setSideImageFile] = useState(null);
-  const [sideImagePreview, setSideImagePreview] = useState(null);
-  const [sideText, setSideText] = useState("");
-
   // PDF fields
   const [pdfFile, setPdfFile] = useState(null);
   const [pdfName, setPdfName] = useState("");
@@ -1731,7 +1726,7 @@ const CreateContent = () => {
   // Background color – auto‑updated from the first uploaded image
   const [backgroundColor, setBackgroundColor] = useState("#ffffff");
 
-  // --- NEW: background image state and load status ---
+  // --- background image state and load status ---
   const [backgroundImage, setBackgroundImage] = useState(null);
   const [bgLoaded, setBgLoaded] = useState(false);
 
@@ -1799,41 +1794,6 @@ const CreateContent = () => {
     setVideoUrl("");
   };
 
-  // --- UPDATED: handle side image upload – set background image ---
-  const handleSideImageChange = async (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setSideImageFile(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const dataUrl = reader.result;
-        setSideImagePreview(dataUrl);
-        // Set as background image
-        setBackgroundImage(dataUrl);
-        setBgLoaded(false);
-        // Preload image to trigger fade
-        const img = new Image();
-        img.onload = () => setBgLoaded(true);
-        img.src = dataUrl;
-        // Auto‑set background color (for overlay tint)
-        getAverageColorFromImage(file).then((color) => {
-          setBackgroundColor(color);
-        });
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-  const removeSideImage = () => {
-    setSideImageFile(null);
-    setSideImagePreview(null);
-    setBackgroundImage(null);   // clear background
-    setBgLoaded(false);
-    // Reset background to white if no other images exist
-    if (slides.every((s) => !s.imageFile)) {
-      setBackgroundColor("#ffffff");
-    }
-  };
-
   const handlePdfChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -1876,7 +1836,6 @@ const CreateContent = () => {
     }
   };
 
-  // --- UPDATED: slide image upload – set background image ---
   const updateSlideImage = async (index, file) => {
     const reader = new FileReader();
     reader.onloadend = async () => {
@@ -1915,8 +1874,6 @@ const CreateContent = () => {
       openInBrowser,
       videoFile,
       videoUrl,
-      sideImageFile,
-      sideText,
       pdfFile,
       pdfText,
       sourceUrl,
@@ -1974,55 +1931,6 @@ const CreateContent = () => {
                 onChange={(e) => setVideoUrl(e.target.value)}
                 placeholder="https://example.com/video.mp4"
                 className="w-full border rounded px-3 py-2 text-sm"
-              />
-            </div>
-          </>
-        );
-
-      case "Image-Text Side by Side":
-        return (
-          <>
-            <div className="relative h-56 bg-gray-100 border flex items-center justify-center">
-              {sideImagePreview ? (
-                <>
-                  <button
-                    onClick={removeSideImage}
-                    className="absolute -top-3 -right-3 w-8 h-8 bg-red-500 rounded-full flex items-center justify-center hover:bg-red-600"
-                  >
-                    <X size={16} className="text-white" />
-                  </button>
-                  <img src={sideImagePreview} alt="preview" className="w-52 h-36 object-cover" />
-                </>
-              ) : (
-                <div className="text-center">
-                  <ImageIcon size={40} className="mx-auto text-gray-400 mb-2" />
-                  <p className="text-sm text-gray-500">Click to upload image</p>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleSideImageChange}
-                    className="hidden"
-                    id="sideImageUpload"
-                  />
-                  <label
-                    htmlFor="sideImageUpload"
-                    className="inline-block mt-2 px-4 py-1 bg-gray-200 text-sm rounded cursor-pointer hover:bg-gray-300"
-                  >
-                    Choose File
-                  </label>
-                </div>
-              )}
-            </div>
-            <div className="mt-4">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Side Text
-              </label>
-              <textarea
-                rows={4}
-                value={sideText}
-                onChange={(e) => setSideText(e.target.value)}
-                placeholder="Enter text that appears alongside the image"
-                className="w-full border rounded px-3 py-2 text-sm resize-none"
               />
             </div>
           </>
@@ -2219,38 +2127,6 @@ const CreateContent = () => {
                 Video from URL
               </div>
             )}
-            <div className="text-sm mt-3" style={{ color: contrastColor }}>
-              {description ? (
-                <div dangerouslySetInnerHTML={{ __html: description.replace(/\n/g, "<br />") }} />
-              ) : (
-                <p className="text-gray-400 text-xs" style={{ color: contrastColor }}>
-                  No description yet
-                </p>
-              )}
-            </div>
-          </>
-        );
-
-      case "Image-Text Side by Side":
-        return (
-          <>
-            <h3 className="font-bold text-sm" style={{ color: contrastColor }}>
-              {title || "Content Preview"}
-            </h3>
-            <div className="mt-2 grid grid-cols-2 gap-2">
-              {sideImagePreview && (
-                <img src={sideImagePreview} alt="side" className="w-full h-20 object-cover rounded" />
-              )}
-              <div className="text-xs" style={{ color: contrastColor }}>
-                {sideText ? (
-                  <div dangerouslySetInnerHTML={{ __html: sideText.replace(/\n/g, "<br />") }} />
-                ) : (
-                  <p className="text-gray-400" style={{ color: contrastColor }}>
-                    Side text
-                  </p>
-                )}
-              </div>
-            </div>
             <div className="text-sm mt-3" style={{ color: contrastColor }}>
               {description ? (
                 <div dangerouslySetInnerHTML={{ __html: description.replace(/\n/g, "<br />") }} />
@@ -2516,41 +2392,41 @@ const CreateContent = () => {
 
             <div className="flex justify-center">
               <div className="w-[220px] h-[460px] bg-[#20242c] rounded-[30px] p-3">
-          <div
-  className="rounded-[20px] h-full overflow-hidden p-3 relative"
-  style={{
-    backgroundColor: backgroundColor,
-    color: getContrastColor(backgroundColor),
-  }}
->
-  {/* Background image with animation */}
-  {backgroundImage && (
-    <img
-      src={backgroundImage}
-      alt="Background"
-      className="absolute inset-0 w-full h-full object-cover rounded-[20px] transition-opacity duration-700 bg-animated"
-      style={{
-        opacity: bgLoaded ? 1 : 0,
-      }}
-    />
-  )}
+                <div
+                  className="rounded-[20px] h-full overflow-hidden p-3 relative"
+                  style={{
+                    backgroundColor: backgroundColor,
+                    color: getContrastColor(backgroundColor),
+                  }}
+                >
+                  {/* Background image with animation */}
+                  {backgroundImage && (
+                    <img
+                      src={backgroundImage}
+                      alt="Background"
+                      className="absolute inset-0 w-full h-full object-cover rounded-[20px] transition-opacity duration-700 bg-animated"
+                      style={{
+                        opacity: bgLoaded ? 1 : 0,
+                      }}
+                    />
+                  )}
 
-  {/* Overlay tint */}
-  <div
-    className="absolute inset-0 rounded-[20px]"
-    style={{
-      backgroundColor: backgroundColor,
-      opacity: 0.6,
-      transition: "background-color 0.5s ease",
-    }}
-  />
+                  {/* Overlay tint */}
+                  <div
+                    className="absolute inset-0 rounded-[20px]"
+                    style={{
+                      backgroundColor: backgroundColor,
+                      opacity: 0.6,
+                      transition: "background-color 0.5s ease",
+                    }}
+                  />
 
-  {/* Content on top */}
-  <div className="relative z-10">
-    {renderPreviewContent()}
-    <p className="italic text-center mt-4 text-xs">Swipe on!</p>
-  </div>
-</div>
+                  {/* Content on top */}
+                  <div className="relative z-10">
+                    {renderPreviewContent()}
+                    <p className="italic text-center mt-4 text-xs">Swipe on!</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
