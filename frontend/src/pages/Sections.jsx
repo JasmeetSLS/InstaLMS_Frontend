@@ -19,6 +19,17 @@ import {
 import api, { FILE_BASE_URL } from "../services/api";
 import "./CreateContent.css";   // re‑use zoom animation and styling
 
+// Helper to extract YouTube embed URL (copied from CreateContent)
+const getYouTubeEmbedUrl = (url) => {
+  if (!url) return null;
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+  const match = url.match(regExp);
+  if (match && match[2] && match[2].length === 11) {
+    return `https://www.youtube.com/embed/${match[2]}`;
+  }
+  return null;
+};
+
 const Sections = () => {
   const { streamId } = useParams();
   const navigate = useNavigate();
@@ -165,8 +176,7 @@ const Sections = () => {
     }
   };
 
-
-  // Preview renderers – all URLs are prefixed with FILE_BASE_URL
+  // -------- PREVIEW RENDERERS --------
   const renderContentPreview = () => {
     if (!selectedContent) return null;
     const content = selectedContent;
@@ -204,28 +214,46 @@ const Sections = () => {
                 className="w-full h-28 object-cover mt-2 rounded"
               />
             )}
-            <div className="mt-3 text-sm leading-5">
-              <p>{content.description || "No description available"}</p>
+            <div className="mt-2 flex items-center gap-2 text-xs bg-gray-100 p-2 rounded">
+              <File size={16} className="text-red-500" />
+              <span className="truncate">{content.pdf_name || "document.pdf"}</span>
               {content.pdf_url && (
                 <a
                   href={`${FILE_BASE_URL}${content.pdf_url}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mt-2 inline-flex items-center gap-1 text-red-500 hover:underline"
+                  className="ml-auto text-red-500 hover:underline"
                 >
-                  <File size={16} />
                   View PDF
                 </a>
               )}
             </div>
+            {content.pdf_text && (
+              <div className="mt-3 text-xs max-h-40 overflow-y-auto text-gray-700 whitespace-pre-wrap border p-2 rounded bg-gray-50">
+                {content.pdf_text.length > 500 ? content.pdf_text.substring(0, 500) + "..." : content.pdf_text}
+              </div>
+            )}
+            <div className="mt-3 text-sm leading-5">
+              <p>{content.description || "No description available"}</p>
+            </div>
           </>
         );
 
-      case "url_extract":
+      case "url_extract": {
+        const youtubeEmbedUrl = getYouTubeEmbedUrl(content.source_url);
         return (
           <>
             <h3 className="font-bold text-base leading-5">{content.title || "URL Content"}</h3>
-            {content.source_url && (
+            {youtubeEmbedUrl ? (
+              <div className="mt-2 w-full aspect-video">
+                <iframe
+                  src={youtubeEmbedUrl}
+                  title="YouTube video"
+                  className="w-full h-full rounded"
+                  allowFullScreen
+                />
+              </div>
+            ) : content.source_url ? (
               <a
                 href={content.source_url}
                 target="_blank"
@@ -235,71 +263,72 @@ const Sections = () => {
                 <LinkIcon size={16} />
                 {content.source_url}
               </a>
-            )}
+            ) : null}
             <div className="mt-3 text-sm leading-5">
               <p>{content.description || "No description available"}</p>
             </div>
           </>
         );
+      }
 
-case "multiple_image_text": {
-  const slides = content.slides || [];
-  const lastImageSlide = [...slides]
-    .reverse()
-    .find((s) => s.type === "image" && s.content);
+      case "multiple_image_text": {
+        const slides = content.slides || [];
+        const lastImageSlide = [...slides]
+          .reverse()
+          .find((s) => s.type === "image" && s.content);
 
-  return (
-    <div className="relative w-full h-full overflow-hidden">
-      {/* Background image – fixed, zooming, blurred */}
-      {lastImageSlide && (
-        <img
-          src={`${FILE_BASE_URL}${lastImageSlide.content}`}
-          alt="Background"
-          className="absolute inset-0 w-full h-full object-cover bg-animated"
-          style={{
-            filter: "blur(1px)",
-            willChange: "transform",
-          }}
-        />
-      )}
-      {/* Semi‑transparent blue overlay for readability */}
-      <div
-        className="absolute inset-0"
-        style={{
-          backgroundColor: "#000000",
-          opacity: 0.5, // adjust as needed (0.4–0.6)
-        }}
-      />
-      {/* Content wrapper – scrollable */}
-      <div className="relative z-10 h-full overflow-auto p-4 text-white">
-        <h3 className="font-bold text-base leading-5">
-          {content.title || "Slides"}
-        </h3>
-        <div className="mt-2 space-y-4">
-          {slides.map((slide, idx) => (
-            <div key={idx}>
-              {slide.type === "image" && slide.content && (
-                <img
-                  src={`${FILE_BASE_URL}${slide.content}`}
-                  alt={`Slide ${idx + 1}`}
-                  className="w-full h-24 object-cover rounded"
-                />
-              )}
-              {slide.type === "text" && slide.content && (
-                <div className="text-sm leading-5 p-2 border bg-opacity-30 rounded text-white">
-                  {slide.content}
-                </div>
-              )}
+        return (
+          <div className="relative w-full h-full overflow-hidden">
+            {/* Background image – fixed, zooming, blurred */}
+            {lastImageSlide && (
+              <img
+                src={`${FILE_BASE_URL}${lastImageSlide.content}`}
+                alt="Background"
+                className="absolute inset-0 w-full h-full object-cover bg-animated"
+                style={{
+                  filter: "blur(1px)",
+                  willChange: "transform",
+                }}
+              />
+            )}
+            {/* Semi‑transparent blue overlay for readability */}
+            <div
+              className="absolute inset-0"
+              style={{
+                backgroundColor: "#000000",
+                opacity: 0.5,
+              }}
+            />
+            {/* Content wrapper – scrollable */}
+            <div className="relative z-10 h-full overflow-auto p-4 text-white">
+              <h3 className="font-bold text-base leading-5">
+                {content.title || "Slides"}
+              </h3>
+              <div className="mt-2 space-y-4">
+                {slides.map((slide, idx) => (
+                  <div key={idx}>
+                    {slide.type === "image" && slide.content && (
+                      <img
+                        src={`${FILE_BASE_URL}${slide.content}`}
+                        alt={`Slide ${idx + 1}`}
+                        className="w-full h-24 object-cover rounded"
+                      />
+                    )}
+                    {slide.type === "text" && slide.content && (
+                      <div className="text-sm leading-5 p-2 border bg-opacity-30 rounded text-white">
+                        {slide.content}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+              <div className="mt-3 text-sm leading-5">
+                <p>{content.description || "No description available"}</p>
+              </div>
             </div>
-          ))}
-        </div>
-        <div className="mt-3 text-sm leading-5">
-          <p>{content.description || "No description available"}</p>
-        </div>
-      </div>
-    </div>
-  );
-}
+          </div>
+        );
+      }
 
       default:
         return (
@@ -678,37 +707,37 @@ case "multiple_image_text": {
             </div>
             <div className="flex justify-center py-3 overflow-auto flex-1">
               <div className="w-[260px] h-[500px] bg-[#20242c] rounded-[28px] p-3">
-<div
-  className={`rounded-[20px] h-full ${
-    activeTab === "cards" && selectedContent?.content_type === "multiple_image_text"
-      ? "overflow-hidden" // no scroll on container, background fixed
-      : "bg-white p-4 overflow-auto"
-  }`}
->
-  {loadingPreview ? (
-    <div className="flex items-center justify-center h-full text-gray-400 text-sm">
-      Loading...
-    </div>
-  ) : activeTab === "cards" && selectedContent ? (
-    renderContentPreview()
-  ) : activeTab === "questions" && selectedQuestion ? (
-    renderQuestionPreview()
-  ) : (
-    <div className="flex flex-col items-center justify-center h-full text-gray-400 text-sm p-2">
-      {activeTab === "cards" ? (
-        <>
-          <ImageIcon size={40} className="mb-3 text-gray-300" />
-          <span className="text-center break-words">Select a card to preview</span>
-        </>
-      ) : (
-        <>
-          <FileText size={40} className="mb-3 text-gray-300" />
-          <span className="text-center break-words">Select a question to preview</span>
-        </>
-      )}
-    </div>
-  )}
-</div>
+                <div
+                  className={`rounded-[20px] h-full ${
+                    activeTab === "cards" && selectedContent?.content_type === "multiple_image_text"
+                      ? "overflow-hidden"
+                      : "bg-white p-4 overflow-auto"
+                  }`}
+                >
+                  {loadingPreview ? (
+                    <div className="flex items-center justify-center h-full text-gray-400 text-sm">
+                      Loading...
+                    </div>
+                  ) : activeTab === "cards" && selectedContent ? (
+                    renderContentPreview()
+                  ) : activeTab === "questions" && selectedQuestion ? (
+                    renderQuestionPreview()
+                  ) : (
+                    <div className="flex flex-col items-center justify-center h-full text-gray-400 text-sm p-2">
+                      {activeTab === "cards" ? (
+                        <>
+                          <ImageIcon size={40} className="mb-3 text-gray-300" />
+                          <span className="text-center break-words">Select a card to preview</span>
+                        </>
+                      ) : (
+                        <>
+                          <FileText size={40} className="mb-3 text-gray-300" />
+                          <span className="text-center break-words">Select a question to preview</span>
+                        </>
+                      )}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>
