@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import {
@@ -16,7 +15,7 @@ import {
   Type,
 } from "lucide-react";
 import api from "../services/api";
-import "./CreateContent.css";   // or the path to your CSS file
+import "./CreateContent.css";
 
 // --- PDF.js with Vite-compatible worker ---
 import * as pdfjsLib from "pdfjs-dist";
@@ -34,48 +33,6 @@ const getYouTubeEmbedUrl = (url) => {
     return `https://www.youtube.com/embed/${match[2]}`;
   }
   return null;
-};
-
-// Helper: returns "#000000" or "#ffffff" based on luminance
-const getContrastColor = (hex) => {
-  const r = parseInt(hex.slice(1, 3), 16);
-  const g = parseInt(hex.slice(3, 5), 16);
-  const b = parseInt(hex.slice(5, 7), 16);
-  const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-  return luminance > 0.5 ? "#000000" : "#ffffff";
-};
-
-// --- Extract dominant color from an image (average color) ---
-const getAverageColorFromImage = (file) => {
-  return new Promise((resolve) => {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const img = new Image();
-      img.onload = () => {
-        const canvas = document.createElement("canvas");
-        canvas.width = img.width;
-        canvas.height = img.height;
-        const ctx = canvas.getContext("2d");
-        ctx.drawImage(img, 0, 0);
-        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        const data = imageData.data;
-        let r = 0, g = 0, b = 0;
-        for (let i = 0; i < data.length; i += 4) {
-          r += data[i];
-          g += data[i + 1];
-          b += data[i + 2];
-        }
-        const pixelCount = data.length / 4;
-        r = Math.round(r / pixelCount);
-        g = Math.round(g / pixelCount);
-        b = Math.round(b / pixelCount);
-        const hex = `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
-        resolve(hex);
-      };
-      img.src = e.target.result;
-    };
-    reader.readAsDataURL(file);
-  });
 };
 
 const CreateContent = () => {
@@ -114,12 +71,8 @@ const CreateContent = () => {
   const [streamTitle, setStreamTitle] = useState("Stream");
   const [loading, setLoading] = useState(false);
 
-  // Background color – auto‑updated from the first uploaded image
-  const [backgroundColor, setBackgroundColor] = useState("#ffffff");
-
-  // --- background image state and load status ---
+  // --- background image state (used for Multiple Image Text preview) ---
   const [backgroundImage, setBackgroundImage] = useState(null);
-  const [bgLoaded, setBgLoaded] = useState(false);
 
   useEffect(() => {
     if (sectionId) {
@@ -215,21 +168,18 @@ const CreateContent = () => {
     // If no slides remain, reset background
     if (updatedSlides.length === 0) {
       setBackgroundImage(null);
-      setBgLoaded(false);
-      setBackgroundColor("#ffffff");
     } else {
-      // If no slide has an image, clear background image but keep color
+      // If no slide has an image, clear background image
       const hasImage = updatedSlides.some((s) => s.type === "image" && s.imageFile);
       if (!hasImage) {
         setBackgroundImage(null);
-        setBgLoaded(false);
       }
     }
   };
 
-  const updateSlideImage = async (index, file) => {
+  const updateSlideImage = (index, file) => {
     const reader = new FileReader();
-    reader.onloadend = async () => {
+    reader.onloadend = () => {
       const dataUrl = reader.result;
       const updated = [...slides];
       updated[index].imageFile = file;
@@ -237,13 +187,6 @@ const CreateContent = () => {
       setSlides(updated);
       // Set as background image
       setBackgroundImage(dataUrl);
-      setBgLoaded(false);
-      const img = new Image();
-      img.onload = () => setBgLoaded(true);
-      img.src = dataUrl;
-      // Auto‑set background color (for overlay tint)
-      const color = await getAverageColorFromImage(file);
-      setBackgroundColor(color);
     };
     reader.readAsDataURL(file);
   };
@@ -427,8 +370,6 @@ const CreateContent = () => {
                               // If no other image slides, reset background
                               if (!updated.some((s) => s.type === "image" && s.imageFile)) {
                                 setBackgroundImage(null);
-                                setBgLoaded(false);
-                                setBackgroundColor("#ffffff");
                               }
                             }}
                             className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 rounded-full flex items-center justify-center hover:bg-red-600"
@@ -499,17 +440,13 @@ const CreateContent = () => {
     }
   };
 
-  // --- Preview renderer (with contrast color) ---
+  // --- Preview renderer ---
   const renderPreviewContent = () => {
-    const contrastColor = getContrastColor(backgroundColor);
-
     switch (template) {
       case "Video":
         return (
           <>
-            <h3 className="font-bold text-sm" style={{ color: contrastColor }}>
-              {title || "Content Preview"}
-            </h3>
+            <h3 className="font-bold text-base">{title || "Content Preview"}</h3>
             {videoPreview && (
               <video src={videoPreview} className="w-full h-32 object-cover mt-2 rounded" controls />
             )}
@@ -518,13 +455,11 @@ const CreateContent = () => {
                 Video from URL
               </div>
             )}
-            <div className="text-sm mt-3" style={{ color: contrastColor }}>
+            <div className="text-sm mt-3">
               {description ? (
                 <div dangerouslySetInnerHTML={{ __html: description.replace(/\n/g, "<br />") }} />
               ) : (
-                <p className="text-gray-400 text-xs" style={{ color: contrastColor }}>
-                  No description yet
-                </p>
+                <p className="text-gray-400 text-xs">No description yet</p>
               )}
             </div>
           </>
@@ -533,9 +468,7 @@ const CreateContent = () => {
       case "Extract from PDF":
         return (
           <>
-            <h3 className="font-bold text-sm" style={{ color: contrastColor }}>
-              {title || "Content Preview"}
-            </h3>
+            <h3 className="font-bold text-base">{title || "Content Preview"}</h3>
             {pdfFile ? (
               <>
                 <div className="mt-2 p-2 bg-gray-100 rounded flex items-center justify-center gap-2 text-xs">
@@ -547,33 +480,23 @@ const CreateContent = () => {
                     <Loader2 size={16} className="animate-spin" /> Extracting text...
                   </div>
                 ) : pdfText ? (
-                  <div
-                    className="mt-3 text-xs max-h-40 overflow-y-auto text-gray-700 whitespace-pre-wrap border p-2 rounded bg-gray-50"
-                    style={{ color: contrastColor }}
-                  >
+                  <div className="mt-3 text-xs max-h-40 overflow-y-auto text-gray-700 whitespace-pre-wrap border p-2 rounded bg-gray-50">
                     {pdfText.length > 500 ? pdfText.substring(0, 500) + "..." : pdfText}
                   </div>
                 ) : (
-                  <p className="mt-3 text-xs text-gray-400" style={{ color: contrastColor }}>
-                    No text extracted yet.
-                  </p>
+                  <p className="mt-3 text-xs text-gray-400">No text extracted yet.</p>
                 )}
               </>
             ) : (
-              <div
-                className="mt-2 h-20 bg-gray-100 rounded flex items-center justify-center text-xs text-gray-400"
-                style={{ color: contrastColor }}
-              >
+              <div className="mt-2 h-20 bg-gray-100 rounded flex items-center justify-center text-xs text-gray-400">
                 No PDF uploaded
               </div>
             )}
-            <div className="text-sm mt-3" style={{ color: contrastColor }}>
+            <div className="text-sm mt-3">
               {description ? (
                 <div dangerouslySetInnerHTML={{ __html: description.replace(/\n/g, "<br />") }} />
               ) : (
-                <p className="text-gray-400 text-xs" style={{ color: contrastColor }}>
-                  No description yet
-                </p>
+                <p className="text-gray-400 text-xs">No description yet</p>
               )}
             </div>
           </>
@@ -583,9 +506,7 @@ const CreateContent = () => {
         const youtubeEmbedUrl = getYouTubeEmbedUrl(sourceUrl);
         return (
           <>
-            <h3 className="font-bold text-sm" style={{ color: contrastColor }}>
-              {title || "Content Preview"}
-            </h3>
+            <h3 className="font-bold text-base">{title || "Content Preview"}</h3>
             {youtubeEmbedUrl ? (
               <div className="mt-2 w-full aspect-video">
                 <iframe
@@ -596,18 +517,16 @@ const CreateContent = () => {
                 />
               </div>
             ) : sourceUrl ? (
-              <div className="mt-2 p-2 bg-gray-100 rounded text-xs break-all" style={{ color: contrastColor }}>
+              <div className="mt-2 p-2 bg-gray-100 rounded text-xs break-all">
                 <Link2 size={14} className="inline mr-1" />
                 {sourceUrl}
               </div>
             ) : null}
-            <div className="text-sm mt-3" style={{ color: contrastColor }}>
+            <div className="text-sm mt-3">
               {description ? (
                 <div dangerouslySetInnerHTML={{ __html: description.replace(/\n/g, "<br />") }} />
               ) : (
-                <p className="text-gray-400 text-xs" style={{ color: contrastColor }}>
-                  No description yet
-                </p>
+                <p className="text-gray-400 text-xs">No description yet</p>
               )}
             </div>
           </>
@@ -617,13 +536,9 @@ const CreateContent = () => {
       case "Multiple Image Text":
         return (
           <>
-            <h3 className="font-bold text-sm" style={{ color: contrastColor }}>
-              {title || "Content Preview"}
-            </h3>
+            <h3 className="font-bold text-base text-white">{title || "Content Preview"}</h3>
             {slides.length === 0 ? (
-              <div className="text-gray-400 text-xs mt-4 text-center" style={{ color: contrastColor }}>
-                No slides to preview
-              </div>
+              <div className="text-xs mt-4 text-center">No slides to preview</div>
             ) : (
               <div className="mt-2 space-y-3">
                 {slides.map((slide, idx) => (
@@ -636,31 +551,25 @@ const CreateContent = () => {
                       />
                     )}
                     {slide.type === "text" && slide.text && (
-                      <div className="text-xs" style={{ color: contrastColor }}>
+                      <div className="text-xs border p-2 text-white rounded">
                         {slide.text}
                       </div>
                     )}
                     {slide.type === "image" && !slide.imagePreview && (
-                      <div className="text-xs text-gray-400" style={{ color: contrastColor }}>
-                        Empty image slide {idx + 1}
-                      </div>
+                      <div className="text-xs text-gray-300">Empty image slide {idx + 1}</div>
                     )}
                     {slide.type === "text" && !slide.text && (
-                      <div className="text-xs text-gray-400" style={{ color: contrastColor }}>
-                        Empty text slide {idx + 1}
-                      </div>
+                      <div className="text-xs text-gray-300">Empty text slide {idx + 1}</div>
                     )}
                   </div>
                 ))}
               </div>
             )}
-            <div className="text-sm mt-3" style={{ color: contrastColor }}>
+            <div className="text-sm mt-3 text-white">
               {description ? (
                 <div dangerouslySetInnerHTML={{ __html: description.replace(/\n/g, "<br />") }} />
               ) : (
-                <p className="text-gray-400 text-xs" style={{ color: contrastColor }}>
-                  No description yet
-                </p>
+                <p className="text-xs">No description yet</p>
               )}
             </div>
           </>
@@ -668,9 +577,7 @@ const CreateContent = () => {
 
       default:
         return (
-          <p className="text-gray-400 text-xs" style={{ color: contrastColor }}>
-            Preview not available
-          </p>
+          <p className="text-gray-400 text-xs">Preview not available</p>
         );
     }
   };
@@ -683,6 +590,8 @@ const CreateContent = () => {
       </div>
     );
   }
+
+  const isMultipleImageText = template === "Multiple Image Text";
 
   return (
     <div className="min-h-screen bg-[#f4f4f4]">
@@ -744,7 +653,7 @@ const CreateContent = () => {
               />
               <p className="text-sm text-gray-500 mt-1">{86 - title.length} characters remaining.</p>
 
-              {/* Template-specific fields (no color picker) */}
+              {/* Template-specific fields */}
               {renderTemplateFields()}
 
               {/* Description */}
@@ -782,42 +691,34 @@ const CreateContent = () => {
             <h2 className="text-center text-2xl font-semibold text-[#1d3557] mb-6">PREVIEW</h2>
 
             <div className="flex justify-center">
-              <div className="w-[220px] h-[460px] bg-[#20242c] rounded-[30px] p-3">
-                <div
-                  className="rounded-[20px] h-full overflow-hidden p-3 relative"
-                  style={{
-                    backgroundColor: backgroundColor,
-                    color: getContrastColor(backgroundColor),
-                  }}
-                >
-                  {/* Background image with animation */}
-                  {backgroundImage && (
-                    <img
-                      src={backgroundImage}
-                      alt="Background"
-                      className="absolute inset-0 w-full h-full object-cover rounded-[20px] transition-opacity duration-700 bg-animated"
-                      style={{
-                        opacity: bgLoaded ? 1 : 0,
-                      }}
+              <div className="w-[260px] h-[500px] bg-[#20242c] rounded-[28px] p-3">
+                {isMultipleImageText ? (
+                  // Multiple Image Text: exactly as in Sections
+                  <div className="rounded-[20px] h-full overflow-hidden relative">
+                    {backgroundImage && (
+                      <img
+                        src={backgroundImage}
+                        alt="Background"
+                        className="absolute inset-0 w-full h-full object-cover bg-animated"
+                        style={{ filter: "blur(1px)" }}
+                      />
+                    )}
+                    <div
+                      className="absolute inset-0 rounded-[20px]"
+                      style={{ backgroundColor: "#000000", opacity: 0.5 }}
                     />
-                  )}
-
-                  {/* Overlay tint */}
-                  <div
-                    className="absolute inset-0 rounded-[20px]"
-                    style={{
-                      backgroundColor: backgroundColor,
-                      opacity: 0.6,
-                      transition: "background-color 0.5s ease",
-                    }}
-                  />
-
-                  {/* Content on top */}
-                  <div className="relative z-10">
-                    {renderPreviewContent()}
-                    <p className="italic text-center mt-4 text-xs">Swipe on!</p>
+                    <div className="relative z-10 h-full overflow-auto p-4 text-white">
+                      {renderPreviewContent()}
+                      <p className="italic text-center mt-4 text-xs">Swipe on!</p>
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  // Other templates: white background
+                  <div className="rounded-[20px] h-full bg-white p-4 overflow-auto">
+                    {renderPreviewContent()}
+                    <p className="italic text-center mt-4 text-xs text-gray-400">Swipe on!</p>
+                  </div>
+                )}
               </div>
             </div>
           </div>

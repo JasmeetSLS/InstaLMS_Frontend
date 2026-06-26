@@ -266,7 +266,7 @@ case "multiple_image_text": {
       <div
         className="absolute inset-0"
         style={{
-          backgroundColor: "#1d3557",
+          backgroundColor: "#000000",
           opacity: 0.5, // adjust as needed (0.4–0.6)
         }}
       />
