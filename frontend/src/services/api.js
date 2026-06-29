@@ -163,6 +163,8 @@ updateStream: (streamId, formData) => admin.put(`/stream/${streamId}`, formData,
        getContentsBySection: (sectionId) => admin.get(`/contents/${sectionId}`),
         getContentById: (contentId) => admin.get(`/content/${contentId}`),
         createContent: (formData) => admin.post('/add-content', formData, { isFormData: true }),
+        updateContent: (contentId, formData) => admin.put(`/content/${contentId}`, formData, { isFormData: true }),
+deleteContent: (contentId) => admin.delete(`/content/${contentId}`),
 
 //CMS Question APIs
 //CMS Question APIs

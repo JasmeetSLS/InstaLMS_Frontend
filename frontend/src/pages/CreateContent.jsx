@@ -14,7 +14,7 @@ import {
   Loader2,
   Type,
 } from "lucide-react";
-import api from "../services/api";
+import api, { FILE_BASE_URL } from "../services/api";
 import "./CreateContent.css";
 
 // --- PDF.js with Vite-compatible worker ---
@@ -35,47 +35,55 @@ const getYouTubeEmbedUrl = (url) => {
   return null;
 };
 
+// Helper to get file name from URL
+const getFileNameFromUrl = (url) => {
+  if (!url) return "";
+  const parts = url.split("/");
+  return parts[parts.length - 1] || "file";
+};
+
 const CreateContent = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const sectionId = searchParams.get("sectionId");
-  const template = searchParams.get("template") || "Multiple Image Text";
-  const type = searchParams.get("type") || "content";
+  const contentId = searchParams.get("contentId");
+  const templateParam = searchParams.get("template") || "Multiple Image Text";
 
-  // Common fields
+  // ---- Common state ----
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [isNumberedList, setIsNumberedList] = useState(false);
   const [openInBrowser, setOpenInBrowser] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [fetchingData, setFetchingData] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [sectionTitle, setSectionTitle] = useState("Section");
+  const [streamTitle, setStreamTitle] = useState("Stream");
 
-  // Video fields
+  // ---- Video fields ----
   const [videoFile, setVideoFile] = useState(null);
   const [videoPreview, setVideoPreview] = useState(null);
   const [videoUrl, setVideoUrl] = useState("");
 
-  // PDF fields
+  // ---- PDF fields ----
   const [pdfFile, setPdfFile] = useState(null);
   const [pdfName, setPdfName] = useState("");
   const [pdfText, setPdfText] = useState("");
   const [isExtracting, setIsExtracting] = useState(false);
 
-  // URL fields
+  // ---- URL fields ----
   const [sourceUrl, setSourceUrl] = useState("");
 
-  // --- Multiple slides – empty by default ---
+  // ---- Multiple slides ----
   const [slides, setSlides] = useState([]);
-
-  // Section/Stream details
-  const [sectionTitle, setSectionTitle] = useState("Section");
-  const [streamTitle, setStreamTitle] = useState("Stream");
-  const [loading, setLoading] = useState(false);
-
-  // --- background image state (used for Multiple Image Text preview) ---
   const [backgroundImage, setBackgroundImage] = useState(null);
 
-  const [submitting, setSubmitting] = useState(false);
+  // ---- Template (may be overridden by edit data) ----
+  const [template, setTemplate] = useState(templateParam);
 
+  // ---- Fetch section details (for breadcrumbs) ----
   useEffect(() => {
     if (sectionId) {
       fetchSectionDetails();
@@ -96,11 +104,109 @@ const CreateContent = () => {
     }
   };
 
-  const handleBack = () => {
-    navigate(-1);
+  // ---- Fetch content data for edit mode ----
+  useEffect(() => {
+    if (contentId) {
+      setIsEditMode(true);
+      fetchContentData(contentId);
+    } else {
+      // Add mode: reset form
+      resetForm();
+    }
+  }, [contentId]);
+
+  const fetchContentData = async (id) => {
+    try {
+      setFetchingData(true);
+      const response = await api.getContentById(id);
+      const data = response.data;
+
+      // Set common fields
+      setTitle(data.title || "");
+      setDescription(data.description || "");
+
+      // Map DB content_type to frontend template label
+      const typeMap = {
+        video: "Video",
+        pdf_extract: "Extract from PDF",
+        url_extract: "Extract from URL",
+        multiple_image_text: "Multiple Image Text",
+      };
+      const frontendTemplate = typeMap[data.content_type] || templateParam;
+      setTemplate(frontendTemplate);
+
+      // Handle type-specific data
+      if (data.content_type === "video") {
+        if (data.media_url) {
+          if (data.media_url.startsWith("http")) {
+            setVideoUrl(data.media_url);
+            setVideoPreview(null);
+          } else {
+            // local file: store URL so we can preview using FILE_BASE_URL
+            setVideoUrl(data.media_url);
+            setVideoPreview(null);
+          }
+          setVideoFile(null);
+        }
+      } else if (data.content_type === "pdf_extract") {
+        if (data.pdf_url) {
+          setPdfName(getFileNameFromUrl(data.pdf_url));
+          setPdfFile(null);
+        }
+        setPdfText(data.pdf_text || "");
+      } else if (data.content_type === "url_extract") {
+        setSourceUrl(data.source_url || "");
+      } else if (data.content_type === "multiple_image_text") {
+        const slidesData = data.slides || [];
+        const newSlides = slidesData.map((slide) => {
+          if (slide.type === "image") {
+            return {
+              type: "image",
+              imageFile: null,
+              imagePreview: slide.content, // existing URL
+              text: "",
+            };
+          } else {
+            return {
+              type: "text",
+              text: slide.content || "",
+            };
+          }
+        });
+        setSlides(newSlides);
+        // set background from first image slide
+        const firstImage = newSlides.find((s) => s.type === "image" && s.imagePreview);
+        if (firstImage) {
+          setBackgroundImage(firstImage.imagePreview);
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching content for edit:", error);
+      alert("Failed to load content data. Please try again.");
+    } finally {
+      setFetchingData(false);
+    }
   };
 
-  // --- PDF Extraction ---
+  const resetForm = () => {
+    setTitle("");
+    setDescription("");
+    setVideoFile(null);
+    setVideoPreview(null);
+    setVideoUrl("");
+    setPdfFile(null);
+    setPdfName("");
+    setPdfText("");
+    setIsExtracting(false);
+    setSourceUrl("");
+    setSlides([]);
+    setBackgroundImage(null);
+    setIsNumberedList(false);
+    setOpenInBrowser(false);
+    setTemplate(templateParam);
+  };
+
+  // ---- PDF Extraction ----
   const extractTextFromPDF = async (file) => {
     try {
       setIsExtracting(true);
@@ -124,7 +230,7 @@ const CreateContent = () => {
     }
   };
 
-  // --- Handlers for other templates ---
+  // ---- File handlers ----
   const handleVideoChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -132,6 +238,8 @@ const CreateContent = () => {
       const reader = new FileReader();
       reader.onloadend = () => setVideoPreview(reader.result);
       reader.readAsDataURL(file);
+      // if editing, clear existing URL
+      setVideoUrl("");
     }
   };
   const removeVideo = () => {
@@ -155,7 +263,7 @@ const CreateContent = () => {
     setPdfText("");
   };
 
-  // --- Slide handlers ---
+  // ---- Slide handlers ----
   const addSlide = (slideType) => {
     const newSlide =
       slideType === "image"
@@ -167,12 +275,10 @@ const CreateContent = () => {
   const removeSlide = (index) => {
     const updatedSlides = slides.filter((_, i) => i !== index);
     setSlides(updatedSlides);
-    // If no slides remain, reset background
     if (updatedSlides.length === 0) {
       setBackgroundImage(null);
     } else {
-      // If no slide has an image, clear background image
-      const hasImage = updatedSlides.some((s) => s.type === "image" && s.imageFile);
+      const hasImage = updatedSlides.some((s) => s.type === "image" && s.imagePreview);
       if (!hasImage) {
         setBackgroundImage(null);
       }
@@ -187,8 +293,11 @@ const CreateContent = () => {
       updated[index].imageFile = file;
       updated[index].imagePreview = dataUrl;
       setSlides(updated);
-      // Set as background image
-      setBackgroundImage(dataUrl);
+      // Set as background image (first image slide with preview)
+      const firstImage = updated.find((s) => s.type === "image" && s.imagePreview);
+      if (firstImage) {
+        setBackgroundImage(firstImage.imagePreview);
+      }
     };
     reader.readAsDataURL(file);
   };
@@ -199,60 +308,93 @@ const CreateContent = () => {
     setSlides(updated);
   };
 
-  // --- Submit ---
-const handleSubmit = async () => {
-  const formData = new FormData();
-  formData.append('sectionId', sectionId);
-  formData.append('title', title);
-  formData.append('description', description);
-  formData.append('template', template);
-  formData.append('isNumberedList', isNumberedList ? 'true' : 'false');
-  formData.append('openInBrowser', openInBrowser ? 'true' : 'false');
-
-  // Template-specific fields
-  if (template === 'Video') {
-    if (videoFile) {
-      formData.append('videoFile', videoFile);
-    } else if (videoUrl) {
-      formData.append('videoUrl', videoUrl);
-    }
-  } else if (template === 'Extract from PDF') {
-    if (pdfFile) {
-      formData.append('pdfFile', pdfFile);
-    }
-    formData.append('pdfText', pdfText);
-  } else if (template === 'Extract from URL') {
-    formData.append('sourceUrl', sourceUrl);
-  } else if (template === 'Multiple Image Text') {
-    // Append slide count
-    formData.append('slideCount', slides.length);
-    slides.forEach((slide, index) => {
-      formData.append(`slideType_${index}`, slide.type);
-      if (slide.type === 'image') {
-        if (slide.imageFile) {
-          formData.append(`slideImage_${index}`, slide.imageFile);
-        }
-      } else {
-        formData.append(`slideText_${index}`, slide.text || '');
-      }
-    });
-  }
-
-  try {
-    setSubmitting(true);
-    const response = await api.createContent(formData); // we'll add this API method
-    console.log('Content created:', response);
-    alert('Content created successfully!');
+  // ---- Navigation ----
+  const handleBack = () => {
     navigate(-1);
-  } catch (error) {
-    console.error('Error creating content:', error);
-    alert('Failed to create content: ' + error.message);
-  } finally {
-    setSubmitting(false);
-  }
-};
+  };
 
-  // --- Render template-specific fields ---
+  // ---- Submit ----
+  const handleSubmit = async () => {
+    // Basic validation
+    if (!title.trim()) {
+      alert("Title is required");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("title", title.trim());
+    formData.append("description", description || "");
+    formData.append("template", template); // will be mapped to content_type on server
+
+    // Template-specific fields
+    if (template === "Video") {
+      if (videoFile) {
+        formData.append("videoFile", videoFile);
+      } else if (videoUrl) {
+        formData.append("videoUrl", videoUrl);
+      } else {
+        alert("Please provide a video file or URL");
+        return;
+      }
+    } else if (template === "Extract from PDF") {
+      if (pdfFile) {
+        formData.append("pdfFile", pdfFile);
+      } else if (!isEditMode) {
+        alert("Please upload a PDF file");
+        return;
+      }
+      formData.append("pdfText", pdfText || "");
+    } else if (template === "Extract from URL") {
+      if (!sourceUrl.trim()) {
+        alert("Source URL is required");
+        return;
+      }
+      formData.append("sourceUrl", sourceUrl.trim());
+    } else if (template === "Multiple Image Text") {
+      if (slides.length === 0) {
+        alert("At least one slide is required");
+        return;
+      }
+      formData.append("slideCount", slides.length);
+      slides.forEach((slide, index) => {
+        formData.append(`slideType_${index}`, slide.type);
+        if (slide.type === "image") {
+          if (slide.imageFile) {
+            formData.append(`slideImage_${index}`, slide.imageFile);
+          }
+          // if no new file, we don't append anything; the server will keep existing if not provided
+        } else {
+          formData.append(`slideText_${index}`, slide.text || "");
+        }
+      });
+    }
+
+    // Optional flags (send as strings)
+    formData.append("isNumberedList", isNumberedList ? "true" : "false");
+    formData.append("openInBrowser", openInBrowser ? "true" : "false");
+
+    try {
+      setSubmitting(true);
+      let response;
+      if (isEditMode) {
+        response = await api.updateContent(contentId, formData);
+        alert("Content updated successfully!");
+      } else {
+        formData.append("sectionId", sectionId);
+        response = await api.createContent(formData);
+        alert("Content created successfully!");
+      }
+      console.log("Response:", response);
+      navigate(-1);
+    } catch (error) {
+      console.error("Error saving content:", error);
+      alert("Failed to save content: " + (error.message || "Unknown error"));
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  // ---- Render helpers ----
   const renderTemplateFields = () => {
     switch (template) {
       case "Video":
@@ -268,6 +410,20 @@ const handleSubmit = async () => {
                     <X size={16} className="text-white" />
                   </button>
                   <video src={videoPreview} className="w-52 h-36 object-cover" controls />
+                </>
+              ) : videoUrl ? (
+                <>
+                  <button
+                    onClick={removeVideo}
+                    className="absolute -top-3 -right-3 w-8 h-8 bg-red-500 rounded-full flex items-center justify-center hover:bg-red-600"
+                  >
+                    <X size={16} className="text-white" />
+                  </button>
+                  <video
+                    src={videoUrl.startsWith("http") ? videoUrl : `${FILE_BASE_URL}${videoUrl}`}
+                    className="w-52 h-36 object-cover"
+                    controls
+                  />
                 </>
               ) : (
                 <div className="text-center">
@@ -291,12 +447,19 @@ const handleSubmit = async () => {
             </div>
             <div className="mt-3">
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Video URL (Optional)
+                Video URL (Optional, overrides file)
               </label>
               <input
                 type="url"
                 value={videoUrl}
-                onChange={(e) => setVideoUrl(e.target.value)}
+                onChange={(e) => {
+                  setVideoUrl(e.target.value);
+                  if (e.target.value) {
+                    // clear file selection if URL is entered
+                    setVideoFile(null);
+                    setVideoPreview(null);
+                  }
+                }}
                 placeholder="https://example.com/video.mp4"
                 className="w-full border rounded px-3 py-2 text-sm"
               />
@@ -308,7 +471,7 @@ const handleSubmit = async () => {
         return (
           <>
             <div className="relative h-56 bg-gray-100 border flex items-center justify-center">
-              {pdfFile ? (
+              {pdfFile || pdfName ? (
                 <div className="text-center">
                   <FileTextIcon size={48} className="mx-auto text-red-500 mb-2" />
                   <p className="text-sm font-medium">{pdfName}</p>
@@ -375,7 +538,6 @@ const handleSubmit = async () => {
           </>
         );
 
-      // --- Multiple slides ---
       case "Multiple Image Text":
         return (
           <>
@@ -401,17 +563,21 @@ const handleSubmit = async () => {
                               updated[idx].imageFile = null;
                               updated[idx].imagePreview = null;
                               setSlides(updated);
-                              // If no other image slides, reset background
-                              if (!updated.some((s) => s.type === "image" && s.imageFile)) {
-                                setBackgroundImage(null);
-                              }
+                              // update background
+                              const firstImage = updated.find((s) => s.type === "image" && s.imagePreview);
+                              setBackgroundImage(firstImage ? firstImage.imagePreview : null);
                             }}
                             className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 rounded-full flex items-center justify-center hover:bg-red-600"
                           >
                             <X size={14} className="text-white" />
                           </button>
                           <img
-                            src={slide.imagePreview}
+                            src={
+                              slide.imagePreview.startsWith("data:") ||
+                              slide.imagePreview.startsWith("http")
+                                ? slide.imagePreview
+                                : `${FILE_BASE_URL}${slide.imagePreview}`
+                            }
                             alt={`slide ${idx + 1}`}
                             className="w-full h-full object-cover"
                           />
@@ -474,7 +640,6 @@ const handleSubmit = async () => {
     }
   };
 
-  // --- Preview renderer ---
   const renderPreviewContent = () => {
     switch (template) {
       case "Video":
@@ -485,9 +650,11 @@ const handleSubmit = async () => {
               <video src={videoPreview} className="w-full h-32 object-cover mt-2 rounded" controls />
             )}
             {videoUrl && !videoPreview && (
-              <div className="w-full h-32 bg-gray-200 mt-2 rounded flex items-center justify-center text-xs text-gray-500">
-                Video from URL
-              </div>
+              <video
+                src={videoUrl.startsWith("http") ? videoUrl : `${FILE_BASE_URL}${videoUrl}`}
+                className="w-full h-32 object-cover mt-2 rounded"
+                controls
+              />
             )}
             <div className="text-sm mt-3">
               {description ? (
@@ -503,7 +670,7 @@ const handleSubmit = async () => {
         return (
           <>
             <h3 className="font-bold text-base">{title || "Content Preview"}</h3>
-            {pdfFile ? (
+            {pdfFile || pdfName ? (
               <>
                 <div className="mt-2 p-2 bg-gray-100 rounded flex items-center justify-center gap-2 text-xs">
                   <FileTextIcon size={20} className="text-red-500" />
@@ -579,15 +746,18 @@ const handleSubmit = async () => {
                   <div key={idx} className="p-2">
                     {slide.type === "image" && slide.imagePreview && (
                       <img
-                        src={slide.imagePreview}
+                        src={
+                          slide.imagePreview.startsWith("data:") ||
+                          slide.imagePreview.startsWith("http")
+                            ? slide.imagePreview
+                            : `${FILE_BASE_URL}${slide.imagePreview}`
+                        }
                         alt={`slide ${idx + 1}`}
                         className="w-full h-24 object-cover rounded"
                       />
                     )}
                     {slide.type === "text" && slide.text && (
-                      <div className="text-xs border p-2 text-white rounded">
-                        {slide.text}
-                      </div>
+                      <div className="text-xs border p-2 text-white rounded">{slide.text}</div>
                     )}
                     {slide.type === "image" && !slide.imagePreview && (
                       <div className="text-xs text-gray-300">Empty image slide {idx + 1}</div>
@@ -610,17 +780,15 @@ const handleSubmit = async () => {
         );
 
       default:
-        return (
-          <p className="text-gray-400 text-xs">Preview not available</p>
-        );
+        return <p className="text-gray-400 text-xs">Preview not available</p>;
     }
   };
 
-  // --- Main render ---
-  if (loading) {
+  // ---- Main render ----
+  if (loading || fetchingData) {
     return (
       <div className="min-h-screen bg-[#f4f4f4] flex justify-center items-center">
-        <div className="text-lg font-medium">Loading...</div>
+        <div className="text-lg font-medium">{fetchingData ? "Loading content..." : "Loading..."}</div>
       </div>
     );
   }
@@ -636,7 +804,7 @@ const handleSubmit = async () => {
             <ArrowLeft size={16} /> Back
           </button>
           <span className="text-gray-300">|</span>
-          <span className="text-sm text-gray-500">Create Content</span>
+          <span className="text-sm text-gray-500">{isEditMode ? "Edit Content" : "Create Content"}</span>
         </div>
         <div className="flex items-center gap-4">
           <span className="text-sm text-gray-500">Super Admin</span>
@@ -654,7 +822,7 @@ const handleSubmit = async () => {
         <span className="mx-2 text-gray-400">{">"}</span>
         <span className="font-medium text-[#1d3557]">{sectionTitle}</span>
         <span className="mx-2 text-gray-400">{">"}</span>
-        <span className="font-medium text-[#1d3557]">Create Content</span>
+        <span className="font-medium text-[#1d3557]">{isEditMode ? "Edit Content" : "Create Content"}</span>
         <span className="text-gray-400 ml-1">({template})</span>
       </div>
 
@@ -707,14 +875,16 @@ const handleSubmit = async () => {
                 <button
                   onClick={handleBack}
                   className="px-5 py-2 border rounded bg-gray-100 text-sm hover:bg-gray-200"
+                  disabled={submitting}
                 >
                   PREVIOUS
                 </button>
                 <button
                   onClick={handleSubmit}
-                  className="px-5 py-2 rounded bg-gradient-to-r from-red-500 to-orange-500 text-white text-sm hover:opacity-90"
+                  className="px-5 py-2 rounded bg-gradient-to-r from-red-500 to-orange-500 text-white text-sm hover:opacity-90 disabled:opacity-50"
+                  disabled={submitting}
                 >
-                  SAVE
+                  {submitting ? "Saving..." : isEditMode ? "UPDATE" : "SAVE"}
                 </button>
               </div>
             </div>
@@ -727,11 +897,14 @@ const handleSubmit = async () => {
             <div className="flex justify-center">
               <div className="w-[260px] h-[500px] bg-[#20242c] rounded-[28px] p-3">
                 {isMultipleImageText ? (
-                  // Multiple Image Text: exactly as in Sections
                   <div className="rounded-[20px] h-full overflow-hidden relative">
                     {backgroundImage && (
                       <img
-                        src={backgroundImage}
+                        src={
+                          backgroundImage.startsWith("data:") || backgroundImage.startsWith("http")
+                            ? backgroundImage
+                            : `${FILE_BASE_URL}${backgroundImage}`
+                        }
                         alt="Background"
                         className="absolute inset-0 w-full h-full object-cover bg-animated"
                         style={{ filter: "blur(1px)" }}
@@ -747,7 +920,6 @@ const handleSubmit = async () => {
                     </div>
                   </div>
                 ) : (
-                  // Other templates: white background
                   <div className="rounded-[20px] h-full bg-white p-4 overflow-auto">
                     {renderPreviewContent()}
                     <p className="italic text-center mt-4 text-xs text-gray-400">Swipe on!</p>

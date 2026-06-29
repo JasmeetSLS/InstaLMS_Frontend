@@ -176,6 +176,32 @@ const Sections = () => {
     }
   };
 
+  // -------- Edit & Delete handlers --------
+  const handleEditContent = (content) => {
+    if (!selectedSection) return;
+    navigate(`/admin/create-content?sectionId=${selectedSection.id}&contentId=${content.id}`);
+  };
+
+  const handleDeleteContent = async (content) => {
+    if (!window.confirm(`Are you sure you want to delete "${content.title || 'this content'}"?`)) {
+      return;
+    }
+    try {
+      await api.deleteContent(content.id);
+      // Refresh contents list
+      if (selectedSection) {
+        await fetchSectionData(selectedSection.id);
+        // If the deleted content was selected, clear selection
+        if (selectedContent?.id === content.id) {
+          setSelectedContent(null);
+        }
+      }
+    } catch (error) {
+      console.error("Error deleting content:", error);
+      alert("Failed to delete content. Please try again.");
+    }
+  };
+
   // -------- PREVIEW RENDERERS --------
   const renderContentPreview = () => {
     if (!selectedContent) return null;
@@ -650,13 +676,31 @@ const Sections = () => {
                         </span>
                       </div>
                       <div className="flex gap-1">
-                        <button className="w-6 h-6 rounded-full bg-red-500 flex items-center justify-center">
+                        <button
+                          className="w-6 h-6 rounded-full bg-red-500 flex items-center justify-center"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            // Share functionality - placeholder
+                          }}
+                        >
                           <Share2 size={11} className="text-white" />
                         </button>
-                        <button className="w-6 h-6 rounded-full bg-red-500 flex items-center justify-center">
+                        <button
+                          className="w-6 h-6 rounded-full bg-red-500 flex items-center justify-center"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleEditContent(content);
+                          }}
+                        >
                           <Pencil size={11} className="text-white" />
                         </button>
-                        <button className="w-6 h-6 rounded-full bg-red-500 flex items-center justify-center">
+                        <button
+                          className="w-6 h-6 rounded-full bg-red-500 flex items-center justify-center"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDeleteContent(content);
+                          }}
+                        >
                           <Trash2 size={11} className="text-white" />
                         </button>
                       </div>
@@ -687,9 +731,6 @@ const Sections = () => {
                           {question.question_text || "Untitled Question"}
                         </span>
                       </div>
-                      <span className="text-xs text-gray-500 capitalize">
-                        {question.question_type || "MCQ"}
-                      </span>
                     </div>
                   ))
                 )
