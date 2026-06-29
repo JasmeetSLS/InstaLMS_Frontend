@@ -148,8 +148,12 @@ const api = {
   createCmsCategory: (formData) => admin.post('/add-cms-category', formData, { isFormData: true }),
 
   //CMS Stream API
-    getStreamsByCategory: (categoryId) => admin.get(`/streams/${categoryId}`),
-    createStream: (formData) => admin.post('/add-stream', formData, { isFormData: true }),
+//CMS Stream API
+getStreamsByCategory: (categoryId) => admin.get(`/streams/${categoryId}`),
+createStream: (formData) => admin.post('/add-stream', formData, { isFormData: true }),
+getStreamById: (streamId) => admin.get(`/stream/${streamId}`),
+updateStream: (streamId, formData) => admin.put(`/stream/${streamId}`, formData, { isFormData: true }),
+    
 
     //CMS Section APIs
     getSectionsByStream: (streamId) => admin.get(`/sections/${streamId}`),
@@ -158,6 +162,7 @@ const api = {
     //CMS Content APIs
        getContentsBySection: (sectionId) => admin.get(`/contents/${sectionId}`),
         getContentById: (contentId) => admin.get(`/content/${contentId}`),
+        createContent: (formData) => admin.post('/add-content', formData, { isFormData: true }),
 
 //CMS Question APIs
 //CMS Question APIs

@@ -74,6 +74,8 @@ const CreateContent = () => {
   // --- background image state (used for Multiple Image Text preview) ---
   const [backgroundImage, setBackgroundImage] = useState(null);
 
+  const [submitting, setSubmitting] = useState(false);
+
   useEffect(() => {
     if (sectionId) {
       fetchSectionDetails();
@@ -198,25 +200,57 @@ const CreateContent = () => {
   };
 
   // --- Submit ---
-  const handleSubmit = () => {
-    const payload = {
-      sectionId,
-      template,
-      title,
-      description,
-      isNumberedList,
-      openInBrowser,
-      videoFile,
-      videoUrl,
-      pdfFile,
-      pdfText,
-      sourceUrl,
-      slides,
-    };
-    console.log("Saving content:", payload);
-    alert("Content created successfully!");
+const handleSubmit = async () => {
+  const formData = new FormData();
+  formData.append('sectionId', sectionId);
+  formData.append('title', title);
+  formData.append('description', description);
+  formData.append('template', template);
+  formData.append('isNumberedList', isNumberedList ? 'true' : 'false');
+  formData.append('openInBrowser', openInBrowser ? 'true' : 'false');
+
+  // Template-specific fields
+  if (template === 'Video') {
+    if (videoFile) {
+      formData.append('videoFile', videoFile);
+    } else if (videoUrl) {
+      formData.append('videoUrl', videoUrl);
+    }
+  } else if (template === 'Extract from PDF') {
+    if (pdfFile) {
+      formData.append('pdfFile', pdfFile);
+    }
+    formData.append('pdfText', pdfText);
+  } else if (template === 'Extract from URL') {
+    formData.append('sourceUrl', sourceUrl);
+  } else if (template === 'Multiple Image Text') {
+    // Append slide count
+    formData.append('slideCount', slides.length);
+    slides.forEach((slide, index) => {
+      formData.append(`slideType_${index}`, slide.type);
+      if (slide.type === 'image') {
+        if (slide.imageFile) {
+          formData.append(`slideImage_${index}`, slide.imageFile);
+        }
+      } else {
+        formData.append(`slideText_${index}`, slide.text || '');
+      }
+    });
+  }
+
+  try {
+    setSubmitting(true);
+    const response = await api.createContent(formData); // we'll add this API method
+    console.log('Content created:', response);
+    alert('Content created successfully!');
     navigate(-1);
-  };
+  } catch (error) {
+    console.error('Error creating content:', error);
+    alert('Failed to create content: ' + error.message);
+  } finally {
+    setSubmitting(false);
+  }
+};
 
   // --- Render template-specific fields ---
   const renderTemplateFields = () => {

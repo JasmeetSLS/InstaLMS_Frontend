@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
   Bell,
@@ -8,9 +8,8 @@ import {
   RefreshCcw,
   Pencil,
   ArrowLeft,
-  ArrowRight,
   ChevronRight,
-  X, // for close icon
+  X,
 } from "lucide-react";
 import api, { FILE_BASE_URL } from "../services/api";
 
@@ -21,16 +20,30 @@ const Stream = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // --- Add Stream Modal State ---
+  // --- Modal State ---
   const [showModal, setShowModal] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [editStreamId, setEditStreamId] = useState(null);
   const [formData, setFormData] = useState({
     title: "",
     language: "",
     content: "",
   });
   const [iconFile, setIconFile] = useState(null);
+  const [newIconPreview, setNewIconPreview] = useState(null); // preview URL for newly selected file
+  const [currentIconUrl, setCurrentIconUrl] = useState(null);
   const [submitting, setSubmitting] = useState(false);
   const [modalError, setModalError] = useState("");
+  const [fetchingStream, setFetchingStream] = useState(false);
+
+  // Clean up object URL when component unmounts or when preview changes
+  useEffect(() => {
+    return () => {
+      if (newIconPreview) {
+        URL.revokeObjectURL(newIconPreview);
+      }
+    };
+  }, [newIconPreview]);
 
   useEffect(() => {
     fetchStreams();
@@ -86,11 +99,83 @@ const Stream = () => {
         e.target.value = "";
         return;
       }
+      // Revoke previous preview if any
+      if (newIconPreview) {
+        URL.revokeObjectURL(newIconPreview);
+      }
       setIconFile(file);
+      setNewIconPreview(URL.createObjectURL(file));
+    } else {
+      // user cleared the input
+      setIconFile(null);
+      if (newIconPreview) {
+        URL.revokeObjectURL(newIconPreview);
+        setNewIconPreview(null);
+      }
     }
   };
 
-  const handleAddStream = async (e) => {
+  // Open modal for adding a new stream
+  const openAddModal = () => {
+    setIsEditMode(false);
+    setEditStreamId(null);
+    setFormData({ title: "", language: "", content: "" });
+    setIconFile(null);
+    if (newIconPreview) {
+      URL.revokeObjectURL(newIconPreview);
+      setNewIconPreview(null);
+    }
+    setCurrentIconUrl(null);
+    setModalError("");
+    setShowModal(true);
+  };
+
+  // Open modal for editing an existing stream
+  const openEditModal = async (streamId) => {
+    setFetchingStream(true);
+    setModalError("");
+    try {
+      const response = await api.getStreamById(streamId);
+      const stream = response.data;
+      setIsEditMode(true);
+      setEditStreamId(streamId);
+      setFormData({
+        title: stream.title || "",
+        language: stream.language || "",
+        content: stream.content || "",
+      });
+      setCurrentIconUrl(stream.icon_url || null);
+      setIconFile(null);
+      if (newIconPreview) {
+        URL.revokeObjectURL(newIconPreview);
+        setNewIconPreview(null);
+      }
+      setShowModal(true);
+    } catch (err) {
+      console.error("Error fetching stream for edit:", err);
+      setModalError("Failed to load stream data. Please try again.");
+    } finally {
+      setFetchingStream(false);
+    }
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+    setModalError("");
+    setFormData({ title: "", language: "", content: "" });
+    setIconFile(null);
+    if (newIconPreview) {
+      URL.revokeObjectURL(newIconPreview);
+      setNewIconPreview(null);
+    }
+    setCurrentIconUrl(null);
+    setIsEditMode(false);
+    setEditStreamId(null);
+    const fileInput = document.getElementById("stream-icon-upload");
+    if (fileInput) fileInput.value = "";
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.title.trim()) {
       setModalError("Title is required");
@@ -106,41 +191,30 @@ const Stream = () => {
 
     try {
       const payload = new FormData();
-      payload.append("category_id", categoryId);
       payload.append("title", formData.title.trim());
       payload.append("language", formData.language.trim());
       payload.append("content", formData.content || "");
       if (iconFile) {
         payload.append("icon", iconFile);
       }
-      // status and sort_order not sent; backend hardcodes them
 
-      const response = await api.createStream(payload);
+      if (isEditMode) {
+        await api.updateStream(editStreamId, payload);
+      } else {
+        payload.append("category_id", categoryId);
+        await api.createStream(payload);
+      }
 
-      // Success: close modal, reset form, refresh list
-      setShowModal(false);
-      setFormData({ title: "", language: "", content: "" });
-      setIconFile(null);
-      const fileInput = document.getElementById("stream-icon-upload");
-      if (fileInput) fileInput.value = "";
+      // Success: close modal, reset, refresh list
+      closeModal();
       await fetchStreams();
-      // Optional success toast
-      alert("Stream added successfully!");
+      alert(isEditMode ? "Stream updated successfully!" : "Stream added successfully!");
     } catch (err) {
-      console.error("Add stream error:", err);
-      setModalError(err.message || "Failed to add stream. Please try again.");
+      console.error("Submit stream error:", err);
+      setModalError(err.message || "Failed to save stream. Please try again.");
     } finally {
       setSubmitting(false);
     }
-  };
-
-  const closeModal = () => {
-    setShowModal(false);
-    setModalError("");
-    setFormData({ title: "", language: "", content: "" });
-    setIconFile(null);
-    const fileInput = document.getElementById("stream-icon-upload");
-    if (fileInput) fileInput.value = "";
   };
 
   // --- Render ---
@@ -184,9 +258,7 @@ const Stream = () => {
           </span>
         </div>
         <div className="flex items-center gap-4">
-          <span className="text-sm text-gray-500 font-medium">
-            Super Admin
-          </span>
+          <span className="text-sm text-gray-500 font-medium">Super Admin</span>
           <button className="w-8 h-8 rounded-full border border-red-300 flex items-center justify-center">
             <Bell size={15} className="text-red-500" />
           </button>
@@ -224,7 +296,7 @@ const Stream = () => {
 
             {/* Add Stream Button */}
             <button
-              onClick={() => setShowModal(true)}
+              onClick={openAddModal}
               className="h-10 px-5 text-white text-sm rounded bg-gradient-to-r from-[#d94d59] to-[#e47b4a] flex items-center gap-2"
             >
               Add Stream
@@ -270,7 +342,12 @@ const Stream = () => {
                       No Image
                     </div>
                   )}
-                  <button className="absolute -bottom-2 right-2 w-6 h-6 rounded-full bg-red-500 text-white flex items-center justify-center">
+                  {/* Edit Icon Button */}
+                  <button
+                    onClick={() => openEditModal(stream.id)}
+                    className="absolute -bottom-2 right-2 w-6 h-6 rounded-full bg-red-500 text-white flex items-center justify-center hover:bg-red-600 transition"
+                    title="Edit Stream"
+                  >
                     <Pencil size={10} />
                   </button>
                 </div>
@@ -340,16 +417,18 @@ const Stream = () => {
         </div>
       </div>
 
-      {/* --- Add Stream Modal --- */}
+      {/* --- Add/Edit Stream Modal --- */}
       {showModal && (
         <div className="fixed inset-0 bg-[#000000d6] bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold">Add New Stream</h2>
+              <h2 className="text-xl font-bold">
+                {isEditMode ? "Edit Stream" : "Add New Stream"}
+              </h2>
               <button
                 onClick={closeModal}
                 className="text-gray-500 hover:text-gray-700"
-                disabled={submitting}
+                disabled={submitting || fetchingStream}
               >
                 <X size={20} />
               </button>
@@ -361,92 +440,125 @@ const Stream = () => {
               </div>
             )}
 
-            <form onSubmit={handleAddStream}>
-              {/* Title */}
-              <div className="mb-4">
-                <label className="block text-sm font-medium mb-1">
-                  Title <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="text"
-                  name="title"
-                  value={formData.title}
-                  onChange={handleInputChange}
-                  className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-400"
-                  required
-                  disabled={submitting}
-                />
-              </div>
+            {fetchingStream ? (
+              <div className="text-center py-8">Loading stream data...</div>
+            ) : (
+              <form onSubmit={handleSubmit}>
+                {/* Title */}
+                <div className="mb-4">
+                  <label className="block text-sm font-medium mb-1">
+                    Title <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="title"
+                    value={formData.title}
+                    onChange={handleInputChange}
+                    className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-400"
+                    required
+                    disabled={submitting}
+                  />
+                </div>
 
-              {/* Language */}
-              <div className="mb-4">
-                <label className="block text-sm font-medium mb-1">
-                  Language <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="text"
-                  name="language"
-                  value={formData.language}
-                  onChange={handleInputChange}
-                  placeholder="e.g., English, Hindi"
-                  className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-400"
-                  required
-                  disabled={submitting}
-                />
-              </div>
+                {/* Language */}
+                <div className="mb-4">
+                  <label className="block text-sm font-medium mb-1">
+                    Language <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="language"
+                    value={formData.language}
+                    onChange={handleInputChange}
+                    placeholder="e.g., English, Hindi"
+                    className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-400"
+                    required
+                    disabled={submitting}
+                  />
+                </div>
 
-              {/* Content */}
-              <div className="mb-4">
-                <label className="block text-sm font-medium mb-1">Content</label>
-                <textarea
-                  name="content"
-                  value={formData.content}
-                  onChange={handleInputChange}
-                  rows={3}
-                  className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-400"
-                  disabled={submitting}
-                />
-              </div>
+                {/* Content */}
+                <div className="mb-4">
+                  <label className="block text-sm font-medium mb-1">Content</label>
+                  <textarea
+                    name="content"
+                    value={formData.content}
+                    onChange={handleInputChange}
+                    rows={3}
+                    className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-400"
+                    disabled={submitting}
+                  />
+                </div>
 
-              {/* Icon Upload */}
-              <div className="mb-4">
-                <label className="block text-sm font-medium mb-1">
-                  Icon (optional, max 5MB)
-                </label>
-                <input
-                  id="stream-icon-upload"
-                  type="file"
-                  accept="image/*"
-                  onChange={handleFileChange}
-                  className="w-full text-sm"
-                  disabled={submitting}
-                />
-                {iconFile && (
-                  <p className="text-xs text-gray-500 mt-1">
-                    Selected: {iconFile.name}
-                  </p>
-                )}
-              </div>
+                {/* Icon Upload with Preview */}
+                <div className="mb-4">
+                  <label className="block text-sm font-medium mb-1">
+                    Icon (optional, max 5MB)
+                  </label>
+                  
+                  {/* Preview area */}
+                  <div className="mb-2">
+                    {newIconPreview ? (
+                      // Show preview of newly selected file
+                      <div>
+                        <p className="text-xs text-green-600 mb-1">New icon selected:</p>
+                        <img
+                          src={newIconPreview}
+                          alt="New icon preview"
+                          className="h-16 w-auto object-contain border rounded"
+                        />
+                      </div>
+                    ) : isEditMode && currentIconUrl ? (
+                      // Show current icon in edit mode when no new file selected
+                      <div>
+                        <p className="text-xs text-gray-500 mb-1">Current icon:</p>
+                        <img
+                          src={`${FILE_BASE_URL}${currentIconUrl}`}
+                          alt="Current icon"
+                          className="h-16 w-auto object-contain border rounded"
+                        />
+                      </div>
+                    ) : (
+                      <div className="text-xs text-gray-400">No icon selected</div>
+                    )}
+                  </div>
 
-              {/* Actions */}
-              <div className="flex justify-end gap-3 mt-6">
-                <button
-                  type="button"
-                  onClick={closeModal}
-                  className="px-4 py-2 text-sm border border-gray-300 rounded hover:bg-gray-50"
-                  disabled={submitting}
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 text-sm bg-red-600 text-white rounded hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed"
-                  disabled={submitting}
-                >
-                  {submitting ? "Adding..." : "Add Stream"}
-                </button>
-              </div>
-            </form>
+                  <input
+                    id="stream-icon-upload"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                    className="w-full text-sm"
+                    disabled={submitting}
+                  />
+                </div>
+
+                {/* Actions */}
+                <div className="flex justify-end gap-3 mt-6">
+                  <button
+                    type="button"
+                    onClick={closeModal}
+                    className="px-4 py-2 text-sm border border-gray-300 rounded hover:bg-gray-50"
+                    disabled={submitting}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-4 py-2 text-sm bg-red-600 text-white rounded hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled={submitting}
+                  >
+                    {submitting
+                      ? isEditMode
+                        ? "Updating..."
+                        : "Adding..."
+                      : isEditMode
+                      ? "Update Stream"
+                      : "Add Stream"}
+                  </button>
+                </div>
+              </form>
+            )}
           </div>
         </div>
       )}
