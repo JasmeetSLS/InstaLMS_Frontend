@@ -202,6 +202,30 @@ const Sections = () => {
     }
   };
 
+  // -------- Question Edit & Delete handlers --------
+const handleEditQuestion = (question) => {
+  if (!selectedSection) return;
+  navigate(`/admin/create-question?sectionId=${selectedSection.id}&questionId=${question.id}`);
+};
+
+const handleDeleteQuestion = async (question) => {
+  if (!window.confirm(`Are you sure you want to delete this question?`)) {
+    return;
+  }
+  try {
+    await api.deleteQuestion(question.id);
+    if (selectedSection) {
+      await fetchSectionData(selectedSection.id);
+      if (selectedQuestion?.id === question.id) {
+        setSelectedQuestion(null);
+      }
+    }
+  } catch (error) {
+    console.error("Error deleting question:", error);
+    alert("Failed to delete question. Please try again.");
+  }
+};
+
   // -------- PREVIEW RENDERERS --------
   const renderContentPreview = () => {
     if (!selectedContent) return null;
@@ -713,26 +737,60 @@ const Sections = () => {
                     No questions available for this section
                   </div>
                 ) : (
-                  questions.map((question) => (
-                    <div
-                      key={question.id}
-                      className={`border rounded p-2.5 flex items-center justify-between cursor-pointer ${
-                        selectedQuestion?.id === question.id
-                          ? "bg-blue-50 border-blue-300"
-                          : "bg-white hover:bg-gray-50"
-                      }`}
-                      onClick={() => handleQuestionClick(question)}
-                    >
-                      <div className="flex items-center gap-2">
-                        <div className="w-7 h-7 rounded-full border border-blue-300 flex items-center justify-center">
-                          <FileText size={14} className="text-blue-400" />
-                        </div>
-                        <span className="text-sm text-gray-700 truncate max-w-[150px]">
-                          {question.question_text || "Untitled Question"}
-                        </span>
-                      </div>
-                    </div>
-                  ))
+                // Inside the questions mapping block, replace the inner div with:
+
+questions.map((question) => (
+  <div
+    key={question.id}
+    className={`border rounded p-2.5 flex items-center justify-between cursor-pointer ${
+      selectedQuestion?.id === question.id
+        ? "bg-blue-50 border-blue-300"
+        : "bg-white hover:bg-gray-50"
+    }`}
+    onClick={() => handleQuestionClick(question)}
+  >
+    <div className="flex items-center gap-2 flex-1 min-w-0">
+      <div className="w-7 h-7 rounded-full border border-blue-300 flex items-center justify-center flex-shrink-0">
+        <FileText size={14} className="text-blue-400" />
+      </div>
+      <span className="text-sm text-gray-700 truncate">
+        {question.question_text || "Untitled Question"}
+      </span>
+    </div>
+    <div className="flex gap-1 flex-shrink-0">
+      <button
+        className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center hover:bg-blue-600"
+        onClick={(e) => {
+          e.stopPropagation();
+          // Share functionality placeholder
+        }}
+        title="Share"
+      >
+        <Share2 size={11} className="text-white" />
+      </button>
+      <button
+        className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center hover:bg-blue-600"
+        onClick={(e) => {
+          e.stopPropagation();
+          handleEditQuestion(question);
+        }}
+        title="Edit"
+      >
+        <Pencil size={11} className="text-white" />
+      </button>
+      <button
+        className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center hover:bg-blue-600"
+        onClick={(e) => {
+          e.stopPropagation();
+          handleDeleteQuestion(question);
+        }}
+        title="Delete"
+      >
+        <Trash2 size={11} className="text-white" />
+      </button>
+    </div>
+  </div>
+))
                 )
               )}
             </div>

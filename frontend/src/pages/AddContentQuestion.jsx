@@ -30,12 +30,12 @@ const contentTemplates = [
 
 // Question templates – map each to a backend question_type
 const questionTemplates = [
-  { icon: Grid2x2, label: "MCQ - Single", type: "mcq" },
-  { icon: Grid2x2, label: "MCQ - Multiple", type: "mcq" }, // same type, but we can differentiate later
+  { icon: Grid2x2, label: "MCQ", type: "mcq" },
   { icon: Equal, label: "Fill Blanks", type: "fill_blank" },
   { icon: ListOrdered, label: "Order the following", type: "order_following" },
   { icon: CheckCircle2, label: "True or False", type: "true_false" },
   { icon: ArrowLeftRight, label: "This or That", type: "this_or_that" },
+  { icon: FileText, label: "Match the following", type: "match_following" }, // added
 ];
 
 const TemplateCard = ({ icon: Icon, label, onClick }) => (

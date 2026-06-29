@@ -168,8 +168,12 @@ deleteContent: (contentId) => admin.delete(`/content/${contentId}`),
 
 //CMS Question APIs
 //CMS Question APIs
+// CMS Question APIs
 getQuestionsBySection: (sectionId) => admin.get(`/questions/${sectionId}`),
 getQuestionById: (questionId) => admin.get(`/question/${questionId}`),
+createQuestion: (data) => admin.post('/add-question', data),
+updateQuestion: (questionId, data) => admin.put(`/question/${questionId}`, data),
+deleteQuestion: (questionId) => admin.delete(`/question/${questionId}`),
 };
 
 export default api;
