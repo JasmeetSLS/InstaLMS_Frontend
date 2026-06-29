@@ -160,7 +160,7 @@ const Content = () => {
                   {category.streaming || 133} STREAMING
                 </div>
 
-                <button className="w-6 h-6 rounded-full bg-white text-red-500 flex items-center justify-center text-xs">
+                <button className="w-6 h-6 rounded-full border bg-white text-red-500 flex items-center justify-center text-xs">
                   ▼
                 </button>
               </div>
