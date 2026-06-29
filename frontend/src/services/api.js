@@ -156,8 +156,12 @@ updateStream: (streamId, formData) => admin.put(`/stream/${streamId}`, formData,
     
 
     //CMS Section APIs
-    getSectionsByStream: (streamId) => admin.get(`/sections/${streamId}`),
-    createSection: (data) => admin.post('/add-section', data), 
+   // CMS Section APIs
+getSectionsByStream: (streamId) => admin.get(`/sections/${streamId}`),
+createSection: (data) => admin.post('/add-section', data),
+getSectionById: (sectionId) => admin.get(`/section/${sectionId}`),
+updateSection: (sectionId, data) => admin.put(`/section/${sectionId}`, data),
+deleteSection: (sectionId) => admin.delete(`/section/${sectionId}`),
 
     //CMS Content APIs
        getContentsBySection: (sectionId) => admin.get(`/contents/${sectionId}`),

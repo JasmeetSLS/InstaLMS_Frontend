@@ -17,9 +17,9 @@ import {
   Link as LinkIcon,
 } from "lucide-react";
 import api, { FILE_BASE_URL } from "../services/api";
-import "./CreateContent.css";   // re‑use zoom animation and styling
+import "./CreateContent.css";
 
-// Helper to extract YouTube embed URL (copied from CreateContent)
+// Helper to extract YouTube embed URL
 const getYouTubeEmbedUrl = (url) => {
   if (!url) return null;
   const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
@@ -42,7 +42,7 @@ const Sections = () => {
   const [contents, setContents] = useState([]);
   const [selectedContent, setSelectedContent] = useState(null);
 
-  // Questions (replaces assessments)
+  // Questions
   const [questions, setQuestions] = useState([]);
   const [selectedQuestion, setSelectedQuestion] = useState(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -52,10 +52,14 @@ const Sections = () => {
   const [loadingContent, setLoadingContent] = useState(false);
   const [loadingPreview, setLoadingPreview] = useState(false);
 
-  // --- Add Section Modal ---
-  const [showAddSectionModal, setShowAddSectionModal] = useState(false);
-  const [newSectionTitle, setNewSectionTitle] = useState("");
-  const [newSectionDescription, setNewSectionDescription] = useState("");
+  // ---- Section Modal State (shared for Add & Edit) ----
+  const [showSectionModal, setShowSectionModal] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [editSectionId, setEditSectionId] = useState(null);
+  const [sectionFormData, setSectionFormData] = useState({
+    title: "",
+    description: "",
+  });
   const [sectionSubmitting, setSectionSubmitting] = useState(false);
   const [sectionError, setSectionError] = useState("");
 
@@ -113,6 +117,98 @@ const Sections = () => {
     await fetchSectionData(section.id);
   };
 
+  // ---- Section CRUD ----
+  const openAddSectionModal = () => {
+    setIsEditMode(false);
+    setEditSectionId(null);
+    setSectionFormData({ title: "", description: "" });
+    setSectionError("");
+    setShowSectionModal(true);
+  };
+
+  const openEditSectionModal = async (section) => {
+    try {
+      setSectionError("");
+      const response = await api.getSectionById(section.id);
+      const data = response.data;
+      setIsEditMode(true);
+      setEditSectionId(section.id);
+      setSectionFormData({
+        title: data.title || "",
+        description: data.description || "",
+      });
+      setShowSectionModal(true);
+    } catch (error) {
+      console.error("Error fetching section for edit:", error);
+      setSectionError("Failed to load section data.");
+    }
+  };
+
+  const closeSectionModal = () => {
+    setShowSectionModal(false);
+    setIsEditMode(false);
+    setEditSectionId(null);
+    setSectionFormData({ title: "", description: "" });
+    setSectionError("");
+    setSectionSubmitting(false);
+  };
+
+  const handleSectionSubmit = async (e) => {
+    e.preventDefault();
+    if (!sectionFormData.title.trim()) {
+      setSectionError("Title is required");
+      return;
+    }
+
+    setSectionSubmitting(true);
+    setSectionError("");
+
+    try {
+      if (isEditMode) {
+        await api.updateSection(editSectionId, {
+          title: sectionFormData.title.trim(),
+          description: sectionFormData.description.trim() || "",
+        });
+        alert("Section updated successfully!");
+      } else {
+        await api.createSection({
+          stream_id: parseInt(streamId),
+          title: sectionFormData.title.trim(),
+          description: sectionFormData.description.trim() || "",
+        });
+        alert("Section added successfully!");
+      }
+      closeSectionModal();
+      await fetchSections(); // refresh list
+    } catch (err) {
+      setSectionError(err.message || "Failed to save section.");
+    } finally {
+      setSectionSubmitting(false);
+    }
+  };
+
+  const handleDeleteSection = async (section) => {
+    if (!window.confirm(`Are you sure you want to delete "${section.title}"? This will also delete all its content and questions.`)) {
+      return;
+    }
+    try {
+      await api.deleteSection(section.id);
+      // If the deleted section was selected, clear selection
+      if (selectedSection?.id === section.id) {
+        setSelectedSection(null);
+        setContents([]);
+        setQuestions([]);
+        setSelectedContent(null);
+        setSelectedQuestion(null);
+      }
+      await fetchSections(); // refresh list
+    } catch (error) {
+      console.error("Error deleting section:", error);
+      alert("Failed to delete section. Please try again.");
+    }
+  };
+
+  // Content & Question handlers (unchanged)
   const handleContentClick = async (content) => {
     setLoadingPreview(true);
     try {
@@ -176,7 +272,7 @@ const Sections = () => {
     }
   };
 
-  // -------- Edit & Delete handlers --------
+  // -------- Content Edit & Delete --------
   const handleEditContent = (content) => {
     if (!selectedSection) return;
     navigate(`/admin/create-content?sectionId=${selectedSection.id}&contentId=${content.id}`);
@@ -188,10 +284,8 @@ const Sections = () => {
     }
     try {
       await api.deleteContent(content.id);
-      // Refresh contents list
       if (selectedSection) {
         await fetchSectionData(selectedSection.id);
-        // If the deleted content was selected, clear selection
         if (selectedContent?.id === content.id) {
           setSelectedContent(null);
         }
@@ -202,29 +296,29 @@ const Sections = () => {
     }
   };
 
-  // -------- Question Edit & Delete handlers --------
-const handleEditQuestion = (question) => {
-  if (!selectedSection) return;
-  navigate(`/admin/create-question?sectionId=${selectedSection.id}&questionId=${question.id}`);
-};
+  // -------- Question Edit & Delete --------
+  const handleEditQuestion = (question) => {
+    if (!selectedSection) return;
+    navigate(`/admin/create-question?sectionId=${selectedSection.id}&questionId=${question.id}`);
+  };
 
-const handleDeleteQuestion = async (question) => {
-  if (!window.confirm(`Are you sure you want to delete this question?`)) {
-    return;
-  }
-  try {
-    await api.deleteQuestion(question.id);
-    if (selectedSection) {
-      await fetchSectionData(selectedSection.id);
-      if (selectedQuestion?.id === question.id) {
-        setSelectedQuestion(null);
-      }
+  const handleDeleteQuestion = async (question) => {
+    if (!window.confirm(`Are you sure you want to delete this question?`)) {
+      return;
     }
-  } catch (error) {
-    console.error("Error deleting question:", error);
-    alert("Failed to delete question. Please try again.");
-  }
-};
+    try {
+      await api.deleteQuestion(question.id);
+      if (selectedSection) {
+        await fetchSectionData(selectedSection.id);
+        if (selectedQuestion?.id === question.id) {
+          setSelectedQuestion(null);
+        }
+      }
+    } catch (error) {
+      console.error("Error deleting question:", error);
+      alert("Failed to delete question. Please try again.");
+    }
+  };
 
   // -------- PREVIEW RENDERERS --------
   const renderContentPreview = () => {
@@ -329,7 +423,6 @@ const handleDeleteQuestion = async (question) => {
 
         return (
           <div className="relative w-full h-full overflow-hidden">
-            {/* Background image – fixed, zooming, blurred */}
             {lastImageSlide && (
               <img
                 src={`${FILE_BASE_URL}${lastImageSlide.content}`}
@@ -341,7 +434,6 @@ const handleDeleteQuestion = async (question) => {
                 }}
               />
             )}
-            {/* Semi‑transparent blue overlay for readability */}
             <div
               className="absolute inset-0"
               style={{
@@ -349,7 +441,6 @@ const handleDeleteQuestion = async (question) => {
                 opacity: 0.5,
               }}
             />
-            {/* Content wrapper – scrollable */}
             <div className="relative z-10 h-full overflow-auto p-4 text-white">
               <h3 className="font-bold text-base leading-5">
                 {content.title || "Slides"}
@@ -500,45 +591,6 @@ const handleDeleteQuestion = async (question) => {
     );
   };
 
-  // --- Add Section Modal handlers ---
-  const handleOpenAddSection = () => {
-    setShowAddSectionModal(true);
-    setNewSectionTitle("");
-    setNewSectionDescription("");
-    setSectionError("");
-  };
-
-  const handleCloseAddSection = () => {
-    setShowAddSectionModal(false);
-    setNewSectionTitle("");
-    setNewSectionDescription("");
-    setSectionError("");
-    setSectionSubmitting(false);
-  };
-
-  const handleAddSectionSubmit = async (e) => {
-    e.preventDefault();
-    if (!newSectionTitle.trim()) {
-      setSectionError("Title is required");
-      return;
-    }
-    setSectionSubmitting(true);
-    setSectionError("");
-    try {
-      await api.createSection({
-        stream_id: parseInt(streamId),
-        title: newSectionTitle.trim(),
-        description: newSectionDescription.trim() || "",
-      });
-      handleCloseAddSection();
-      await fetchSections();
-    } catch (err) {
-      setSectionError(err.message || "Failed to add section");
-    } finally {
-      setSectionSubmitting(false);
-    }
-  };
-
   // --- Loading / Error states ---
   if (loading) {
     return (
@@ -609,7 +661,7 @@ const handleDeleteQuestion = async (question) => {
               <PlusCircle
                 size={22}
                 className="text-red-500 cursor-pointer"
-                onClick={handleOpenAddSection}
+                onClick={openAddSectionModal}
               />
             </div>
             <div className="overflow-y-auto p-3 space-y-3 flex-1">
@@ -623,14 +675,48 @@ const handleDeleteQuestion = async (question) => {
                   }`}
                   onClick={() => handleSectionClick(section)}
                 >
-                  <h4 className="font-semibold text-sm leading-5">{section.title}</h4>
-                  <p
-                    className={`mt-3 text-xs ${
-                      selectedSection?.id === section.id ? "text-white" : "text-gray-500"
-                    }`}
-                  >
-                    {section.description || "No description"}
-                  </p>
+                  <div className="flex justify-between items-start">
+                    <div className="flex-1">
+                      <h4 className="font-semibold text-sm leading-5">{section.title}</h4>
+                      <p
+                        className={`mt-1 text-xs ${
+                          selectedSection?.id === section.id ? "text-white" : "text-gray-500"
+                        }`}
+                      >
+                        {section.description || "No description"}
+                      </p>
+                    </div>
+                    <div className="flex gap-1 flex-shrink-0 ml-2">
+                      <button
+                        className={`w-6 h-6 rounded-full flex items-center justify-center ${
+                          selectedSection?.id === section.id
+                            ? "bg-white text-red-500 hover:bg-gray-100"
+                            : "bg-red-500 text-white hover:bg-red-600"
+                        }`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          openEditSectionModal(section);
+                        }}
+                        title="Edit Section"
+                      >
+                        <Pencil size={12} />
+                      </button>
+                      <button
+                        className={`w-6 h-6 rounded-full flex items-center justify-center ${
+                          selectedSection?.id === section.id
+                            ? "bg-white text-red-500 hover:bg-gray-100"
+                            : "bg-red-500 text-white hover:bg-red-600"
+                        }`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteSection(section);
+                        }}
+                        title="Delete Section"
+                      >
+                        <Trash2 size={12} />
+                      </button>
+                    </div>
+                  </div>
                 </div>
               ))}
             </div>
@@ -704,7 +790,7 @@ const handleDeleteQuestion = async (question) => {
                           className="w-6 h-6 rounded-full bg-red-500 flex items-center justify-center"
                           onClick={(e) => {
                             e.stopPropagation();
-                            // Share functionality - placeholder
+                            // Share placeholder
                           }}
                         >
                           <Share2 size={11} className="text-white" />
@@ -737,60 +823,58 @@ const handleDeleteQuestion = async (question) => {
                     No questions available for this section
                   </div>
                 ) : (
-                // Inside the questions mapping block, replace the inner div with:
-
-questions.map((question) => (
-  <div
-    key={question.id}
-    className={`border rounded p-2.5 flex items-center justify-between cursor-pointer ${
-      selectedQuestion?.id === question.id
-        ? "bg-blue-50 border-blue-300"
-        : "bg-white hover:bg-gray-50"
-    }`}
-    onClick={() => handleQuestionClick(question)}
-  >
-    <div className="flex items-center gap-2 flex-1 min-w-0">
-      <div className="w-7 h-7 rounded-full border border-blue-300 flex items-center justify-center flex-shrink-0">
-        <FileText size={14} className="text-blue-400" />
-      </div>
-      <span className="text-sm text-gray-700 truncate">
-        {question.question_text || "Untitled Question"}
-      </span>
-    </div>
-    <div className="flex gap-1 flex-shrink-0">
-      <button
-        className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center hover:bg-blue-600"
-        onClick={(e) => {
-          e.stopPropagation();
-          // Share functionality placeholder
-        }}
-        title="Share"
-      >
-        <Share2 size={11} className="text-white" />
-      </button>
-      <button
-        className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center hover:bg-blue-600"
-        onClick={(e) => {
-          e.stopPropagation();
-          handleEditQuestion(question);
-        }}
-        title="Edit"
-      >
-        <Pencil size={11} className="text-white" />
-      </button>
-      <button
-        className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center hover:bg-blue-600"
-        onClick={(e) => {
-          e.stopPropagation();
-          handleDeleteQuestion(question);
-        }}
-        title="Delete"
-      >
-        <Trash2 size={11} className="text-white" />
-      </button>
-    </div>
-  </div>
-))
+                  questions.map((question) => (
+                    <div
+                      key={question.id}
+                      className={`border rounded p-2.5 flex items-center justify-between cursor-pointer ${
+                        selectedQuestion?.id === question.id
+                          ? "bg-blue-50 border-blue-300"
+                          : "bg-white hover:bg-gray-50"
+                      }`}
+                      onClick={() => handleQuestionClick(question)}
+                    >
+                      <div className="flex items-center gap-2 flex-1 min-w-0">
+                        <div className="w-7 h-7 rounded-full border border-blue-300 flex items-center justify-center flex-shrink-0">
+                          <FileText size={14} className="text-blue-400" />
+                        </div>
+                        <span className="text-sm text-gray-700 truncate">
+                          {question.question_text || "Untitled Question"}
+                        </span>
+                      </div>
+                      <div className="flex gap-1 flex-shrink-0">
+                        <button
+                          className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center hover:bg-blue-600"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            // Share placeholder
+                          }}
+                          title="Share"
+                        >
+                          <Share2 size={11} className="text-white" />
+                        </button>
+                        <button
+                          className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center hover:bg-blue-600"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleEditQuestion(question);
+                          }}
+                          title="Edit"
+                        >
+                          <Pencil size={11} className="text-white" />
+                        </button>
+                        <button
+                          className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center hover:bg-blue-600"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDeleteQuestion(question);
+                          }}
+                          title="Delete"
+                        >
+                          <Trash2 size={11} className="text-white" />
+                        </button>
+                      </div>
+                    </div>
+                  ))
                 )
               )}
             </div>
@@ -843,14 +927,16 @@ questions.map((question) => (
         </div>
       </div>
 
-      {/* --- Add Section Modal --- */}
-      {showAddSectionModal && (
+      {/* --- Add/Edit Section Modal --- */}
+      {showSectionModal && (
         <div className="fixed inset-0 bg-[#000000d6] bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold">Add New Section</h2>
+              <h2 className="text-xl font-bold">
+                {isEditMode ? "Edit Section" : "Add New Section"}
+              </h2>
               <button
-                onClick={handleCloseAddSection}
+                onClick={closeSectionModal}
                 className="text-gray-500 hover:text-gray-700"
                 disabled={sectionSubmitting}
               >
@@ -864,15 +950,17 @@ questions.map((question) => (
               </div>
             )}
 
-            <form onSubmit={handleAddSectionSubmit}>
+            <form onSubmit={handleSectionSubmit}>
               <div className="mb-4">
                 <label className="block text-sm font-medium mb-1">
                   Title <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
-                  value={newSectionTitle}
-                  onChange={(e) => setNewSectionTitle(e.target.value)}
+                  value={sectionFormData.title}
+                  onChange={(e) =>
+                    setSectionFormData({ ...sectionFormData, title: e.target.value })
+                  }
                   className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-400"
                   required
                   disabled={sectionSubmitting}
@@ -882,8 +970,10 @@ questions.map((question) => (
               <div className="mb-4">
                 <label className="block text-sm font-medium mb-1">Description</label>
                 <textarea
-                  value={newSectionDescription}
-                  onChange={(e) => setNewSectionDescription(e.target.value)}
+                  value={sectionFormData.description}
+                  onChange={(e) =>
+                    setSectionFormData({ ...sectionFormData, description: e.target.value })
+                  }
                   rows={3}
                   className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-400"
                   disabled={sectionSubmitting}
@@ -893,7 +983,7 @@ questions.map((question) => (
               <div className="flex justify-end gap-3 mt-6">
                 <button
                   type="button"
-                  onClick={handleCloseAddSection}
+                  onClick={closeSectionModal}
                   className="px-4 py-2 text-sm border border-gray-300 rounded hover:bg-gray-50"
                   disabled={sectionSubmitting}
                 >
@@ -904,7 +994,11 @@ questions.map((question) => (
                   className="px-4 py-2 text-sm bg-red-600 text-white rounded hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed"
                   disabled={sectionSubmitting}
                 >
-                  {sectionSubmitting ? "Adding..." : "Add Section"}
+                  {sectionSubmitting
+                    ? "Saving..."
+                    : isEditMode
+                    ? "Update Section"
+                    : "Add Section"}
                 </button>
               </div>
             </form>
