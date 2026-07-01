@@ -1253,12 +1253,12 @@ const hours = Array.from({ length: 24 }, (_, i) => i + 1);
             </div>
             <div className="md:col-span-2 h-[180px] flex items-center justify-center">
               <HighchartsReact highcharts={Highcharts} options={{
-                chart: { type: "pie", backgroundColor: "transparent", height: 180, options3d: { enabled: true, alpha: 45 } },
+                chart: { type: "pie", backgroundColor: "transparent", height: 180},
                 colors: contentColors,
                 accessibility: { enabled: false },
                 credits: { enabled: false },
                 title: { text: null },
-                plotOptions: { pie: { innerSize: 70, depth: 45, dataLabels: { enabled: false } } },
+                plotOptions: { pie: { innerSize: 70, dataLabels: { enabled: false } } },
                 series: [{ name: "Content", data: contentData.map(item => ({ name: item.type, y: item.count })) }]
               }} />
             </div>
