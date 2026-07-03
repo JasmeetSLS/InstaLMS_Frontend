@@ -13,11 +13,17 @@ import {
 } from "lucide-react";
 import api, { FILE_BASE_URL } from "../services/api";
 
+// Debounce delay (in ms)
+const DEBOUNCE_DELAY = 300;
+
 const Stream = () => {
   const { categoryId } = useParams();
   const navigate = useNavigate();
   const [streams, setStreams] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [searchLoading, setSearchLoading] = useState(false);
   const [error, setError] = useState(null);
 
   // --- Modal State ---
@@ -30,13 +36,26 @@ const Stream = () => {
     content: "",
   });
   const [iconFile, setIconFile] = useState(null);
-  const [newIconPreview, setNewIconPreview] = useState(null); // preview URL for newly selected file
+  const [newIconPreview, setNewIconPreview] = useState(null);
   const [currentIconUrl, setCurrentIconUrl] = useState(null);
   const [submitting, setSubmitting] = useState(false);
   const [modalError, setModalError] = useState("");
   const [fetchingStream, setFetchingStream] = useState(false);
 
-  // Clean up object URL when component unmounts or when preview changes
+  // Debounce effect
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearch(searchTerm);
+    }, DEBOUNCE_DELAY);
+    return () => clearTimeout(handler);
+  }, [searchTerm]);
+
+  // Fetch streams when categoryId or debouncedSearch changes
+  useEffect(() => {
+    fetchStreams(debouncedSearch);
+  }, [categoryId, debouncedSearch]);
+
+  // Clean up object URL
   useEffect(() => {
     return () => {
       if (newIconPreview) {
@@ -45,14 +64,11 @@ const Stream = () => {
     };
   }, [newIconPreview]);
 
-  useEffect(() => {
-    fetchStreams();
-  }, [categoryId]);
-
-  const fetchStreams = async () => {
+  const fetchStreams = async (search = "") => {
     try {
+      setSearchLoading(true);
       setLoading(true);
-      const response = await api.getStreamsByCategory(categoryId);
+      const response = await api.getStreamsByCategory(categoryId, { search });
       setStreams(response.data || []);
       setError(null);
     } catch (err) {
@@ -60,6 +76,7 @@ const Stream = () => {
       setError("Failed to load streams. Please try again.");
     } finally {
       setLoading(false);
+      setSearchLoading(false);
     }
   };
 
@@ -99,14 +116,12 @@ const Stream = () => {
         e.target.value = "";
         return;
       }
-      // Revoke previous preview if any
       if (newIconPreview) {
         URL.revokeObjectURL(newIconPreview);
       }
       setIconFile(file);
       setNewIconPreview(URL.createObjectURL(file));
     } else {
-      // user cleared the input
       setIconFile(null);
       if (newIconPreview) {
         URL.revokeObjectURL(newIconPreview);
@@ -115,7 +130,6 @@ const Stream = () => {
     }
   };
 
-  // Open modal for adding a new stream
   const openAddModal = () => {
     setIsEditMode(false);
     setEditStreamId(null);
@@ -130,7 +144,6 @@ const Stream = () => {
     setShowModal(true);
   };
 
-  // Open modal for editing an existing stream
   const openEditModal = async (streamId) => {
     setFetchingStream(true);
     setModalError("");
@@ -205,9 +218,9 @@ const Stream = () => {
         await api.createStream(payload);
       }
 
-      // Success: close modal, reset, refresh list
       closeModal();
-      await fetchStreams();
+      // Refetch with current search
+      await fetchStreams(debouncedSearch);
       alert(isEditMode ? "Stream updated successfully!" : "Stream added successfully!");
     } catch (err) {
       console.error("Submit stream error:", err);
@@ -218,7 +231,7 @@ const Stream = () => {
   };
 
   // --- Render ---
-  if (loading) {
+  if (loading && !searchTerm) {
     return (
       <div className="min-h-screen bg-[#f3f3f3] flex justify-center items-center">
         <div className="text-lg font-medium">Loading streams...</div>
@@ -281,9 +294,14 @@ const Stream = () => {
               <Search size={15} className="text-gray-400" />
               <input
                 type="text"
-                placeholder="Search"
+                placeholder="Search streams..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-[220px] outline-none text-sm"
               />
+              {searchLoading && (
+                <span className="text-xs text-gray-400">⏳</span>
+              )}
             </div>
           </div>
 
@@ -308,12 +326,10 @@ const Stream = () => {
 
       {/* Content */}
       <div className="p-3">
-        {/* Top Bar */}
         <div className="flex items-center justify-between mb-3">
           <h2 className="font-semibold text-[18px] text-gray-800">
             {streams.length} Stream{streams.length !== 1 && "s"} found
           </h2>
-
           <div className="bg-white border px-3 py-2 rounded text-sm flex items-center gap-2">
             <span className="text-gray-500">sort by :</span>
             <span className="font-semibold">Relevance</span>
@@ -323,101 +339,107 @@ const Stream = () => {
 
         {/* Stream Cards */}
         <div className="space-y-3">
-          {streams.map((stream) => (
-            <div
-              key={stream.id}
-              className="bg-white border border-gray-200 px-3 py-3 rounded-sm"
-            >
-              <div className="grid grid-cols-[220px_1.8fr_220px_180px_120px] gap-4 items-center">
-                {/* Image */}
-                <div className="relative">
-                  {stream.icon_url ? (
-                    <img
-                      src={`${FILE_BASE_URL}${stream.icon_url}`}
-                      alt={stream.title}
-                      className="w-full h-[90px] object-cover border rounded"
-                    />
-                  ) : (
-                    <div className="w-full h-[90px] bg-gray-200 border rounded flex items-center justify-center text-gray-500 text-sm">
-                      No Image
+          {streams.length === 0 ? (
+            <div className="text-center py-10 text-gray-500">
+              {searchTerm ? "No streams match your search" : "No streams available"}
+            </div>
+          ) : (
+            streams.map((stream) => (
+              <div
+                key={stream.id}
+                className="bg-white border border-gray-200 px-3 py-3 rounded-sm"
+              >
+                {/* Card content – unchanged */}
+                <div className="grid grid-cols-[220px_1.8fr_220px_180px_120px] gap-4 items-center">
+                  {/* Image */}
+                  <div className="relative">
+                    {stream.icon_url ? (
+                      <img
+                        src={`${FILE_BASE_URL}${stream.icon_url}`}
+                        alt={stream.title}
+                        className="w-full h-[90px] object-cover border rounded"
+                      />
+                    ) : (
+                      <div className="w-full h-[90px] bg-gray-200 border rounded flex items-center justify-center text-gray-500 text-sm">
+                        No Image
+                      </div>
+                    )}
+                    <button
+                      onClick={() => openEditModal(stream.id)}
+                      className="absolute -bottom-2 right-2 w-6 h-6 rounded-full bg-red-500 text-white flex items-center justify-center hover:bg-red-600 transition"
+                      title="Edit Stream"
+                    >
+                      <Pencil size={10} />
+                    </button>
+                  </div>
+
+                  {/* Details */}
+                  <div>
+                    <div className="flex items-center gap-2 mb-1 flex-wrap">
+                      <h3 className="font-semibold text-[15px] text-gray-800">
+                        {stream.title}
+                      </h3>
+                      <span className="bg-[#2d2d2d] text-white text-[10px] px-2 py-[2px] rounded">
+                        V1
+                      </span>
+                      <span className="font-semibold text-xs text-gray-700">
+                        {stream.status?.toUpperCase() || "ACTIVE"}
+                      </span>
                     </div>
-                  )}
-                  {/* Edit Icon Button */}
-                  <button
-                    onClick={() => openEditModal(stream.id)}
-                    className="absolute -bottom-2 right-2 w-6 h-6 rounded-full bg-red-500 text-white flex items-center justify-center hover:bg-red-600 transition"
-                    title="Edit Stream"
-                  >
-                    <Pencil size={10} />
-                  </button>
-                </div>
 
-                {/* Details */}
-                <div>
-                  <div className="flex items-center gap-2 mb-1 flex-wrap">
-                    <h3 className="font-semibold text-[15px] text-gray-800">
-                      {stream.title}
-                    </h3>
-                    <span className="bg-[#2d2d2d] text-white text-[10px] px-2 py-[2px] rounded">
-                      V1
-                    </span>
-                    <span className="font-semibold text-xs text-gray-700">
-                      {stream.status?.toUpperCase() || "ACTIVE"}
+                    <p className="text-xs text-gray-500 line-clamp-2">
+                      {stream.content || "No description available"}
+                    </p>
+
+                    <span className="inline-block mt-2 bg-gray-100 px-2 py-1 rounded text-[11px] font-medium">
+                      {stream.language || "1 Language"}
                     </span>
                   </div>
 
-                  <p className="text-xs text-gray-500 line-clamp-2">
-                    {stream.content || "No description available"}
-                  </p>
-
-                  <span className="inline-block mt-2 bg-gray-100 px-2 py-1 rounded text-[11px] font-medium">
-                    {stream.language || "1 Language"}
-                  </span>
-                </div>
-
-                {/* Stats */}
-                <div>
-                  <button
-                    onClick={(e) => handleViewSections(stream.id, e)}
-                    className="text-[#c94f4f] text-sm font-semibold hover:underline flex items-center gap-1 transition"
-                  >
-                    {stream.sections_count || 0} Sections |{" "}
-                    {stream.contents_count || 0} Cards
-                    <ChevronRight size={14} className="inline-block" />
-                  </button>
-                  <p className="text-[11px] text-gray-500 mt-1">
-                    LAST UPDATED : {formatDate(stream.updated_at)}
-                  </p>
-                </div>
-
-                {/* Status */}
-                <div>
-                  <h4 className="text-sm font-medium text-gray-700">
-                    {getStatusDisplay(stream.status)}
-                  </h4>
-                  <div className="flex items-center gap-1 mt-2 text-red-500 text-sm">
-                    <RefreshCcw size={14} />
-                    Sync
+                  {/* Stats */}
+                  <div>
+                    <button
+                      onClick={(e) => handleViewSections(stream.id, e)}
+                      className="text-[#c94f4f] text-sm font-semibold hover:underline flex items-center gap-1 transition"
+                    >
+                      {stream.sections_count || 0} Sections |{" "}
+                      {stream.contents_count || 0} Cards
+                      <ChevronRight size={14} className="inline-block" />
+                    </button>
+                    <p className="text-[11px] text-gray-500 mt-1">
+                      LAST UPDATED : {formatDate(stream.updated_at)}
+                    </p>
                   </div>
-                  <p className="text-[11px] text-gray-500 mt-1">
-                    {stream.sections_count || 0} sections available
-                  </p>
-                </div>
 
-                {/* Actions */}
-                <div className="flex justify-end">
-                  <button className="border border-red-300 text-red-500 px-3 py-1.5 text-sm rounded flex items-center gap-1">
-                    Actions
-                    <ChevronDown size={12} />
-                  </button>
+                  {/* Status */}
+                  <div>
+                    <h4 className="text-sm font-medium text-gray-700">
+                      {getStatusDisplay(stream.status)}
+                    </h4>
+                    <div className="flex items-center gap-1 mt-2 text-red-500 text-sm">
+                      <RefreshCcw size={14} />
+                      Sync
+                    </div>
+                    <p className="text-[11px] text-gray-500 mt-1">
+                      {stream.sections_count || 0} sections available
+                    </p>
+                  </div>
+
+                  {/* Actions */}
+                  <div className="flex justify-end">
+                    <button className="border border-red-300 text-red-500 px-3 py-1.5 text-sm rounded flex items-center gap-1">
+                      Actions
+                      <ChevronDown size={12} />
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
       </div>
 
-      {/* --- Add/Edit Stream Modal --- */}
+      {/* Modal – unchanged */}
       {showModal && (
         <div className="fixed inset-0 bg-[#000000d6] bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
@@ -495,11 +517,8 @@ const Stream = () => {
                   <label className="block text-sm font-medium mb-1">
                     Icon (optional, max 5MB)
                   </label>
-                  
-                  {/* Preview area */}
                   <div className="mb-2">
                     {newIconPreview ? (
-                      // Show preview of newly selected file
                       <div>
                         <p className="text-xs text-green-600 mb-1">New icon selected:</p>
                         <img
@@ -509,7 +528,6 @@ const Stream = () => {
                         />
                       </div>
                     ) : isEditMode && currentIconUrl ? (
-                      // Show current icon in edit mode when no new file selected
                       <div>
                         <p className="text-xs text-gray-500 mb-1">Current icon:</p>
                         <img
@@ -522,7 +540,6 @@ const Stream = () => {
                       <div className="text-xs text-gray-400">No icon selected</div>
                     )}
                   </div>
-
                   <input
                     id="stream-icon-upload"
                     type="file"
@@ -533,7 +550,6 @@ const Stream = () => {
                   />
                 </div>
 
-                {/* Actions */}
                 <div className="flex justify-end gap-3 mt-6">
                   <button
                     type="button"

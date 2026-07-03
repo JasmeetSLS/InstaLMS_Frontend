@@ -1,13 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../services/api";
+
+// Adjust this value to control debounce delay (in ms)
+const DEBOUNCE_DELAY = 300; // try 150 for quicker response
 
 const Content = () => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchLoading, setSearchLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
 
-  // Modal and form state (status removed)
+  // Modal and form state
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
@@ -17,17 +22,34 @@ const Content = () => {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    fetchCategories();
-  }, []);
+  // Debounced search
+  const [debouncedSearch, setDebouncedSearch] = useState("");
 
-  const fetchCategories = async () => {
+  // Debounce effect
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearch(searchTerm);
+    }, DEBOUNCE_DELAY);
+
+    return () => clearTimeout(handler);
+  }, [searchTerm]);
+
+  // Fetch categories whenever debouncedSearch changes
+  useEffect(() => {
+    if (debouncedSearch !== undefined) {
+      fetchCategories(debouncedSearch);
+    }
+  }, [debouncedSearch]);
+
+  const fetchCategories = async (search = "") => {
+    setSearchLoading(true);
     try {
-      const response = await api.getCmsCategories();
+      const response = await api.getCmsCategories({ search });
       setCategories(response.data || []);
     } catch (error) {
       console.error("Error fetching categories:", error);
     } finally {
+      setSearchLoading(false);
       setLoading(false);
     }
   };
@@ -80,21 +102,20 @@ const Content = () => {
       const payload = new FormData();
       payload.append("title", formData.title.trim());
       payload.append("content", formData.content || "");
-      // status is NOT sent – backend always sets to 'active'
       if (iconFile) {
         payload.append("icon", iconFile);
       }
 
       await api.createCmsCategory(payload);
 
-      // Success
       setIsModalOpen(false);
       setFormData({ title: "", content: "" });
       setIconFile(null);
       const fileInput = document.getElementById("icon-upload");
       if (fileInput) fileInput.value = "";
 
-      await fetchCategories();
+      // Refetch with current search
+      await fetchCategories(debouncedSearch);
       alert("Category added successfully!");
     } catch (error) {
       console.error("Add category error:", error);
@@ -113,7 +134,8 @@ const Content = () => {
     if (fileInput) fileInput.value = "";
   };
 
-  if (loading) {
+  // Show initial loading only
+  if (loading && !searchTerm) {
     return (
       <div className="flex justify-center items-center h-screen text-base font-medium">
         Loading...
@@ -125,11 +147,20 @@ const Content = () => {
     <div className="bg-[#f3f3f3] min-h-screen p-5">
       {/* Header */}
       <div className="flex justify-between items-center mb-5">
-        <input
-          type="text"
-          placeholder="Search"
-          className="w-72 border border-gray-300 rounded-md px-4 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-red-400"
-        />
+        <div className="relative">
+          <input
+            type="text"
+            placeholder="Search categories by title or content..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-72 border border-gray-300 rounded-md px-4 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-red-400"
+          />
+          {searchLoading && (
+            <span className="absolute right-3 top-2.5 text-sm text-gray-400">
+              🔍
+            </span>
+          )}
+        </div>
 
         <button
           onClick={() => setIsModalOpen(true)}
@@ -142,7 +173,7 @@ const Content = () => {
       {/* Grid */}
       {categories.length === 0 ? (
         <div className="text-center text-gray-500 py-12 text-base">
-          No categories found
+          {searchTerm ? "No categories match your search" : "No categories found"}
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
@@ -186,7 +217,7 @@ const Content = () => {
         </div>
       )}
 
-      {/* Add Category Modal (status field removed) */}
+      {/* Add Category Modal (unchanged) */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-[#000000d6] bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">

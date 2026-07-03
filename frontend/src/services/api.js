@@ -144,12 +144,14 @@ const api = {
 
 
    // CMS Category APIs (NEW)
-  getCmsCategories: () => admin.get('/cms-categories'),
+  getCmsCategories: (params = {}) => admin.get(`/cms-categories${buildQuery(params)}`),
   createCmsCategory: (formData) => admin.post('/add-cms-category', formData, { isFormData: true }),
 
   //CMS Stream API
 //CMS Stream API
-getStreamsByCategory: (categoryId) => admin.get(`/streams/${categoryId}`),
+// In api.js, inside the main api object:
+getStreamsByCategory: (categoryId, params = {}) => 
+    admin.get(`/streams/${categoryId}${buildQuery(params)}`),
 createStream: (formData) => admin.post('/add-stream', formData, { isFormData: true }),
 getStreamById: (streamId) => admin.get(`/stream/${streamId}`),
 updateStream: (streamId, formData) => admin.put(`/stream/${streamId}`, formData, { isFormData: true }),
