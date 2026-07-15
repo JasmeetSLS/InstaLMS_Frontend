@@ -9,7 +9,8 @@ import {
   Layers,
   BarChart3,
   FileText,
-  UserCog
+  UserCog,
+  Video
 } from 'lucide-react';
 
 const Sidebar = ({ isOpen, onClose }) => {
@@ -45,6 +46,11 @@ const Sidebar = ({ isOpen, onClose }) => {
       path: '/admin/content',
       name: 'Content',
       icon: <FileText className="w-5 h-5" />,
+    },
+     {
+      path: '/admin/video-analysis',       // <-- new item
+      name: 'Video Analysis',
+      icon: <Video className="w-5 h-5" />,
     },
   ];
 

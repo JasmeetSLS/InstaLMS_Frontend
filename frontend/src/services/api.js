@@ -180,6 +180,9 @@ getQuestionById: (questionId) => admin.get(`/question/${questionId}`),
 createQuestion: (data) => admin.post('/add-question', data),
 updateQuestion: (questionId, data) => admin.put(`/question/${questionId}`, data),
 deleteQuestion: (questionId) => admin.delete(`/question/${questionId}`),
+
+// Video Analysis APIs
+getVideoAnalysisUsers: () => admin.get('/video-analysis/users-only'),
 };
 
 export default api;

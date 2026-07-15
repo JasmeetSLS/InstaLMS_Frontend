@@ -15,6 +15,8 @@ import Sections from './pages/Sections';
 import AddContentQuestion from './pages/AddContentQuestion';
 import CreateContent from './pages/CreateContent';
 import CreateQuestion from './pages/CreateQuestion';
+import VideoAnalysis from './pages/VideoAnalysis';
+import VideoAnalysisReport from './pages/VideoAnalysisReport';
 
 function App() {
   return (
@@ -29,6 +31,8 @@ function App() {
          <Route path="/admin/quiz" element={<AdminLayout><Quiz/></AdminLayout>} />
          <Route path="/admin/cms" element={<AdminLayout><CMS/></AdminLayout>} />
           <Route path="/admin/performanceAnalytics" element={<AdminLayout><PerformanceAnalytics/></AdminLayout>} />
+          <Route path="/admin/video-analysis" element={<AdminLayout><VideoAnalysis/></AdminLayout>} />
+          <Route path="/admin/video-analysis/report/:userId" element={<AdminLayout><VideoAnalysisReport /></AdminLayout>} />
           <Route path="/admin/content" element={<AdminLayout><Content/></AdminLayout>} />
           <Route path="/admin/stream/:categoryId" element={<AdminLayout><Stream /></AdminLayout>} /> 
           <Route path="/admin/sections/:streamId" element={<AdminLayout><Sections/></AdminLayout>} />
