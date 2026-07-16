@@ -183,6 +183,7 @@ deleteQuestion: (questionId) => admin.delete(`/question/${questionId}`),
 
 // Video Analysis APIs
 getVideoAnalysisUsers: () => admin.get('/video-analysis/users-only'),
+getVideoAnalysisReport: (userId) => admin.get(`/video-analysis/report/${userId}`)
 };
 
 export default api;
