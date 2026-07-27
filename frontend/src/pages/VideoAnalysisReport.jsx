@@ -911,6 +911,7 @@
 
 
 import React, { useState, useEffect } from "react";
+import HighchartsReactOfficial from "highcharts-react-official";
 import { useParams, useNavigate } from "react-router-dom";
 import {
   ArrowLeft,
@@ -935,6 +936,8 @@ import {
   Sparkles,
 } from "lucide-react";
 import api, { FILE_BASE_URL } from "../services/api";
+const Highcharts = window.Highcharts;
+const HighchartsReact = HighchartsReactOfficial.default || HighchartsReactOfficial;
 
 /* -------------------------------------------------------------------------
  * Theme — face / voice / emotion colour families (mirrors reference)
@@ -1382,30 +1385,90 @@ const OverallPanel = ({ overall }) => {
   );
 };
 
-const MiniDonut = ({ title, family, data }) => (
-  <article className="ar-panel overflow-hidden" style={{ borderColor: `${family.a}55` }}>
-    <div
-      className="text-center text-white text-[12px] font-black py-2.5 uppercase tracking-wide px-3"
-      style={{ background: `linear-gradient(90deg, ${family.a}D0, transparent)` }}
-    >
-      {title}
-    </div>
-    <div className="flex items-center gap-4 p-[18px] min-w-0">
-      <SVGDonutChart data={data} size={110} />
-      <ul className="flex-1 min-w-0 list-none m-0 p-0">
-        {data.map((d) => (
-          <li key={d.name} className="flex items-center justify-between gap-3 text-[13px] text-[#e9f1ff] my-2 min-w-0">
-            <span className="flex items-center gap-2 min-w-0">
-              <i className="inline-block w-2 h-2 rounded-full shrink-0" style={{ background: d.color, boxShadow: `0 0 6px ${d.color}` }} />
-              <span className="min-w-0 break-words">{d.name}</span>
-            </span>
-            <b className="font-semibold text-white shrink-0 whitespace-nowrap">{(Number(d.value) || 0).toFixed(2)}%</b>
-          </li>
-        ))}
-      </ul>
-    </div>
-  </article>
-);
+const MiniDonut = ({ title, family, data }) => {
+  const chartOptions = {
+    chart: {
+      type: "pie",
+      backgroundColor: "transparent",
+      height: 110,
+      width: 110,
+      margin: [0, 0, 0, 0],
+      spacing: [0, 0, 0, 0],
+    },
+    title: { text: null },
+    credits: { enabled: false },
+    tooltip: {
+      backgroundColor: "#1c2536",
+      style: { color: "#fff", fontSize: "12px" },
+      borderWidth: 0,
+      borderRadius: 8,
+      pointFormat: "{point.percentage:.2f}%",
+    },
+    plotOptions: {
+      pie: {
+        innerSize: "65%",
+        borderWidth: 2,
+        borderColor: "#0b1120",
+        dataLabels: { enabled: false },
+        states: {
+          hover: { halo: { size: 4 } },
+        },
+        animation: { duration: 1000 },
+      },
+    },
+    series: [
+      {
+        type: "pie",
+        data: data.map((d) => ({
+          name: d.name,
+          y: Number(d.value) || 0,
+          color: d.color,
+        })),
+      },
+    ],
+  };
+
+  return (
+    <article className="ar-panel overflow-hidden" style={{ borderColor: `${family.a}66` }}>
+      {/* Header banner */}
+      <div
+        className="text-center text-white text-[13px] font-black py-3 uppercase tracking-wide px-3"
+        style={{
+          background: `linear-gradient(90deg, ${family.a}, ${family.b})`,
+          boxShadow: `inset 0 -1px 0 rgba(255,255,255,0.15)`,
+        }}
+      >
+        {title}
+      </div>
+
+      <div className="flex items-center gap-5 p-5 min-w-0">
+        <div className="shrink-0" style={{ width: 100, height: 100 }}>
+          <HighchartsReact highcharts={Highcharts} options={chartOptions} />
+        </div>
+
+        <ul className="flex-1 min-w-0 list-none m-0 p-0">
+          {data.map((d) => (
+            <li
+              key={d.name}
+              className="flex items-center justify-between gap-4 text-[14px] text-[#e9f1ff] py-1.5 min-w-0"
+            >
+              <span className="flex items-center gap-2.5 min-w-0">
+                <i
+                  className="inline-block w-3 h-3 rounded-full shrink-0"
+                  style={{ background: d.color, boxShadow: `0 0 8px ${d.color}` }}
+                />
+                <span className="min-w-0 break-words font-semibold">{d.name}</span>
+              </span>
+              <b className="font-black text-white shrink-0 whitespace-nowrap text-[14px]">
+                {(Number(d.value) || 0).toFixed(2)}%
+              </b>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </article>
+  );
+};
 
 const StatCard = ({ label, icon: Icon, value, capitalize }) => (
   <article className="ar-panel flex flex-col items-center justify-between text-center gap-3 py-5 px-3 min-h-[150px]">
