@@ -280,6 +280,194 @@ const DonutChart = ({ title, value, total, percentage, color = "#f97316" }) => {
   );
 };
 
+const staticLeaderboardData = {
+  fastest_course_completion: [
+    { rank: 1, user_id: 4, name: "Subhojit", photo: "/uploads/users/4/profile-1776246467383.jpg", city: "Mumbai, Maharashtra", dealership: "ABC Motors", role: "DSE", completion_time: "5 days", points: 73, is_selected: false },
+    { rank: 2, user_id: 2, name: "Neeraj Jain", photo: "/uploads/users/2/profile-1775713867244.jpg", city: "Mumbai, Maharashtra", dealership: "ABC Motors", role: "DSE", completion_time: "5 days", points: 92, is_selected: false },
+    { rank: 3, user_id: 7, name: "Dheeraj", photo: "/uploads/users/7/profile-1776246864430.jpg", city: "Mumbai, Maharashtra", dealership: "ABC Motors", role: "DSE", completion_time: "3 days", points: 81, is_selected: false },
+    { rank: 4, user_id: 5, name: "Pradeep Kumar", photo: "/uploads/users/5/profile-1776246576012.jpg", city: "Mumbai, Maharashtra", dealership: "ABC Motors", role: "DSE", completion_time: "9 days", points: 99, is_selected: false },
+    { rank: 5, user_id: 11, name: "Sudha Pawar", photo: "/uploads/users/11/profile-1778653157019.jpg", city: "Mumbai, Maharashtra", dealership: "ABC Motors", role: "DSE", completion_time: "7 days", points: 92, is_selected: false },
+    { rank: 6, user_id: 12, name: "Nagnath Pise", photo: "/uploads/users/12/profile-1778653233079.jpg", city: "Mumbai, Maharashtra", dealership: "ABC Motors", role: "DSE", completion_time: "11 days", points: 81, is_selected: false },
+    { rank: 7, user_id: 3, name: "Ravi Pandey", photo: "/uploads/users/3/profile-1775713939921.jpg", city: "Mumbai, Maharashtra", dealership: "ABC Motors", role: "DSE", completion_time: "11 days", points: 100, is_selected: false },
+    { rank: 8, user_id: 1, name: "Keshav_Goyal", photo: "/uploads/users/1/profile-1775713806692.jpg", city: "Mumbai, Maharashtra", dealership: "ABC Motors", role: "DSE", completion_time: "11 days", points: 90, is_selected: false },
+    { rank: 9, user_id: 10, name: "Vinaya Prasad", photo: "/uploads/users/10/profile-1778653116674.jpg", city: "Mumbai, Maharashtra", dealership: "ABC Motors", role: "DSE", completion_time: "11 days", points: 73, is_selected: false },
+    { rank: 10, user_id: 6, name: "Anil Kumawat", photo: "/uploads/users/6/profile-1776246747079.jpg", city: "Mumbai, Maharashtra", dealership: "ABC Motors", role: "DSE", completion_time: "7 days", points: 92, is_selected: false },
+    { rank: 11, user_id: 8, name: "Karthick", photo: "/uploads/users/8/profile-1778652931250.jpg", city: "Mumbai, Maharashtra", dealership: "ABC Motors", role: "DSE", completion_time: "3 days", points: 70, is_selected: false },
+    { rank: 12, user_id: 9, name: "SOHAIL KHAN", photo: "/uploads/users/9/profile-1778653072931.jpg", city: "Mumbai, Maharashtra", dealership: "ABC Motors", role: "DSE", completion_time: "2 days", points: 98, is_selected: false }
+  ],
+  highest_quiz_scores: [
+    { rank: 1, user_id: 9, name: "SOHAIL KHAN", photo: "/uploads/users/9/profile-1778653072931.jpg", city: "Mumbai, Maharashtra", dealership: "ABC Motors", role: "DSE", score: 83, quizzes_taken: 14, is_selected: false },
+    { rank: 2, user_id: 3, name: "Ravi Pandey", photo: "/uploads/users/3/profile-1775713939921.jpg", city: "Mumbai, Maharashtra", dealership: "ABC Motors", role: "DSE", score: 77, quizzes_taken: 30, is_selected: false },
+    { rank: 3, user_id: 7, name: "Dheeraj", photo: "/uploads/users/7/profile-1776246864430.jpg", city: "Mumbai, Maharashtra", dealership: "ABC Motors", role: "DSE", score: 78, quizzes_taken: 12, is_selected: false },
+    { rank: 4, user_id: 4, name: "Subhojit", photo: "/uploads/users/4/profile-1776246467383.jpg", city: "Mumbai, Maharashtra", dealership: "ABC Motors", role: "DSE", score: 98, quizzes_taken: 14, is_selected: false },
+    { rank: 5, user_id: 1, name: "Keshav_Goyal", photo: "/uploads/users/1/profile-1775713806692.jpg", city: "Mumbai, Maharashtra", dealership: "ABC Motors", role: "DSE", score: 84, quizzes_taken: 13, is_selected: false },
+    { rank: 6, user_id: 11, name: "Sudha Pawar", photo: "/uploads/users/11/profile-1778653157019.jpg", city: "Mumbai, Maharashtra", dealership: "ABC Motors", role: "DSE", score: 77, quizzes_taken: 23, is_selected: false },
+    { rank: 7, user_id: 8, name: "Karthick", photo: "/uploads/users/8/profile-1778652931250.jpg", city: "Mumbai, Maharashtra", dealership: "ABC Motors", role: "DSE", score: 77, quizzes_taken: 30, is_selected: false },
+    { rank: 8, user_id: 5, name: "Pradeep Kumar", photo: "/uploads/users/5/profile-1776246576012.jpg", city: "Mumbai, Maharashtra", dealership: "ABC Motors", role: "DSE", score: 87, quizzes_taken: 23, is_selected: false },
+    { rank: 9, user_id: 12, name: "Nagnath Pise", photo: "/uploads/users/12/profile-1778653233079.jpg", city: "Mumbai, Maharashtra", dealership: "ABC Motors", role: "DSE", score: 96, quizzes_taken: 28, is_selected: false },
+    { rank: 10, user_id: 10, name: "Vinaya Prasad", photo: "/uploads/users/10/profile-1778653116674.jpg", city: "Mumbai, Maharashtra", dealership: "ABC Motors", role: "DSE", score: 88, quizzes_taken: 22, is_selected: false },
+    { rank: 11, user_id: 2, name: "Neeraj Jain", photo: "/uploads/users/2/profile-1775713867244.jpg", city: "Mumbai, Maharashtra", dealership: "ABC Motors", role: "DSE", score: 79, quizzes_taken: 23, is_selected: false },
+    { rank: 12, user_id: 6, name: "Anil Kumawat", photo: "/uploads/users/6/profile-1776246747079.jpg", city: "Mumbai, Maharashtra", dealership: "ABC Motors", role: "DSE", score: 95, quizzes_taken: 29, is_selected: false }
+  ],
+  most_quizzes_completed: [
+    { rank: 1, user_id: 10, name: "Vinaya Prasad", photo: "/uploads/users/10/profile-1778653116674.jpg", city: "Mumbai, Maharashtra", dealership: "ABC Motors", role: "DSE", certificates: 16, completion_rate: "94%", is_selected: false },
+    { rank: 2, user_id: 9, name: "SOHAIL KHAN", photo: "/uploads/users/9/profile-1778653072931.jpg", city: "Mumbai, Maharashtra", dealership: "ABC Motors", role: "DSE", certificates: 18, completion_rate: "95%", is_selected: false },
+    { rank: 3, user_id: 6, name: "Anil Kumawat", photo: "/uploads/users/6/profile-1776246747079.jpg", city: "Mumbai, Maharashtra", dealership: "ABC Motors", role: "DSE", certificates: 15, completion_rate: "84%", is_selected: false },
+    { rank: 4, user_id: 11, name: "Sudha Pawar", photo: "/uploads/users/11/profile-1778653157019.jpg", city: "Mumbai, Maharashtra", dealership: "ABC Motors", role: "DSE", certificates: 8, completion_rate: "97%", is_selected: false },
+    { rank: 5, user_id: 12, name: "Nagnath Pise", photo: "/uploads/users/12/profile-1778653233079.jpg", city: "Mumbai, Maharashtra", dealership: "ABC Motors", role: "DSE", certificates: 20, completion_rate: "73%", is_selected: false },
+    { rank: 6, user_id: 4, name: "Subhojit", photo: "/uploads/users/4/profile-1776246467383.jpg", city: "Mumbai, Maharashtra", dealership: "ABC Motors", role: "DSE", certificates: 15, completion_rate: "73%", is_selected: false },
+    { rank: 7, user_id: 2, name: "Neeraj Jain", photo: "/uploads/users/2/profile-1775713867244.jpg", city: "Mumbai, Maharashtra", dealership: "ABC Motors", role: "DSE", certificates: 12, completion_rate: "72%", is_selected: false },
+    { rank: 8, user_id: 3, name: "Ravi Pandey", photo: "/uploads/users/3/profile-1775713939921.jpg", city: "Mumbai, Maharashtra", dealership: "ABC Motors", role: "DSE", certificates: 7, completion_rate: "75%", is_selected: false },
+    { rank: 9, user_id: 5, name: "Pradeep Kumar", photo: "/uploads/users/5/profile-1776246576012.jpg", city: "Mumbai, Maharashtra", dealership: "ABC Motors", role: "DSE", certificates: 7, completion_rate: "86%", is_selected: false },
+    { rank: 10, user_id: 8, name: "Karthick", photo: "/uploads/users/8/profile-1778652931250.jpg", city: "Mumbai, Maharashtra", dealership: "ABC Motors", role: "DSE", certificates: 8, completion_rate: "99%", is_selected: false },
+    { rank: 11, user_id: 7, name: "Dheeraj", photo: "/uploads/users/7/profile-1776246864430.jpg", city: "Mumbai, Maharashtra", dealership: "ABC Motors", role: "DSE", certificates: 9, completion_rate: "77%", is_selected: false },
+    { rank: 12, user_id: 1, name: "Keshav_Goyal", photo: "/uploads/users/1/profile-1775713806692.jpg", city: "Mumbai, Maharashtra", dealership: "ABC Motors", role: "DSE", certificates: 17, completion_rate: "100%", is_selected: false }
+  ],
+  highest_engagement: [
+    { rank: 1, user_id: 2, name: "Neeraj Jain", photo: "/uploads/users/2/profile-1775713867244.jpg", city: "Mumbai, Maharashtra", dealership: "ABC Motors", role: "DSE", engagement_score: 97, hours_spent: 110, posts_completed: 42, is_selected: false },
+    { rank: 2, user_id: 9, name: "SOHAIL KHAN", photo: "/uploads/users/9/profile-1778653072931.jpg", city: "Mumbai, Maharashtra", dealership: "ABC Motors", role: "DSE", engagement_score: 73, hours_spent: 97, posts_completed: 34, is_selected: false },
+    { rank: 3, user_id: 6, name: "Anil Kumawat", photo: "/uploads/users/6/profile-1776246747079.jpg", city: "Mumbai, Maharashtra", dealership: "ABC Motors", role: "DSE", engagement_score: 78, hours_spent: 62, posts_completed: 37, is_selected: false },
+    { rank: 4, user_id: 12, name: "Nagnath Pise", photo: "/uploads/users/12/profile-1778653233079.jpg", city: "Mumbai, Maharashtra", dealership: "ABC Motors", role: "DSE", engagement_score: 75, hours_spent: 119, posts_completed: 47, is_selected: false },
+    { rank: 5, user_id: 1, name: "Keshav_Goyal", photo: "/uploads/users/1/profile-1775713806692.jpg", city: "Mumbai, Maharashtra", dealership: "ABC Motors", role: "DSE", engagement_score: 88, hours_spent: 103, posts_completed: 25, is_selected: false },
+    { rank: 6, user_id: 3, name: "Ravi Pandey", photo: "/uploads/users/3/profile-1775713939921.jpg", city: "Mumbai, Maharashtra", dealership: "ABC Motors", role: "DSE", engagement_score: 99, hours_spent: 96, posts_completed: 26, is_selected: false },
+    { rank: 7, user_id: 7, name: "Dheeraj", photo: "/uploads/users/7/profile-1776246864430.jpg", city: "Mumbai, Maharashtra", dealership: "ABC Motors", role: "DSE", engagement_score: 83, hours_spent: 98, posts_completed: 47, is_selected: false },
+    { rank: 8, user_id: 4, name: "Subhojit", photo: "/uploads/users/4/profile-1776246467383.jpg", city: "Mumbai, Maharashtra", dealership: "ABC Motors", role: "DSE", engagement_score: 95, hours_spent: 119, posts_completed: 43, is_selected: false },
+    { rank: 9, user_id: 11, name: "Sudha Pawar", photo: "/uploads/users/11/profile-1778653157019.jpg", city: "Mumbai, Maharashtra", dealership: "ABC Motors", role: "DSE", engagement_score: 84, hours_spent: 99, posts_completed: 46, is_selected: false },
+    { rank: 10, user_id: 8, name: "Karthick", photo: "/uploads/users/8/profile-1778652931250.jpg", city: "Mumbai, Maharashtra", dealership: "ABC Motors", role: "DSE", engagement_score: 75, hours_spent: 65, posts_completed: 41, is_selected: false },
+    { rank: 11, user_id: 10, name: "Vinaya Prasad", photo: "/uploads/users/10/profile-1778653116674.jpg", city: "Mumbai, Maharashtra", dealership: "ABC Motors", role: "DSE", engagement_score: 93, hours_spent: 116, posts_completed: 30, is_selected: false },
+    { rank: 12, user_id: 5, name: "Pradeep Kumar", photo: "/uploads/users/5/profile-1776246576012.jpg", city: "Mumbai, Maharashtra", dealership: "ABC Motors", role: "DSE", engagement_score: 80, hours_spent: 100, posts_completed: 47, is_selected: false }
+  ]
+};
+
+const stateWiseStaticData = {
+  success: true,
+  data: {
+    states: [
+      {
+        state: "Maharashtra",
+        code: "maharashtra",   // was "in-mh"
+        users: 530,
+        total: 8375,
+        ytd: 6199,
+        mtd: 1032,
+        week: 516,
+        cities: "Mumbai, Pune, Nagpur"
+      },
+      {
+        state: "Gujarat",
+        code: "gujarat",       // was "in-gj"
+        users: 420,
+        total: 6365,
+        ytd: 4690,
+        mtd: 781,
+        week: 393,
+        cities: ""
+      },
+      {
+        state: "Karnataka",
+        code: "karnataka",     // was "in-ka"
+        users: 500,
+        total: 7874,
+        ytd: 5864,
+        mtd: 978,
+        week: 490,
+        cities: ""
+      },
+      {
+        state: "Tamil Nadu",
+        code: "tamil nadu",    // was "in-tn" – note the space
+        users: 480,
+        total: 7370,
+        ytd: 5462,
+        mtd: 911,
+        week: 455,
+        cities: ""
+      },
+      {
+        state: "Uttar Pradesh",
+        code: "uttar pradesh", // was "in-up"
+        users: 550,
+        total: 7204,
+        ytd: 5360,
+        mtd: 895,
+        week: 449,
+        cities: ""
+      },
+      {
+        state: "West Bengal",
+        code: "west bengal",   // was "in-wb" – note the space
+        users: 380,
+        total: 5025,
+        ytd: 3685,
+        mtd: 613,
+        week: 308,
+        cities: ""
+      },
+      {
+        state: "Rajasthan",
+        code: "rajasthan",     // was "in-rj"
+        users: 300,
+        total: 4020,
+        ytd: 2849,
+        mtd: 476,
+        week: 238,
+        cities: ""
+      }
+    ],
+    summary: {
+      total_users: 3160,
+      total_usage: 46233,
+      total_ytd: 34109,
+      total_mtd: 5686,
+      total_week: 2849
+    }
+  }
+};
+
+// Helper to generate random hourly usage matrix
+const generateRandomHourlyData = () => {
+  const days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+  const hours = Array.from({ length: 24 }, (_, i) => i);
+  const matrix = [];
+  let maxVal = 0;
+
+  for (let d = 0; d < 7; d++) {
+    const row = [];
+    for (let h = 0; h < 24; h++) {
+      // Decide if this hour has activity
+      // We want some hours to be zero (e.g., 0-6, 19-23 often zero, but can have occasional)
+      // For 7-18 we have higher chance of activity.
+      let value = 0;
+      const rand = Math.random();
+      if (h >= 7 && h <= 18) {
+        // Work hours: 70% chance of activity, with varying intensity
+        if (rand < 0.7) {
+          // intensity: low (1-10) or heavy (11-23)
+          const intensity = Math.random();
+          if (intensity < 0.4) {
+            value = Math.floor(Math.random() * 10) + 1; // low
+          } else {
+            value = Math.floor(Math.random() * 13) + 11; // heavy (11-23)
+          }
+        }
+      } else {
+        // Off-hours: 20% chance of activity, mostly low
+        if (rand < 0.2) {
+          value = Math.floor(Math.random() * 8) + 1; // low
+        }
+      }
+      row.push(value);
+      if (value > maxVal) maxVal = value;
+    }
+    matrix.push(row);
+  }
+
+  // Ensure maxVal is at least 1 to avoid division by zero
+  if (maxVal === 0) maxVal = 1;
+
+  return { matrix, maxValue: maxVal, days, hours };
+};
+
 // ================= MAIN DASHBOARD =================
 const PerformanceAnalytics = () => {
   // ---------- Filter States ----------
@@ -301,12 +489,7 @@ const [uaDropdowns, setUaDropdowns] = useState({ zones: [], dealership: [], role
 const [uaCitiesList, setUaCitiesList] = useState([]);
 const [uaUsersList, setUaUsersList] = useState([]);
 const [contentPrefs, setContentPrefs] = useState({ total_users: 0, preferences: [] });
-const [hourlyData, setHourlyData] = useState({
-  matrix: Array.from({ length: 7 }, () => Array(24).fill(0)),
-  maxValue: 0,
-  days: ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
-  hours: Array.from({ length: 24 }, (_, i) => i)
-});
+const [hourlyData, setHourlyData] = useState(generateRandomHourlyData);
   const [dropdowns, setDropdowns] = useState({ zones: [], dealership: [], roles: [] });
   const [citiesList, setCitiesList] = useState([]);
   const [usersList, setUsersList] = useState([]);
@@ -324,12 +507,7 @@ const [hourlyData, setHourlyData] = useState({
     by_category: []
   });
   const [mediaStats, setMediaStats] = useState({ total_media: 0, by_type: [] });
-  const [leaderboard, setLeaderboard] = useState({
-    fastest_course_completion: [],
-    highest_quiz_scores: [],
-    most_quizzes_completed: [],
-    highest_engagement: []
-  });
+const [leaderboard, setLeaderboard] = useState(staticLeaderboardData);
 const [learningProgress, setLearningProgress] = useState({
     mycourse: { 
         total_courses_available: 0, 
@@ -359,11 +537,8 @@ const [learningProgress, setLearningProgress] = useState({
     assessment_breakup: []
 });
 
-  const [stateWiseData, setStateWiseData] = useState({
-    states: [],
-    summary: { total_users: 0, total_usage: 0, total_ytd: 0, total_mtd: 0, total_week: 0 }
-});
-
+ const [stateWiseData, setStateWiseData] = useState(stateWiseStaticData.data);
+ 
 
   // ---------- UI States ----------
   const [activeTab, setActiveTab] = useState(0);
@@ -549,53 +724,7 @@ useEffect(() => {
     fetchContentPrefs();
 }, [uaRegion, uaDealership, uaCity, uaRole, uaUser]);
 
-useEffect(() => {
-  const fetchHourlyUsage = async () => {
-    try {
-      const params = {};
-if (uaRegion && uaRegion !== "Regions") params.zone = uaRegion;
-if (uaDealership && uaDealership !== "All Dealerships") params.dealer = uaDealership;
-if (uaCity && uaCity !== "All Cities") params.city = uaCity;
-if (uaRole && uaRole !== "All") params.role = uaRole;
-// No 'user' parameter
 
-      const res = await api.getHourlyUsage(params);
-      if (res.success) {
-        setHourlyData({
-          matrix: res.data.matrix,
-          maxValue: res.data.max_value,
-          days: res.data.days || ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
-          hours: res.data.hours || Array.from({ length: 24 }, (_, i) => i)
-        });
-      }
-    } catch (err) {
-      console.error("Hourly usage fetch error:", err);
-    }
-  };
-  fetchHourlyUsage();
-}, [uaRegion, uaDealership, uaCity, uaRole, uaUser]);
-
-
-
-useEffect(() => {
-    const fetchStateWiseUsage = async () => {
-        try {
-            const params = {};
-            if (uaRegion && uaRegion !== "Regions") params.zone = uaRegion;
-            if (uaDealership && uaDealership !== "All Dealerships") params.dealer = uaDealership;
-            if (uaCity && uaCity !== "All Cities") params.city = uaCity;
-            if (uaRole && uaRole !== "All") params.role = uaRole;
-
-            const res = await api.getStateWiseUsage(params);
-            if (res.success) {
-                setStateWiseData(res.data);
-            }
-        } catch (err) {
-            console.error("State wise usage fetch error:", err);
-        }
-    };
-    fetchStateWiseUsage();
-}, [uaRegion, uaDealership, uaCity, uaRole]);
 
 // Get filtered table data from API
 const getFilteredTableData = () => {
@@ -668,41 +797,38 @@ const currentHeatData = stateWiseData.states.map(item => {
   }, [selectedRole]);
 
   // Fetch main dashboard data
-  useEffect(() => {
-    const fetchAllData = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const params = {};
-        if (selectedRegion && selectedRegion !== "Regions") params.zone = selectedRegion;
-        if (selectedDealership && selectedDealership !== "All Dealerships") params.dealer = selectedDealership;
-        if (selectedCity && selectedCity !== "All Cities") params.city = selectedCity;
-        if (selectedRole && selectedRole !== "All") params.role = selectedRole;
-        if (selectedUser && selectedUser !== "All Users") params.user = selectedUser;
+useEffect(() => {
+  const fetchAllData = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const params = {};
+      if (selectedRegion && selectedRegion !== "Regions") params.zone = selectedRegion;
+      if (selectedDealership && selectedDealership !== "All Dealerships") params.dealer = selectedDealership;
+      if (selectedCity && selectedCity !== "All Cities") params.city = selectedCity;
+      if (selectedRole && selectedRole !== "All") params.role = selectedRole;
+      if (selectedUser && selectedUser !== "All Users") params.user = selectedUser;
 
-        const [statsRes, leaderboardRes, learningRes] = await Promise.all([
-          api.getDashboardStats(params),
-          api.getDashboardLeaderboard(params),
-          api.getDashboardLearningProgress(params)
-        ]);
+      const [statsRes, learningRes] = await Promise.all([
+        api.getDashboardStats(params),
+        api.getDashboardLearningProgress(params)
+      ]);
 
-        if (statsRes.success) {
-          setUserStats(statsRes.data.users);
-          setCourseStats(statsRes.data.courses);
-          setMediaStats(statsRes.data.media);
-        }
-        if (leaderboardRes.success) setLeaderboard(leaderboardRes.data);
-        if (learningRes.success) setLearningProgress(learningRes.data);
-      } catch (err) {
-        console.error("Dashboard data fetch error:", err);
-        setError("Failed to load dashboard data. Please try again.");
-      } finally {
-        setLoading(false);
+      if (statsRes.success) {
+        setUserStats(statsRes.data.users);
+        setCourseStats(statsRes.data.courses);
+        setMediaStats(statsRes.data.media);
       }
-    };
-    fetchAllData();
-  }, [selectedRegion, selectedDealership, selectedCity, selectedRole, selectedUser]);
-
+      if (learningRes.success) setLearningProgress(learningRes.data);
+    } catch (err) {
+      console.error("Dashboard data fetch error:", err);
+      setError("Failed to load dashboard data. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+  fetchAllData();
+}, [selectedRegion, selectedDealership, selectedCity, selectedRole, selectedUser]);
 
 useEffect(() => {
     const fetchContentPrefs = async () => {
