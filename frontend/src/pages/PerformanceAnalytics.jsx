@@ -345,8 +345,8 @@ const stateWiseStaticData = {
     states: [
       {
         state: "Maharashtra",
-        code: "maharashtra",   // was "in-mh"
-        users: 530,
+        code: "maharashtra",
+        users: 5,
         total: 8375,
         ytd: 6199,
         mtd: 1032,
@@ -355,67 +355,67 @@ const stateWiseStaticData = {
       },
       {
         state: "Gujarat",
-        code: "gujarat",       // was "in-gj"
-        users: 420,
+        code: "gujarat",
+        users: 4,
         total: 6365,
         ytd: 4690,
         mtd: 781,
         week: 393,
-        cities: ""
+        cities: "Ahmedabad, Surat, Vadodara"
       },
       {
         state: "Karnataka",
-        code: "karnataka",     // was "in-ka"
-        users: 500,
+        code: "karnataka",
+        users: 3,
         total: 7874,
         ytd: 5864,
         mtd: 978,
         week: 490,
-        cities: ""
+        cities: "Bengaluru, Mysuru, Hubballi"
       },
       {
         state: "Tamil Nadu",
-        code: "tamil nadu",    // was "in-tn" – note the space
-        users: 480,
+        code: "tamil nadu",
+        users: 3,
         total: 7370,
         ytd: 5462,
         mtd: 911,
         week: 455,
-        cities: ""
+        cities: "Chennai, Coimbatore, Madurai"
       },
       {
         state: "Uttar Pradesh",
-        code: "uttar pradesh", // was "in-up"
-        users: 550,
+        code: "uttar pradesh",
+        users: 3,
         total: 7204,
         ytd: 5360,
         mtd: 895,
         week: 449,
-        cities: ""
+        cities: "Lucknow, Kanpur, Varanasi"
       },
       {
         state: "West Bengal",
-        code: "west bengal",   // was "in-wb" – note the space
-        users: 380,
+        code: "west bengal",
+        users: 3,
         total: 5025,
         ytd: 3685,
         mtd: 613,
         week: 308,
-        cities: ""
+        cities: "Kolkata, Howrah, Durgapur"
       },
       {
         state: "Rajasthan",
-        code: "rajasthan",     // was "in-rj"
-        users: 300,
+        code: "rajasthan",
+        users: 2,
         total: 4020,
         ytd: 2849,
         mtd: 476,
         week: 238,
-        cities: ""
+        cities: "Jaipur, Jodhpur, Udaipur"
       }
     ],
     summary: {
-      total_users: 3160,
+      total_users: 23,
       total_usage: 46233,
       total_ytd: 34109,
       total_mtd: 5686,
@@ -423,7 +423,6 @@ const stateWiseStaticData = {
     }
   }
 };
-
 // Helper to generate random hourly usage matrix
 const generateRandomHourlyData = () => {
   const days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
