@@ -31,14 +31,14 @@ function App() {
          <Route path="/admin/quiz" element={<AdminLayout><Quiz/></AdminLayout>} />
          <Route path="/admin/cms" element={<AdminLayout><CMS/></AdminLayout>} />
           <Route path="/admin/performanceAnalytics" element={<AdminLayout><PerformanceAnalytics/></AdminLayout>} />
-          <Route path="/admin/video-analysis" element={<AdminLayout><VideoAnalysis/></AdminLayout>} />
-          <Route path="/admin/video-analysis/report/:userId" element={<AdminLayout><VideoAnalysisReport /></AdminLayout>} />
-          <Route path="/admin/content" element={<AdminLayout><Content/></AdminLayout>} />
-          <Route path="/admin/stream/:categoryId" element={<AdminLayout><Stream /></AdminLayout>} /> 
-          <Route path="/admin/sections/:streamId" element={<AdminLayout><Sections/></AdminLayout>} />
-          <Route path="/admin/add-content-question" element={<AdminLayout><AddContentQuestion /></AdminLayout>} />
-          <Route path="/admin/create-content" element={<AdminLayout><CreateContent /></AdminLayout>} />
-<Route path="/admin/create-question" element={<AdminLayout><CreateQuestion /></AdminLayout>} />
+          <Route path="/admin/video-analysis" element={<VideoAnalysis />} />
+<Route path="/admin/video-analysis/report/:userId" element={<VideoAnalysisReport />} />
+         <Route path="/admin/content" element={<Content />} />
+<Route path="/admin/stream/:categoryId" element={<Stream />} />
+<Route path="/admin/sections/:streamId" element={<Sections />} />
+<Route path="/admin/add-content-question" element={<AddContentQuestion />} />
+<Route path="/admin/create-content" element={<CreateContent />} />
+<Route path="/admin/create-question" element={<CreateQuestion />} />
         {/* Redirect any unknown routes to home */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

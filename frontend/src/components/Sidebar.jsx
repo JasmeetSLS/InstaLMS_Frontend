@@ -42,16 +42,16 @@ const Sidebar = ({ isOpen, onClose }) => {
       name: 'Performance Analytics',
       icon: <BarChart3 className="w-5 h-5" />,
     },
-     {
-      path: '/admin/content',
-      name: 'Content',
-      icon: <FileText className="w-5 h-5" />,
-    },
-     {
-      path: '/admin/video-analysis',       // <-- new item
-      name: 'Video Analysis',
-      icon: <Video className="w-5 h-5" />,
-    },
+    //  {
+    //   path: '/admin/content',
+    //   name: 'Content',
+    //   icon: <FileText className="w-5 h-5" />,
+    // },
+    //  {
+    //   path: '/admin/video-analysis',       // <-- new item
+    //   name: 'Video Analysis',
+    //   icon: <Video className="w-5 h-5" />,
+    // },
   ];
 
   const handleLogout = () => {
