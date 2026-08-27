@@ -96,6 +96,7 @@ const createApiMethods = (basePath = '') => ({
 });
 
 const admin = createApiMethods('/admin');
+const withoutAdmin = createApiMethods();
 
 // Helper to build query string
 const buildQuery = (params) => {
@@ -144,46 +145,46 @@ const api = {
 
 
    // CMS Category APIs (NEW)
-  getCmsCategories: (params = {}) => admin.get(`/cms-categories${buildQuery(params)}`),
-  createCmsCategory: (formData) => admin.post('/add-cms-category', formData, { isFormData: true }),
+  getCmsCategories: (params = {}) => withoutAdmin.get(`/cms-categories${buildQuery(params)}`),
+  createCmsCategory: (formData) => withoutAdmin.post('/add-cms-category', formData, { isFormData: true }),
 
   //CMS Stream API
 //CMS Stream API
 // In api.js, inside the main api object:
 getStreamsByCategory: (categoryId, params = {}) => 
-    admin.get(`/streams/${categoryId}${buildQuery(params)}`),
-createStream: (formData) => admin.post('/add-stream', formData, { isFormData: true }),
-getStreamById: (streamId) => admin.get(`/stream/${streamId}`),
-updateStream: (streamId, formData) => admin.put(`/stream/${streamId}`, formData, { isFormData: true }),
+    withoutAdmin.get(`/streams/${categoryId}${buildQuery(params)}`),
+createStream: (formData) => withoutAdmin.post('/add-stream', formData, { isFormData: true }),
+getStreamById: (streamId) => withoutAdmin.get(`/stream/${streamId}`),
+updateStream: (streamId, formData) => withoutAdmin.put(`/stream/${streamId}`, formData, { isFormData: true }),
     
 
     //CMS Section APIs
    // CMS Section APIs
-getSectionsByStream: (streamId) => admin.get(`/sections/${streamId}`),
-createSection: (data) => admin.post('/add-section', data),
-getSectionById: (sectionId) => admin.get(`/section/${sectionId}`),
-updateSection: (sectionId, data) => admin.put(`/section/${sectionId}`, data),
-deleteSection: (sectionId) => admin.delete(`/section/${sectionId}`),
+getSectionsByStream: (streamId) => withoutAdmin.get(`/sections/${streamId}`),
+createSection: (data) => withoutAdmin.post('/add-section', data),
+getSectionById: (sectionId) => withoutAdmin.get(`/section/${sectionId}`),
+updateSection: (sectionId, data) => withoutAdmin.put(`/section/${sectionId}`, data),
+deleteSection: (sectionId) => withoutAdmin.delete(`/section/${sectionId}`),
 
     //CMS Content APIs
-       getContentsBySection: (sectionId) => admin.get(`/contents/${sectionId}`),
-        getContentById: (contentId) => admin.get(`/content/${contentId}`),
-        createContent: (formData) => admin.post('/add-content', formData, { isFormData: true }),
-        updateContent: (contentId, formData) => admin.put(`/content/${contentId}`, formData, { isFormData: true }),
-deleteContent: (contentId) => admin.delete(`/content/${contentId}`),
+       getContentsBySection: (sectionId) => withoutAdmin.get(`/contents/${sectionId}`),
+        getContentById: (contentId) => withoutAdmin.get(`/content/${contentId}`),
+        createContent: (formData) => withoutAdmin.post('/add-content', formData, { isFormData: true }),
+        updateContent: (contentId, formData) => withoutAdmin.put(`/content/${contentId}`, formData, { isFormData: true }),
+deleteContent: (contentId) => withoutAdmin.delete(`/content/${contentId}`),
 
 //CMS Question APIs
 //CMS Question APIs
 // CMS Question APIs
-getQuestionsBySection: (sectionId) => admin.get(`/questions/${sectionId}`),
-getQuestionById: (questionId) => admin.get(`/question/${questionId}`),
-createQuestion: (data) => admin.post('/add-question', data),
-updateQuestion: (questionId, data) => admin.put(`/question/${questionId}`, data),
-deleteQuestion: (questionId) => admin.delete(`/question/${questionId}`),
+getQuestionsBySection: (sectionId) => withoutAdmin.get(`/questions/${sectionId}`),
+getQuestionById: (questionId) => withoutAdmin.get(`/question/${questionId}`),
+createQuestion: (data) => withoutAdmin.post('/add-question', data),
+updateQuestion: (questionId, data) => withoutAdmin.put(`/question/${questionId}`, data),
+deleteQuestion: (questionId) => withoutAdmin.delete(`/question/${questionId}`),
 
 // Video Analysis APIs
-getVideoAnalysisUsers: () => admin.get('/video-analysis/users-only'),
-getVideoAnalysisReport: (userId) => admin.get(`/video-analysis/report/${userId}`)
+getVideoAnalysisUsers: () => withoutAdmin.get('/video-analysis/users-only'),
+getVideoAnalysisReport: (userId) => withoutAdmin.get(`/video-analysis/report/${userId}`)
 };
 
 export default api;
